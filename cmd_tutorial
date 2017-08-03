@@ -110,7 +110,7 @@ TODO: Colocar swift.conf nos diretórios
 ============================
 
 > cd ../c-ray
-> export PATH:./bin:$PATH
+> export PATH=./bin:$PATH
 > swift -sites treinamento c-ray.swift 
 
 > swiftlog -import-provenance <run_id>
@@ -120,7 +120,7 @@ TODO: Colocar swift.conf nos diretórios
 ============================
 
 > cd ../swift-gecko
-> export PATH:./bin:$PATH
+> export PATH=./bin:$PATH
 > swift -sites treinamento allvsall.swift
 
 > swiftlog -import-provenance <run_id>
