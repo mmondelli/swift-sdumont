@@ -1,0 +1,29 @@
+Set MPI_ROOT_HOST to  from OMPI_MCA_orte_hnp_uri=
+My rank: 0
+checking for paramfile
+no paramfile: using command line arguments
+Progress  2017-02-16 21:41:37.935218880-0200  LOG_START
+
+_____________________________________________________________________________
+
+        Wrapper (_swiftwrap.staging)
+_____________________________________________________________________________
+
+PWD=/tmp/mondelli/swiftwork/c-ray-run001/jobs/g/genscenes-y6joh24n-0
+EXEC=/home/mondelli/Dropbox/Docker/swift_verao/c-ray/bin/genscenes
+STDIN=
+STDOUT=/home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0000.data
+STDERR=stderr.txt
+DIRS=/home/mondelli/Dropbox/Docker/swift_verao/c-ray/./.
+INF=/home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene
+OUTF=/home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0000.data
+COLLECT=
+ARGS=0 10 /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene
+ARGC=3
+Progress  2017-02-16 21:41:37.942813128-0200  CREATE_INPUTDIR
+Created output directory: /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./.
+Progress  2017-02-16 21:41:37.954748325-0200  EXECUTE
+Progress  2017-02-16 21:41:38.024861422-0200  DONE EXITCODE=0
+Progress  2017-02-16 21:41:38.026193619-0200  EXECUTE_DONE
+Job ran successfully
+Progress  2017-02-16 21:41:38.028187687-0200  END

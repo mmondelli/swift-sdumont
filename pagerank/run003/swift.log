@@ -1,0 +1,578 @@
+2017-02-16 21:44:55,561-0200 INFO  Loader JAVA Oracle Corporation Java HotSpot(TM) 64-Bit Server VM 1.7.0_80
+2017-02-16 21:44:55,562-0200 INFO  Loader VERSION Swift trunk git-rev: 18aec82244c5611381528bc361888c553570c66e heads/master 6574
+2017-02-16 21:44:55,562-0200 INFO  Loader RUN_ID run003
+2017-02-16 21:44:55,562-0200 INFO  Loader ARGUMENTS [-runid, run003, -logfile, /home/mondelli/Dropbox/Docker/swift_verao/pagerank/run003/swift.log, pagerank_final.swift, -word=Brazil]
+2017-02-16 21:44:55,563-0200 INFO  Loader MAX_HEAP 954728448
+2017-02-16 21:44:55,563-0200 INFO  Loader GLOBUS_HOSTNAME mondelli-520U4C
+2017-02-16 21:44:55,563-0200 INFO  Loader CWD /home/mondelli/Dropbox/Docker/swift_verao/pagerank/.
+2017-02-16 21:44:55,564-0200 DEBUG Loader SWIFT_CONFIGURATION 
+[D] /home/mondelli/swift-k/dist/swift-svn/etc/swift.conf
+[C] <Command Line>
+{
+	TCPPortRange: "50000, 50100"                               # [D] line 27
+	alwaysTransferWrapperLog: true                             # [D] line 61
+	executionRetries: 0                                        # [D] line 137
+	fileOperationsThrottle: 8                                  # [D] line 121
+	fileTransfersThrottle: 4                                   # [D] line 107
+	hostJobSubmitThrottle: 2                                   # [D] line 95
+	jobSubmitThrottle: 4                                       # [D] line 83
+	keepSiteDir: false                                         # [D] line 131
+	lazyErrors: true                                           # [D] line 41
+	logProvenance: false                                       # [D] line 200
+	maxForeachThreads: 16384                                   # [D] line 194
+	replicationEnabled: false                                  # [D] line 146
+	replicationLimit: 3                                        # [D] line 157
+	replicationMinQueueTime: 60                                # [D] line 153
+	site.local {
+		app.ALL.executable: "*"                                   # [D] line 235
+		execution.type: "local"                                   # [D] line 223
+		filesystem.type: "local"                                  # [D] line 226
+		initialParallelTasks: 8                                   # [D] line 230
+		maxParallelTasks: 16                                      # [D] line 229
+		workDirectory: "swiftwork"                                # [D] line 232
+	}
+	sites: [local]                                             # [D] line 239
+	tracingEnabled: false                                      # [D] line 51
+}
+
+2017-02-16 21:44:55,565-0200 DEBUG textfiles BEGIN SWIFTSCRIPT:
+type file; 
+
+#USE: swift pagerank.swift -word=Brazil
+
+string w = arg("word");
+
+file text[] <filesys_mapper; location="./raw.en3", prefix="english">;
+file select[] <simple_mapper; location="./select", prefix="select", suffix=".txt">;
+file count[] <simple_mapper; location="./count", prefix="count_word", suffix=".txt">;
+file group <"group.txt">;
+file sort <"sort.txt">;
+
+app (file o) select_word (file i, string word)
+{
+	grep "-o" "-w" word filename(i) stdout=filename(o);
+}
+
+app (file o) count_word (file i)
+{
+	wc "-w" filename(i) stdout=filename(o);
+}
+
+app (file o) group_count (file i[])
+{
+	cat filenames(i) stdout=filename(o);
+}
+
+app (file o) sort (file i)
+{
+	sort "-n" filename(i) stdout=filename(o);
+}
+
+foreach t,i in text
+{
+	select[i] = select_word(text[i], w);
+	count[i] = count_word(select[i]);
+}
+
+group = group_count(count);
+sort = sort(group);
+
+
+2017-02-16 21:44:55,565-0200 DEBUG textfiles END SWIFTSCRIPT:
+2017-02-16 21:44:55,565-0200 DEBUG Loader kmlversion is >9f6c1ed4-f975-4fb5-9fcf-7994f9fda617-no-provenance<
+2017-02-16 21:44:55,565-0200 DEBUG Loader build version is >9f6c1ed4-f975-4fb5-9fcf-7994f9fda617-no-provenance<
+2017-02-16 21:44:55,565-0200 DEBUG Loader Recompilation suppressed.
+2017-02-16 21:44:56,442-0200 INFO  Loader RUN_START
+2017-02-16 21:44:56,446-0200 INFO  SwiftExecutor swift.home = /home/mondelli/swift-k/dist/swift-svn
+2017-02-16 21:44:56,488-0200 INFO  AbstractScheduler Setting resources to: {local=local}
+2017-02-16 21:44:56,497-0200 INFO  GlobalSubmitQueue No global submit throttle set. Using default (1024)
+2017-02-16 21:44:56,513-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:56,514-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:56,514-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:56,550-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 28591912, JVMThreads: 16
+2017-02-16 21:44:56,551-0200 INFO  RuntimeStats$ProgressTicker 
+2017-02-16 21:44:56,553-0200 DEBUG swift PROCEDURE line=23 thread=2-0-13-10 name=group_count
+2017-02-16 21:44:56,553-0200 DEBUG swift PROCEDURE line=28 thread=2-0-14-11 name=sort
+2017-02-16 21:44:56,564-0200 DEBUG swift FOREACH_IT_START line=33 thread=2-0-12-9-15-0
+2017-02-16 21:44:56,564-0200 DEBUG swift SCOPE thread=2-0-12-9-15-0
+2017-02-16 21:44:56,564-0200 DEBUG swift FOREACH_IT_START line=33 thread=2-0-12-9-17-2
+2017-02-16 21:44:56,564-0200 DEBUG swift SCOPE thread=2-0-12-9-17-2
+2017-02-16 21:44:56,564-0200 DEBUG swift FOREACH_IT_START line=33 thread=2-0-12-9-18-3
+2017-02-16 21:44:56,564-0200 DEBUG swift SCOPE thread=2-0-12-9-18-3
+2017-02-16 21:44:56,564-0200 DEBUG swift FOREACH_IT_START line=33 thread=2-0-12-9-19-4
+2017-02-16 21:44:56,564-0200 DEBUG swift SCOPE thread=2-0-12-9-19-4
+2017-02-16 21:44:56,564-0200 DEBUG swift PROCEDURE line=13 thread=2-0-12-9-17-2-22-0 name=select_word
+2017-02-16 21:44:56,564-0200 DEBUG swift PROCEDURE line=18 thread=2-0-12-9-15-0-21-1 name=count_word
+2017-02-16 21:44:56,564-0200 DEBUG swift PROCEDURE line=18 thread=2-0-12-9-17-2-23-1 name=count_word
+2017-02-16 21:44:56,564-0200 DEBUG swift PROCEDURE line=13 thread=2-0-12-9-18-3-24-0 name=select_word
+2017-02-16 21:44:56,564-0200 DEBUG swift PROCEDURE line=18 thread=2-0-12-9-18-3-25-1 name=count_word
+2017-02-16 21:44:56,564-0200 DEBUG swift PROCEDURE line=13 thread=2-0-12-9-19-4-26-0 name=select_word
+2017-02-16 21:44:56,564-0200 DEBUG swift FOREACH_IT_START line=33 thread=2-0-12-9-16-1
+2017-02-16 21:44:56,565-0200 DEBUG swift SCOPE thread=2-0-12-9-16-1
+2017-02-16 21:44:56,565-0200 DEBUG swift PROCEDURE line=18 thread=2-0-12-9-19-4-27-1 name=count_word
+2017-02-16 21:44:56,565-0200 DEBUG swift PROCEDURE line=13 thread=2-0-12-9-16-1-28-0 name=select_word
+2017-02-16 21:44:56,564-0200 DEBUG swift PROCEDURE line=13 thread=2-0-12-9-15-0-20-0 name=select_word
+2017-02-16 21:44:56,566-0200 DEBUG swift PROCEDURE line=18 thread=2-0-12-9-16-1-29-1 name=count_word
+2017-02-16 21:44:56,567-0200 DEBUG swift JOB_INIT jobid=grep-ib6th24n tr=grep
+2017-02-16 21:44:56,567-0200 DEBUG swift JOB_INIT jobid=grep-jb6th24n tr=grep
+2017-02-16 21:44:56,567-0200 DEBUG swift JOB_SITE_SELECT jobid=grep-jb6th24n-0
+2017-02-16 21:44:56,567-0200 DEBUG swift JOB_INIT jobid=grep-kb6th24n tr=grep
+2017-02-16 21:44:56,567-0200 DEBUG swift JOB_SITE_SELECT jobid=grep-kb6th24n-0
+2017-02-16 21:44:56,568-0200 DEBUG swift JOB_INIT jobid=grep-lb6th24n tr=grep
+2017-02-16 21:44:56,568-0200 DEBUG swift JOB_SITE_SELECT jobid=grep-lb6th24n-0
+2017-02-16 21:44:56,568-0200 DEBUG swift JOB_INIT jobid=grep-mb6th24n tr=grep
+2017-02-16 21:44:56,568-0200 DEBUG swift JOB_SITE_SELECT jobid=grep-mb6th24n-0
+2017-02-16 21:44:56,568-0200 DEBUG swift JOB_SITE_SELECT jobid=grep-ib6th24n-0
+2017-02-16 21:44:56,572-0200 DEBUG swift THREAD_ASSOCIATION jobid=grep-jb6th24n-0 host=local thread=2-0-12-9-16-1-28-0
+2017-02-16 21:44:56,572-0200 DEBUG swift THREAD_ASSOCIATION jobid=grep-mb6th24n-0 host=local thread=2-0-12-9-18-3-24-0
+2017-02-16 21:44:56,572-0200 INFO  swift START host=local - Initializing shared directory
+2017-02-16 21:44:56,573-0200 DEBUG swift THREAD_ASSOCIATION jobid=grep-ib6th24n-0 host=local thread=2-0-12-9-19-4-26-0
+2017-02-16 21:44:56,573-0200 DEBUG swift THREAD_ASSOCIATION jobid=grep-lb6th24n-0 host=local thread=2-0-12-9-17-2-22-0
+2017-02-16 21:44:56,573-0200 DEBUG swift THREAD_ASSOCIATION jobid=grep-kb6th24n-0 host=local thread=2-0-12-9-15-0-20-0
+2017-02-16 21:44:56,574-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:56,583-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:56,583-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:56,584-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:56,585-0200 INFO  swift END host=local - Done initializing shared directory
+2017-02-16 21:44:56,588-0200 INFO  swift START jobid=grep-ib6th24n-0 host=local - Initializing directory structure
+2017-02-16 21:44:56,588-0200 INFO  swift START path=select dir=pagerank_final-run003/shared - Creating directory structure
+2017-02-16 21:44:56,588-0200 INFO  swift START jobid=grep-lb6th24n-0 host=local - Initializing directory structure
+2017-02-16 21:44:56,588-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:56,589-0200 INFO  swift START path=raw.en3 dir=pagerank_final-run003/shared - Creating directory structure
+2017-02-16 21:44:56,590-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:56,590-0200 INFO  swift START jobid=grep-kb6th24n-0 host=local - Initializing directory structure
+2017-02-16 21:44:56,590-0200 INFO  swift START jobid=grep-jb6th24n-0 host=local - Initializing directory structure
+2017-02-16 21:44:56,591-0200 INFO  swift START jobid=grep-mb6th24n-0 host=local - Initializing directory structure
+2017-02-16 21:44:56,591-0200 INFO  swift END jobid=grep-lb6th24n-0 - Done initializing directory structure
+2017-02-16 21:44:56,591-0200 INFO  swift END jobid=grep-jb6th24n-0 - Done initializing directory structure
+2017-02-16 21:44:56,591-0200 INFO  swift START jobid=grep-lb6th24n-0 - Staging in files [file://localhost/./raw.en3/englishText_30000_40000]
+2017-02-16 21:44:56,591-0200 INFO  swift START jobid=grep-jb6th24n-0 - Staging in files [file://localhost/./raw.en3/englishText_10000_20000]
+2017-02-16 21:44:56,592-0200 INFO  swift END jobid=grep-mb6th24n-0 - Done initializing directory structure
+2017-02-16 21:44:56,592-0200 INFO  swift START jobid=grep-mb6th24n-0 - Staging in files [file://localhost/./raw.en3/englishText_40000_50000]
+2017-02-16 21:44:56,592-0200 INFO  swift END jobid=grep-ib6th24n-0 - Done initializing directory structure
+2017-02-16 21:44:56,592-0200 INFO  swift START jobid=grep-ib6th24n-0 - Staging in files [file://localhost/./raw.en3/englishText_20000_30000]
+2017-02-16 21:44:56,593-0200 INFO  swift END jobid=grep-kb6th24n-0 - Done initializing directory structure
+2017-02-16 21:44:56,593-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:56,593-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:56,594-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:56,595-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:56,596-0200 INFO  swift START jobid=grep-kb6th24n-0 - Staging in files [file://localhost/./raw.en3/englishText_0_10000]
+2017-02-16 21:44:56,596-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:56,598-0200 DEBUG swift CDM: file://localhost/./raw.en3/englishText_20000_30000 : DEFAULT
+2017-02-16 21:44:56,598-0200 DEBUG swift CDM: file://localhost/./raw.en3/englishText_0_10000 : DEFAULT
+2017-02-16 21:44:56,598-0200 DEBUG swift CDM: file://localhost/./raw.en3/englishText_40000_50000 : DEFAULT
+2017-02-16 21:44:56,598-0200 DEBUG swift CDM: file://localhost/./raw.en3/englishText_30000_40000 : DEFAULT
+2017-02-16 21:44:56,598-0200 DEBUG swift CDM: file://localhost/./raw.en3/englishText_10000_20000 : DEFAULT
+2017-02-16 21:44:56,600-0200 DEBUG swift FILE_STAGE_IN_START file=englishText_30000_40000 srchost=localhost srcdir=./raw.en3 srcname=englishText_30000_40000 desthost=local destdir=pagerank_final-run003/shared/raw.en3 provider=file policy=DEFAULT
+2017-02-16 21:44:56,600-0200 DEBUG swift FILE_STAGE_IN_START file=englishText_40000_50000 srchost=localhost srcdir=./raw.en3 srcname=englishText_40000_50000 desthost=local destdir=pagerank_final-run003/shared/raw.en3 provider=file policy=DEFAULT
+2017-02-16 21:44:56,600-0200 DEBUG swift FILE_STAGE_IN_START file=englishText_20000_30000 srchost=localhost srcdir=./raw.en3 srcname=englishText_20000_30000 desthost=local destdir=pagerank_final-run003/shared/raw.en3 provider=file policy=DEFAULT
+2017-02-16 21:44:56,601-0200 DEBUG swift FILE_STAGE_IN_START file=englishText_0_10000 srchost=localhost srcdir=./raw.en3 srcname=englishText_0_10000 desthost=local destdir=pagerank_final-run003/shared/raw.en3 provider=file policy=DEFAULT
+2017-02-16 21:44:56,601-0200 DEBUG swift FILE_STAGE_IN_START file=englishText_10000_20000 srchost=localhost srcdir=./raw.en3 srcname=englishText_10000_20000 desthost=local destdir=pagerank_final-run003/shared/raw.en3 provider=file policy=DEFAULT
+2017-02-16 21:44:56,650-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-16 21:44:56,651-0200 DEBUG swift FILE_STAGE_IN_END file=englishText_30000_40000 srchost=localhost srcdir=./raw.en3 srcname=englishText_30000_40000 desthost=local destdir=pagerank_final-run003/shared/raw.en3 provider=file
+2017-02-16 21:44:56,652-0200 INFO  swift END jobid=grep-lb6th24n-0 - Staging in finished
+2017-02-16 21:44:56,652-0200 DEBUG swift JOB_START jobid=grep-lb6th24n-0 tr=grep arguments=[-o, -w, Brazil, raw.en3/englishText_30000_40000] tmpdir=pagerank_final-run003/jobs/g/grep-lb6th24n-0
+2017-02-16 21:44:56,658-0200 INFO  Execute JOB_TASK jobid=grep-lb6th24n-0 taskid=task-22 exec=/bin/bash dir=pagerank_final-run003 args=shared/_swiftwrap grep-lb6th24n-0 -jobdir g -scratch  -e grep -out select/select0002.txt -err stderr.txt -i -d select|raw.en3 -if raw.en3/englishText_30000_40000 -of select/select0002.txt -cf  -cdmfile -status files -a -o -w Brazil raw.en3/englishText_30000_40000
+2017-02-16 21:44:56,671-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:56,672-0200 DEBUG swift FILE_STAGE_IN_END file=englishText_40000_50000 srchost=localhost srcdir=./raw.en3 srcname=englishText_40000_50000 desthost=local destdir=pagerank_final-run003/shared/raw.en3 provider=file
+2017-02-16 21:44:56,672-0200 INFO  swift END jobid=grep-mb6th24n-0 - Staging in finished
+2017-02-16 21:44:56,672-0200 DEBUG swift JOB_START jobid=grep-mb6th24n-0 tr=grep arguments=[-o, -w, Brazil, raw.en3/englishText_40000_50000] tmpdir=pagerank_final-run003/jobs/g/grep-mb6th24n-0
+2017-02-16 21:44:56,673-0200 INFO  Execute JOB_TASK jobid=grep-mb6th24n-0 taskid=task-24 exec=/bin/bash dir=pagerank_final-run003 args=shared/_swiftwrap grep-mb6th24n-0 -jobdir g -scratch  -e grep -out select/select0003.txt -err stderr.txt -i -d select|raw.en3 -if raw.en3/englishText_40000_50000 -of select/select0003.txt -cf  -cdmfile -status files -a -o -w Brazil raw.en3/englishText_40000_50000
+2017-02-16 21:44:56,679-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-24 status=8
+2017-02-16 21:44:56,679-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-22 status=8
+2017-02-16 21:44:56,680-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-24 status=1
+2017-02-16 21:44:56,682-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-22 status=1
+2017-02-16 21:44:56,685-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:56,685-0200 DEBUG swift FILE_STAGE_IN_END file=englishText_0_10000 srchost=localhost srcdir=./raw.en3 srcname=englishText_0_10000 desthost=local destdir=pagerank_final-run003/shared/raw.en3 provider=file
+2017-02-16 21:44:56,685-0200 INFO  swift END jobid=grep-kb6th24n-0 - Staging in finished
+2017-02-16 21:44:56,686-0200 DEBUG swift JOB_START jobid=grep-kb6th24n-0 tr=grep arguments=[-o, -w, Brazil, raw.en3/englishText_0_10000] tmpdir=pagerank_final-run003/jobs/g/grep-kb6th24n-0
+2017-02-16 21:44:56,686-0200 INFO  Execute JOB_TASK jobid=grep-kb6th24n-0 taskid=task-20 exec=/bin/bash dir=pagerank_final-run003 args=shared/_swiftwrap grep-kb6th24n-0 -jobdir g -scratch  -e grep -out select/select0000.txt -err stderr.txt -i -d select|raw.en3 -if raw.en3/englishText_0_10000 -of select/select0000.txt -cf  -cdmfile -status files -a -o -w Brazil raw.en3/englishText_0_10000
+2017-02-16 21:44:56,686-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-20 status=8
+2017-02-16 21:44:56,688-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-24 status=2
+2017-02-16 21:44:56,691-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-22 status=2
+2017-02-16 21:44:56,692-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-20 status=1
+2017-02-16 21:44:56,697-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-20 status=2
+2017-02-16 21:44:56,703-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:56,703-0200 DEBUG swift FILE_STAGE_IN_END file=englishText_10000_20000 srchost=localhost srcdir=./raw.en3 srcname=englishText_10000_20000 desthost=local destdir=pagerank_final-run003/shared/raw.en3 provider=file
+2017-02-16 21:44:56,704-0200 INFO  swift END jobid=grep-jb6th24n-0 - Staging in finished
+2017-02-16 21:44:56,704-0200 DEBUG swift JOB_START jobid=grep-jb6th24n-0 tr=grep arguments=[-o, -w, Brazil, raw.en3/englishText_10000_20000] tmpdir=pagerank_final-run003/jobs/g/grep-jb6th24n-0
+2017-02-16 21:44:56,704-0200 INFO  Execute JOB_TASK jobid=grep-jb6th24n-0 taskid=task-28 exec=/bin/bash dir=pagerank_final-run003 args=shared/_swiftwrap grep-jb6th24n-0 -jobdir g -scratch  -e grep -out select/select0001.txt -err stderr.txt -i -d select|raw.en3 -if raw.en3/englishText_10000_20000 -of select/select0001.txt -cf  -cdmfile -status files -a -o -w Brazil raw.en3/englishText_10000_20000
+2017-02-16 21:44:56,704-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-28 status=8
+2017-02-16 21:44:56,711-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-28 status=1
+2017-02-16 21:44:56,718-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:56,719-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-28 status=2
+2017-02-16 21:44:56,721-0200 DEBUG swift FILE_STAGE_IN_END file=englishText_20000_30000 srchost=localhost srcdir=./raw.en3 srcname=englishText_20000_30000 desthost=local destdir=pagerank_final-run003/shared/raw.en3 provider=file
+2017-02-16 21:44:56,721-0200 INFO  swift END jobid=grep-ib6th24n-0 - Staging in finished
+2017-02-16 21:44:56,721-0200 DEBUG swift JOB_START jobid=grep-ib6th24n-0 tr=grep arguments=[-o, -w, Brazil, raw.en3/englishText_20000_30000] tmpdir=pagerank_final-run003/jobs/g/grep-ib6th24n-0
+2017-02-16 21:44:56,722-0200 INFO  Execute JOB_TASK jobid=grep-ib6th24n-0 taskid=task-26 exec=/bin/bash dir=pagerank_final-run003 args=shared/_swiftwrap grep-ib6th24n-0 -jobdir g -scratch  -e grep -out select/select0004.txt -err stderr.txt -i -d select|raw.en3 -if raw.en3/englishText_20000_30000 -of select/select0004.txt -cf  -cdmfile -status files -a -o -w Brazil raw.en3/englishText_20000_30000
+2017-02-16 21:44:56,722-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-26 status=8
+2017-02-16 21:44:56,722-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-26 status=1
+2017-02-16 21:44:56,725-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-26 status=2
+2017-02-16 21:44:57,552-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 34163688, JVMThreads: 31
+2017-02-16 21:44:57,553-0200 INFO  RuntimeStats$ProgressTicker   Active:5
+2017-02-16 21:44:57,995-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:57,995-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-26 status=7
+2017-02-16 21:44:57,995-0200 DEBUG swift START jobid=grep-ib6th24n-0
+2017-02-16 21:44:57,996-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:57,996-0200 INFO  swift SUCCESS jobid=grep-ib6th24n-0 - Success file found
+2017-02-16 21:44:57,996-0200 DEBUG swift STAGING_OUT jobid=grep-ib6th24n-0
+2017-02-16 21:44:57,996-0200 INFO  swift START jobid=grep-ib6th24n-0 - Staging out files
+2017-02-16 21:44:57,996-0200 DEBUG swift stageouts: [file://localhost/./select/select0004.txt]
+2017-02-16 21:44:57,997-0200 DEBUG swift FILE_STAGE_OUT_START srcname=select0004.txt srcdir=pagerank_final-run003/shared/select srchost=local destdir=./select desthost=localhost provider=file jobid=grep-ib6th24n-0
+2017-02-16 21:44:57,998-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:57,998-0200 DEBUG swift CDM: file://localhost/./select/select0004.txt : DEFAULT
+2017-02-16 21:44:58,001-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,001-0200 DEBUG swift FILE_STAGE_OUT_END srcname=select0004.txt srcdir=pagerank_final-run003/shared/select srchost=local destdir=./select desthost=localhost provider=file
+2017-02-16 21:44:58,001-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,002-0200 INFO  swift END jobid=grep-ib6th24n-0 - Staging out finished
+2017-02-16 21:44:58,004-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,005-0200 DEBUG swift JOB_END jobid=grep-ib6th24n-0
+2017-02-16 21:44:58,005-0200 INFO  swift END_SUCCESS jobid=grep-ib6th24n tr=grep
+2017-02-16 21:44:58,005-0200 DEBUG swift JOB_INIT jobid=wc-nb6th24n tr=wc
+2017-02-16 21:44:58,005-0200 DEBUG swift PROCEDURE_END line=13 thread=2-0-12-9-19-4-26-0 name=select_word
+2017-02-16 21:44:58,005-0200 DEBUG swift JOB_SITE_SELECT jobid=wc-nb6th24n-0
+2017-02-16 21:44:58,006-0200 DEBUG swift THREAD_ASSOCIATION jobid=wc-nb6th24n-0 host=local thread=2-0-12-9-19-4-27-1
+2017-02-16 21:44:58,007-0200 INFO  swift START jobid=wc-nb6th24n-0 host=local - Initializing directory structure
+2017-02-16 21:44:58,007-0200 INFO  swift START path=count dir=pagerank_final-run003/shared - Creating directory structure
+2017-02-16 21:44:58,007-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,008-0200 INFO  swift END jobid=wc-nb6th24n-0 - Done initializing directory structure
+2017-02-16 21:44:58,008-0200 INFO  swift START jobid=wc-nb6th24n-0 - Staging in files [file://localhost/./select/select0004.txt]
+2017-02-16 21:44:58,009-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,009-0200 DEBUG swift CDM: file://localhost/./select/select0004.txt : DEFAULT
+2017-02-16 21:44:58,009-0200 INFO  swift END jobid=wc-nb6th24n-0 - Staging in finished
+2017-02-16 21:44:58,009-0200 DEBUG swift JOB_START jobid=wc-nb6th24n-0 tr=wc arguments=[-w, select/select0004.txt] tmpdir=pagerank_final-run003/jobs/w/wc-nb6th24n-0
+2017-02-16 21:44:58,010-0200 INFO  Execute JOB_TASK jobid=wc-nb6th24n-0 taskid=task-27 exec=/bin/bash dir=pagerank_final-run003 args=shared/_swiftwrap wc-nb6th24n-0 -jobdir w -scratch  -e wc -out count/count_word0004.txt -err stderr.txt -i -d select|count -if select/select0004.txt -of count/count_word0004.txt -cf  -cdmfile -status files -a -w select/select0004.txt
+2017-02-16 21:44:58,010-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-27 status=8
+2017-02-16 21:44:58,010-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-27 status=1
+2017-02-16 21:44:58,011-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-27 status=2
+2017-02-16 21:44:58,019-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,019-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-24 status=7
+2017-02-16 21:44:58,019-0200 DEBUG swift START jobid=grep-mb6th24n-0
+2017-02-16 21:44:58,029-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,029-0200 INFO  swift SUCCESS jobid=grep-mb6th24n-0 - Success file found
+2017-02-16 21:44:58,029-0200 DEBUG swift STAGING_OUT jobid=grep-mb6th24n-0
+2017-02-16 21:44:58,029-0200 INFO  swift START jobid=grep-mb6th24n-0 - Staging out files
+2017-02-16 21:44:58,029-0200 DEBUG swift stageouts: [file://localhost/./select/select0003.txt]
+2017-02-16 21:44:58,029-0200 DEBUG swift FILE_STAGE_OUT_START srcname=select0003.txt srcdir=pagerank_final-run003/shared/select srchost=local destdir=./select desthost=localhost provider=file jobid=grep-mb6th24n-0
+2017-02-16 21:44:58,030-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,030-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,030-0200 DEBUG swift CDM: file://localhost/./select/select0003.txt : DEFAULT
+2017-02-16 21:44:58,030-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-28 status=7
+2017-02-16 21:44:58,030-0200 DEBUG swift START jobid=grep-jb6th24n-0
+2017-02-16 21:44:58,031-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,031-0200 INFO  swift SUCCESS jobid=grep-jb6th24n-0 - Success file found
+2017-02-16 21:44:58,031-0200 DEBUG swift STAGING_OUT jobid=grep-jb6th24n-0
+2017-02-16 21:44:58,031-0200 INFO  swift START jobid=grep-jb6th24n-0 - Staging out files
+2017-02-16 21:44:58,031-0200 DEBUG swift stageouts: [file://localhost/./select/select0001.txt]
+2017-02-16 21:44:58,031-0200 DEBUG swift FILE_STAGE_OUT_START srcname=select0001.txt srcdir=pagerank_final-run003/shared/select srchost=local destdir=./select desthost=localhost provider=file jobid=grep-jb6th24n-0
+2017-02-16 21:44:58,032-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,032-0200 DEBUG swift CDM: file://localhost/./select/select0001.txt : DEFAULT
+2017-02-16 21:44:58,034-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,035-0200 DEBUG swift FILE_STAGE_OUT_END srcname=select0003.txt srcdir=pagerank_final-run003/shared/select srchost=local destdir=./select desthost=localhost provider=file
+2017-02-16 21:44:58,035-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,036-0200 INFO  swift END jobid=grep-mb6th24n-0 - Staging out finished
+2017-02-16 21:44:58,037-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-16 21:44:58,037-0200 DEBUG swift FILE_STAGE_OUT_END srcname=select0001.txt srcdir=pagerank_final-run003/shared/select srchost=local destdir=./select desthost=localhost provider=file
+2017-02-16 21:44:58,037-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,038-0200 INFO  swift END jobid=grep-jb6th24n-0 - Staging out finished
+2017-02-16 21:44:58,039-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,039-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,039-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,039-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-22 status=7
+2017-02-16 21:44:58,040-0200 DEBUG swift START jobid=grep-lb6th24n-0
+2017-02-16 21:44:58,040-0200 DEBUG swift JOB_END jobid=grep-jb6th24n-0
+2017-02-16 21:44:58,040-0200 INFO  swift END_SUCCESS jobid=grep-jb6th24n tr=grep
+2017-02-16 21:44:58,040-0200 DEBUG swift PROCEDURE_END line=13 thread=2-0-12-9-16-1-28-0 name=select_word
+2017-02-16 21:44:58,040-0200 DEBUG swift JOB_INIT jobid=wc-ob6th24n tr=wc
+2017-02-16 21:44:58,040-0200 DEBUG swift JOB_SITE_SELECT jobid=wc-ob6th24n-0
+2017-02-16 21:44:58,041-0200 DEBUG swift THREAD_ASSOCIATION jobid=wc-ob6th24n-0 host=local thread=2-0-12-9-16-1-29-1
+2017-02-16 21:44:58,041-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,041-0200 INFO  swift SUCCESS jobid=grep-lb6th24n-0 - Success file found
+2017-02-16 21:44:58,041-0200 DEBUG swift STAGING_OUT jobid=grep-lb6th24n-0
+2017-02-16 21:44:58,041-0200 INFO  swift START jobid=wc-ob6th24n-0 host=local - Initializing directory structure
+2017-02-16 21:44:58,041-0200 INFO  swift START jobid=grep-lb6th24n-0 - Staging out files
+2017-02-16 21:44:58,041-0200 DEBUG swift stageouts: [file://localhost/./select/select0002.txt]
+2017-02-16 21:44:58,041-0200 INFO  swift END jobid=wc-ob6th24n-0 - Done initializing directory structure
+2017-02-16 21:44:58,041-0200 INFO  swift START jobid=wc-ob6th24n-0 - Staging in files [file://localhost/./select/select0001.txt]
+2017-02-16 21:44:58,041-0200 DEBUG swift FILE_STAGE_OUT_START srcname=select0002.txt srcdir=pagerank_final-run003/shared/select srchost=local destdir=./select desthost=localhost provider=file jobid=grep-lb6th24n-0
+2017-02-16 21:44:58,042-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,042-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,043-0200 DEBUG swift CDM: file://localhost/./select/select0002.txt : DEFAULT
+2017-02-16 21:44:58,043-0200 DEBUG swift CDM: file://localhost/./select/select0001.txt : DEFAULT
+2017-02-16 21:44:58,043-0200 INFO  swift END jobid=wc-ob6th24n-0 - Staging in finished
+2017-02-16 21:44:58,043-0200 DEBUG swift JOB_START jobid=wc-ob6th24n-0 tr=wc arguments=[-w, select/select0001.txt] tmpdir=pagerank_final-run003/jobs/w/wc-ob6th24n-0
+2017-02-16 21:44:58,044-0200 INFO  Execute JOB_TASK jobid=wc-ob6th24n-0 taskid=task-29 exec=/bin/bash dir=pagerank_final-run003 args=shared/_swiftwrap wc-ob6th24n-0 -jobdir w -scratch  -e wc -out count/count_word0001.txt -err stderr.txt -i -d select|count -if select/select0001.txt -of count/count_word0001.txt -cf  -cdmfile -status files -a -w select/select0001.txt
+2017-02-16 21:44:58,044-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-29 status=8
+2017-02-16 21:44:58,045-0200 DEBUG swift JOB_END jobid=grep-mb6th24n-0
+2017-02-16 21:44:58,045-0200 INFO  swift END_SUCCESS jobid=grep-mb6th24n tr=grep
+2017-02-16 21:44:58,045-0200 DEBUG swift PROCEDURE_END line=13 thread=2-0-12-9-18-3-24-0 name=select_word
+2017-02-16 21:44:58,045-0200 DEBUG swift JOB_INIT jobid=wc-pb6th24n tr=wc
+2017-02-16 21:44:58,045-0200 DEBUG swift JOB_SITE_SELECT jobid=wc-pb6th24n-0
+2017-02-16 21:44:58,046-0200 DEBUG swift THREAD_ASSOCIATION jobid=wc-pb6th24n-0 host=local thread=2-0-12-9-18-3-25-1
+2017-02-16 21:44:58,046-0200 INFO  swift START jobid=wc-pb6th24n-0 host=local - Initializing directory structure
+2017-02-16 21:44:58,047-0200 INFO  swift END jobid=wc-pb6th24n-0 - Done initializing directory structure
+2017-02-16 21:44:58,047-0200 INFO  swift START jobid=wc-pb6th24n-0 - Staging in files [file://localhost/./select/select0003.txt]
+2017-02-16 21:44:58,048-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,049-0200 DEBUG swift CDM: file://localhost/./select/select0003.txt : DEFAULT
+2017-02-16 21:44:58,049-0200 INFO  swift END jobid=wc-pb6th24n-0 - Staging in finished
+2017-02-16 21:44:58,049-0200 DEBUG swift JOB_START jobid=wc-pb6th24n-0 tr=wc arguments=[-w, select/select0003.txt] tmpdir=pagerank_final-run003/jobs/w/wc-pb6th24n-0
+2017-02-16 21:44:58,050-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,050-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-20 status=7
+2017-02-16 21:44:58,050-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,050-0200 INFO  Execute JOB_TASK jobid=wc-pb6th24n-0 taskid=task-25 exec=/bin/bash dir=pagerank_final-run003 args=shared/_swiftwrap wc-pb6th24n-0 -jobdir w -scratch  -e wc -out count/count_word0003.txt -err stderr.txt -i -d select|count -if select/select0003.txt -of count/count_word0003.txt -cf  -cdmfile -status files -a -w select/select0003.txt
+2017-02-16 21:44:58,050-0200 DEBUG swift FILE_STAGE_OUT_END srcname=select0002.txt srcdir=pagerank_final-run003/shared/select srchost=local destdir=./select desthost=localhost provider=file
+2017-02-16 21:44:58,050-0200 DEBUG swift START jobid=grep-kb6th24n-0
+2017-02-16 21:44:58,051-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-25 status=8
+2017-02-16 21:44:58,051-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-25 status=1
+2017-02-16 21:44:58,051-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,051-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,051-0200 INFO  swift SUCCESS jobid=grep-kb6th24n-0 - Success file found
+2017-02-16 21:44:58,051-0200 DEBUG swift STAGING_OUT jobid=grep-kb6th24n-0
+2017-02-16 21:44:58,051-0200 INFO  swift START jobid=grep-kb6th24n-0 - Staging out files
+2017-02-16 21:44:58,051-0200 DEBUG swift stageouts: [file://localhost/./select/select0000.txt]
+2017-02-16 21:44:58,052-0200 DEBUG swift FILE_STAGE_OUT_START srcname=select0000.txt srcdir=pagerank_final-run003/shared/select srchost=local destdir=./select desthost=localhost provider=file jobid=grep-kb6th24n-0
+2017-02-16 21:44:58,052-0200 INFO  swift END jobid=grep-lb6th24n-0 - Staging out finished
+2017-02-16 21:44:58,053-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-25 status=2
+2017-02-16 21:44:58,053-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,053-0200 DEBUG swift CDM: file://localhost/./select/select0000.txt : DEFAULT
+2017-02-16 21:44:58,063-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-29 status=1
+2017-02-16 21:44:58,068-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-29 status=2
+2017-02-16 21:44:58,070-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,071-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,071-0200 DEBUG swift FILE_STAGE_OUT_END srcname=select0000.txt srcdir=pagerank_final-run003/shared/select srchost=local destdir=./select desthost=localhost provider=file
+2017-02-16 21:44:58,071-0200 DEBUG swift JOB_END jobid=grep-lb6th24n-0
+2017-02-16 21:44:58,071-0200 INFO  swift END_SUCCESS jobid=grep-lb6th24n tr=grep
+2017-02-16 21:44:58,071-0200 DEBUG swift PROCEDURE_END line=13 thread=2-0-12-9-17-2-22-0 name=select_word
+2017-02-16 21:44:58,071-0200 DEBUG swift JOB_INIT jobid=wc-qb6th24n tr=wc
+2017-02-16 21:44:58,071-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,071-0200 DEBUG swift JOB_SITE_SELECT jobid=wc-qb6th24n-0
+2017-02-16 21:44:58,072-0200 DEBUG swift THREAD_ASSOCIATION jobid=wc-qb6th24n-0 host=local thread=2-0-12-9-17-2-23-1
+2017-02-16 21:44:58,072-0200 INFO  swift START jobid=wc-qb6th24n-0 host=local - Initializing directory structure
+2017-02-16 21:44:58,072-0200 INFO  swift END jobid=wc-qb6th24n-0 - Done initializing directory structure
+2017-02-16 21:44:58,072-0200 INFO  swift START jobid=wc-qb6th24n-0 - Staging in files [file://localhost/./select/select0002.txt]
+2017-02-16 21:44:58,073-0200 INFO  swift END jobid=grep-kb6th24n-0 - Staging out finished
+2017-02-16 21:44:58,073-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-16 21:44:58,073-0200 DEBUG swift CDM: file://localhost/./select/select0002.txt : DEFAULT
+2017-02-16 21:44:58,074-0200 INFO  swift END jobid=wc-qb6th24n-0 - Staging in finished
+2017-02-16 21:44:58,074-0200 DEBUG swift JOB_START jobid=wc-qb6th24n-0 tr=wc arguments=[-w, select/select0002.txt] tmpdir=pagerank_final-run003/jobs/w/wc-qb6th24n-0
+2017-02-16 21:44:58,074-0200 INFO  Execute JOB_TASK jobid=wc-qb6th24n-0 taskid=task-23 exec=/bin/bash dir=pagerank_final-run003 args=shared/_swiftwrap wc-qb6th24n-0 -jobdir w -scratch  -e wc -out count/count_word0002.txt -err stderr.txt -i -d select|count -if select/select0002.txt -of count/count_word0002.txt -cf  -cdmfile -status files -a -w select/select0002.txt
+2017-02-16 21:44:58,075-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-23 status=8
+2017-02-16 21:44:58,077-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-23 status=1
+2017-02-16 21:44:58,079-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,079-0200 DEBUG swift JOB_END jobid=grep-kb6th24n-0
+2017-02-16 21:44:58,079-0200 INFO  swift END_SUCCESS jobid=grep-kb6th24n tr=grep
+2017-02-16 21:44:58,079-0200 DEBUG swift PROCEDURE_END line=13 thread=2-0-12-9-15-0-20-0 name=select_word
+2017-02-16 21:44:58,080-0200 DEBUG swift JOB_INIT jobid=wc-rb6th24n tr=wc
+2017-02-16 21:44:58,080-0200 DEBUG swift JOB_SITE_SELECT jobid=wc-rb6th24n-0
+2017-02-16 21:44:58,080-0200 DEBUG swift THREAD_ASSOCIATION jobid=wc-rb6th24n-0 host=local thread=2-0-12-9-15-0-21-1
+2017-02-16 21:44:58,081-0200 INFO  swift START jobid=wc-rb6th24n-0 host=local - Initializing directory structure
+2017-02-16 21:44:58,081-0200 INFO  swift END jobid=wc-rb6th24n-0 - Done initializing directory structure
+2017-02-16 21:44:58,081-0200 INFO  swift START jobid=wc-rb6th24n-0 - Staging in files [file://localhost/./select/select0000.txt]
+2017-02-16 21:44:58,082-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,082-0200 DEBUG swift CDM: file://localhost/./select/select0000.txt : DEFAULT
+2017-02-16 21:44:58,082-0200 INFO  swift END jobid=wc-rb6th24n-0 - Staging in finished
+2017-02-16 21:44:58,082-0200 DEBUG swift JOB_START jobid=wc-rb6th24n-0 tr=wc arguments=[-w, select/select0000.txt] tmpdir=pagerank_final-run003/jobs/w/wc-rb6th24n-0
+2017-02-16 21:44:58,083-0200 INFO  Execute JOB_TASK jobid=wc-rb6th24n-0 taskid=task-21 exec=/bin/bash dir=pagerank_final-run003 args=shared/_swiftwrap wc-rb6th24n-0 -jobdir w -scratch  -e wc -out count/count_word0000.txt -err stderr.txt -i -d select|count -if select/select0000.txt -of count/count_word0000.txt -cf  -cdmfile -status files -a -w select/select0000.txt
+2017-02-16 21:44:58,083-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-21 status=8
+2017-02-16 21:44:58,083-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-21 status=1
+2017-02-16 21:44:58,087-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-23 status=2
+2017-02-16 21:44:58,089-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-21 status=2
+2017-02-16 21:44:58,134-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,134-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-27 status=7
+2017-02-16 21:44:58,134-0200 DEBUG swift START jobid=wc-nb6th24n-0
+2017-02-16 21:44:58,136-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,136-0200 INFO  swift SUCCESS jobid=wc-nb6th24n-0 - Success file found
+2017-02-16 21:44:58,136-0200 DEBUG swift STAGING_OUT jobid=wc-nb6th24n-0
+2017-02-16 21:44:58,136-0200 INFO  swift START jobid=wc-nb6th24n-0 - Staging out files
+2017-02-16 21:44:58,136-0200 DEBUG swift stageouts: [file://localhost/./count/count_word0004.txt]
+2017-02-16 21:44:58,137-0200 DEBUG swift FILE_STAGE_OUT_START srcname=count_word0004.txt srcdir=pagerank_final-run003/shared/count srchost=local destdir=./count desthost=localhost provider=file jobid=wc-nb6th24n-0
+2017-02-16 21:44:58,138-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,138-0200 DEBUG swift CDM: file://localhost/./count/count_word0004.txt : DEFAULT
+2017-02-16 21:44:58,140-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,140-0200 DEBUG swift FILE_STAGE_OUT_END srcname=count_word0004.txt srcdir=pagerank_final-run003/shared/count srchost=local destdir=./count desthost=localhost provider=file
+2017-02-16 21:44:58,142-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,143-0200 INFO  swift END jobid=wc-nb6th24n-0 - Staging out finished
+2017-02-16 21:44:58,145-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,147-0200 DEBUG swift JOB_END jobid=wc-nb6th24n-0
+2017-02-16 21:44:58,147-0200 INFO  swift END_SUCCESS jobid=wc-nb6th24n tr=wc
+2017-02-16 21:44:58,147-0200 DEBUG swift PROCEDURE_END line=18 thread=2-0-12-9-19-4-27-1 name=count_word
+2017-02-16 21:44:58,147-0200 DEBUG swift FOREACH_IT_END line=33 thread=2-0-12-9-19-4
+2017-02-16 21:44:58,154-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,154-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-25 status=7
+2017-02-16 21:44:58,154-0200 DEBUG swift START jobid=wc-pb6th24n-0
+2017-02-16 21:44:58,155-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,155-0200 INFO  swift SUCCESS jobid=wc-pb6th24n-0 - Success file found
+2017-02-16 21:44:58,155-0200 DEBUG swift STAGING_OUT jobid=wc-pb6th24n-0
+2017-02-16 21:44:58,155-0200 INFO  swift START jobid=wc-pb6th24n-0 - Staging out files
+2017-02-16 21:44:58,155-0200 DEBUG swift stageouts: [file://localhost/./count/count_word0003.txt]
+2017-02-16 21:44:58,155-0200 DEBUG swift FILE_STAGE_OUT_START srcname=count_word0003.txt srcdir=pagerank_final-run003/shared/count srchost=local destdir=./count desthost=localhost provider=file jobid=wc-pb6th24n-0
+2017-02-16 21:44:58,156-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,156-0200 DEBUG swift CDM: file://localhost/./count/count_word0003.txt : DEFAULT
+2017-02-16 21:44:58,157-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,158-0200 DEBUG swift FILE_STAGE_OUT_END srcname=count_word0003.txt srcdir=pagerank_final-run003/shared/count srchost=local destdir=./count desthost=localhost provider=file
+2017-02-16 21:44:58,158-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,159-0200 INFO  swift END jobid=wc-pb6th24n-0 - Staging out finished
+2017-02-16 21:44:58,164-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,164-0200 DEBUG swift JOB_END jobid=wc-pb6th24n-0
+2017-02-16 21:44:58,164-0200 INFO  swift END_SUCCESS jobid=wc-pb6th24n tr=wc
+2017-02-16 21:44:58,164-0200 DEBUG swift PROCEDURE_END line=18 thread=2-0-12-9-18-3-25-1 name=count_word
+2017-02-16 21:44:58,164-0200 DEBUG swift FOREACH_IT_END line=33 thread=2-0-12-9-18-3
+2017-02-16 21:44:58,188-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,188-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-23 status=7
+2017-02-16 21:44:58,189-0200 DEBUG swift START jobid=wc-qb6th24n-0
+2017-02-16 21:44:58,189-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,189-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,189-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-29 status=7
+2017-02-16 21:44:58,190-0200 INFO  swift SUCCESS jobid=wc-qb6th24n-0 - Success file found
+2017-02-16 21:44:58,190-0200 DEBUG swift STAGING_OUT jobid=wc-qb6th24n-0
+2017-02-16 21:44:58,190-0200 DEBUG swift START jobid=wc-ob6th24n-0
+2017-02-16 21:44:58,190-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,190-0200 INFO  swift START jobid=wc-qb6th24n-0 - Staging out files
+2017-02-16 21:44:58,190-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-21 status=7
+2017-02-16 21:44:58,190-0200 DEBUG swift stageouts: [file://localhost/./count/count_word0002.txt]
+2017-02-16 21:44:58,190-0200 DEBUG swift FILE_STAGE_OUT_START srcname=count_word0002.txt srcdir=pagerank_final-run003/shared/count srchost=local destdir=./count desthost=localhost provider=file jobid=wc-qb6th24n-0
+2017-02-16 21:44:58,190-0200 DEBUG swift START jobid=wc-rb6th24n-0
+2017-02-16 21:44:58,190-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,190-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,190-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,191-0200 INFO  swift SUCCESS jobid=wc-ob6th24n-0 - Success file found
+2017-02-16 21:44:58,191-0200 DEBUG swift STAGING_OUT jobid=wc-ob6th24n-0
+2017-02-16 21:44:58,191-0200 INFO  swift START jobid=wc-ob6th24n-0 - Staging out files
+2017-02-16 21:44:58,191-0200 DEBUG swift stageouts: [file://localhost/./count/count_word0001.txt]
+2017-02-16 21:44:58,191-0200 DEBUG swift CDM: file://localhost/./count/count_word0002.txt : DEFAULT
+2017-02-16 21:44:58,191-0200 INFO  swift SUCCESS jobid=wc-rb6th24n-0 - Success file found
+2017-02-16 21:44:58,191-0200 DEBUG swift STAGING_OUT jobid=wc-rb6th24n-0
+2017-02-16 21:44:58,191-0200 DEBUG swift FILE_STAGE_OUT_START srcname=count_word0001.txt srcdir=pagerank_final-run003/shared/count srchost=local destdir=./count desthost=localhost provider=file jobid=wc-ob6th24n-0
+2017-02-16 21:44:58,191-0200 INFO  swift START jobid=wc-rb6th24n-0 - Staging out files
+2017-02-16 21:44:58,191-0200 DEBUG swift stageouts: [file://localhost/./count/count_word0000.txt]
+2017-02-16 21:44:58,191-0200 DEBUG swift FILE_STAGE_OUT_START srcname=count_word0000.txt srcdir=pagerank_final-run003/shared/count srchost=local destdir=./count desthost=localhost provider=file jobid=wc-rb6th24n-0
+2017-02-16 21:44:58,192-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-16 21:44:58,192-0200 DEBUG swift CDM: file://localhost/./count/count_word0001.txt : DEFAULT
+2017-02-16 21:44:58,194-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,194-0200 DEBUG swift CDM: file://localhost/./count/count_word0000.txt : DEFAULT
+2017-02-16 21:44:58,195-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,195-0200 DEBUG swift FILE_STAGE_OUT_END srcname=count_word0002.txt srcdir=pagerank_final-run003/shared/count srchost=local destdir=./count desthost=localhost provider=file
+2017-02-16 21:44:58,196-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,196-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,196-0200 DEBUG swift FILE_STAGE_OUT_END srcname=count_word0001.txt srcdir=pagerank_final-run003/shared/count srchost=local destdir=./count desthost=localhost provider=file
+2017-02-16 21:44:58,197-0200 INFO  swift END jobid=wc-qb6th24n-0 - Staging out finished
+2017-02-16 21:44:58,198-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,199-0200 INFO  swift END jobid=wc-ob6th24n-0 - Staging out finished
+2017-02-16 21:44:58,200-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,201-0200 DEBUG swift JOB_END jobid=wc-qb6th24n-0
+2017-02-16 21:44:58,201-0200 INFO  swift END_SUCCESS jobid=wc-qb6th24n tr=wc
+2017-02-16 21:44:58,201-0200 DEBUG swift PROCEDURE_END line=18 thread=2-0-12-9-17-2-23-1 name=count_word
+2017-02-16 21:44:58,201-0200 DEBUG swift FOREACH_IT_END line=33 thread=2-0-12-9-17-2
+2017-02-16 21:44:58,200-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,202-0200 DEBUG swift FILE_STAGE_OUT_END srcname=count_word0000.txt srcdir=pagerank_final-run003/shared/count srchost=local destdir=./count desthost=localhost provider=file
+2017-02-16 21:44:58,203-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,204-0200 INFO  swift END jobid=wc-rb6th24n-0 - Staging out finished
+2017-02-16 21:44:58,204-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-16 21:44:58,204-0200 DEBUG swift JOB_END jobid=wc-ob6th24n-0
+2017-02-16 21:44:58,204-0200 INFO  swift END_SUCCESS jobid=wc-ob6th24n tr=wc
+2017-02-16 21:44:58,204-0200 DEBUG swift PROCEDURE_END line=18 thread=2-0-12-9-16-1-29-1 name=count_word
+2017-02-16 21:44:58,205-0200 DEBUG swift FOREACH_IT_END line=33 thread=2-0-12-9-16-1
+2017-02-16 21:44:58,206-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,207-0200 DEBUG swift JOB_END jobid=wc-rb6th24n-0
+2017-02-16 21:44:58,207-0200 INFO  swift END_SUCCESS jobid=wc-rb6th24n tr=wc
+2017-02-16 21:44:58,207-0200 DEBUG swift PROCEDURE_END line=18 thread=2-0-12-9-15-0-21-1 name=count_word
+2017-02-16 21:44:58,207-0200 DEBUG swift FOREACH_IT_END line=33 thread=2-0-12-9-15-0
+2017-02-16 21:44:58,207-0200 DEBUG swift JOB_INIT jobid=cat-sb6th24n tr=cat
+2017-02-16 21:44:58,207-0200 DEBUG swift JOB_SITE_SELECT jobid=cat-sb6th24n-0
+2017-02-16 21:44:58,208-0200 DEBUG swift THREAD_ASSOCIATION jobid=cat-sb6th24n-0 host=local thread=2-0-13-10
+2017-02-16 21:44:58,210-0200 INFO  swift START jobid=cat-sb6th24n-0 host=local - Initializing directory structure
+2017-02-16 21:44:58,210-0200 INFO  swift START path= dir=pagerank_final-run003/shared - Creating directory structure
+2017-02-16 21:44:58,210-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,210-0200 INFO  swift END jobid=cat-sb6th24n-0 - Done initializing directory structure
+2017-02-16 21:44:58,210-0200 INFO  swift START jobid=cat-sb6th24n-0 - Staging in files [file://localhost/./count/count_word0002.txt, file://localhost/./count/count_word0001.txt, file://localhost/./count/count_word0003.txt, file://localhost/./count/count_word0004.txt, file://localhost/./count/count_word0000.txt]
+2017-02-16 21:44:58,211-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,212-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,212-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,212-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,212-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,212-0200 DEBUG swift CDM: file://localhost/./count/count_word0002.txt : DEFAULT
+2017-02-16 21:44:58,212-0200 DEBUG swift CDM: file://localhost/./count/count_word0001.txt : DEFAULT
+2017-02-16 21:44:58,212-0200 DEBUG swift CDM: file://localhost/./count/count_word0003.txt : DEFAULT
+2017-02-16 21:44:58,212-0200 DEBUG swift CDM: file://localhost/./count/count_word0004.txt : DEFAULT
+2017-02-16 21:44:58,212-0200 DEBUG swift CDM: file://localhost/./count/count_word0000.txt : DEFAULT
+2017-02-16 21:44:58,213-0200 INFO  swift END jobid=cat-sb6th24n-0 - Staging in finished
+2017-02-16 21:44:58,213-0200 DEBUG swift JOB_START jobid=cat-sb6th24n-0 tr=cat arguments=[count/count_word0000.txt count/count_word0001.txt count/count_word0002.txt count/count_word0003.txt count/count_word0004.txt] tmpdir=pagerank_final-run003/jobs/c/cat-sb6th24n-0
+2017-02-16 21:44:58,213-0200 INFO  Execute JOB_TASK jobid=cat-sb6th24n-0 taskid=task-13 exec=/bin/bash dir=pagerank_final-run003 args=shared/_swiftwrap cat-sb6th24n-0 -jobdir c -scratch  -e cat -out group.txt -err stderr.txt -i -d count -if count/count_word0002.txt|count/count_word0001.txt|count/count_word0003.txt|count/count_word0004.txt|count/count_word0000.txt -of group.txt -cf  -cdmfile -status files -a count/count_word0000.txt count/count_word0001.txt count/count_word0002.txt count/count_word0003.txt count/count_word0004.txt
+2017-02-16 21:44:58,214-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-13 status=8
+2017-02-16 21:44:58,214-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-13 status=1
+2017-02-16 21:44:58,215-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-13 status=2
+2017-02-16 21:44:58,255-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,255-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-13 status=7
+2017-02-16 21:44:58,255-0200 DEBUG swift START jobid=cat-sb6th24n-0
+2017-02-16 21:44:58,256-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,256-0200 INFO  swift SUCCESS jobid=cat-sb6th24n-0 - Success file found
+2017-02-16 21:44:58,256-0200 DEBUG swift STAGING_OUT jobid=cat-sb6th24n-0
+2017-02-16 21:44:58,256-0200 INFO  swift START jobid=cat-sb6th24n-0 - Staging out files
+2017-02-16 21:44:58,256-0200 DEBUG swift stageouts: [file://localhost/group.txt]
+2017-02-16 21:44:58,256-0200 DEBUG swift FILE_STAGE_OUT_START srcname=group.txt srcdir=pagerank_final-run003/shared/ srchost=local destdir= desthost=localhost provider=file jobid=cat-sb6th24n-0
+2017-02-16 21:44:58,257-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,257-0200 DEBUG swift CDM: file://localhost/group.txt : DEFAULT
+2017-02-16 21:44:58,258-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,258-0200 DEBUG swift FILE_STAGE_OUT_END srcname=group.txt srcdir=pagerank_final-run003/shared/ srchost=local destdir= desthost=localhost provider=file
+2017-02-16 21:44:58,258-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,259-0200 INFO  swift END jobid=cat-sb6th24n-0 - Staging out finished
+2017-02-16 21:44:58,261-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,262-0200 DEBUG swift JOB_END jobid=cat-sb6th24n-0
+2017-02-16 21:44:58,262-0200 INFO  swift END_SUCCESS jobid=cat-sb6th24n tr=cat
+2017-02-16 21:44:58,262-0200 DEBUG swift PROCEDURE_END line=23 thread=2-0-13-10 name=group_count
+2017-02-16 21:44:58,262-0200 DEBUG swift JOB_INIT jobid=sort-tb6th24n tr=sort
+2017-02-16 21:44:58,263-0200 DEBUG swift JOB_SITE_SELECT jobid=sort-tb6th24n-0
+2017-02-16 21:44:58,263-0200 DEBUG swift THREAD_ASSOCIATION jobid=sort-tb6th24n-0 host=local thread=2-0-14-11
+2017-02-16 21:44:58,264-0200 INFO  swift START jobid=sort-tb6th24n-0 host=local - Initializing directory structure
+2017-02-16 21:44:58,264-0200 INFO  swift END jobid=sort-tb6th24n-0 - Done initializing directory structure
+2017-02-16 21:44:58,264-0200 INFO  swift START jobid=sort-tb6th24n-0 - Staging in files [file://localhost/group.txt]
+2017-02-16 21:44:58,264-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,265-0200 DEBUG swift CDM: file://localhost/group.txt : DEFAULT
+2017-02-16 21:44:58,265-0200 INFO  swift END jobid=sort-tb6th24n-0 - Staging in finished
+2017-02-16 21:44:58,265-0200 DEBUG swift JOB_START jobid=sort-tb6th24n-0 tr=sort arguments=[-n, group.txt] tmpdir=pagerank_final-run003/jobs/s/sort-tb6th24n-0
+2017-02-16 21:44:58,265-0200 INFO  Execute JOB_TASK jobid=sort-tb6th24n-0 taskid=task-14 exec=/bin/bash dir=pagerank_final-run003 args=shared/_swiftwrap sort-tb6th24n-0 -jobdir s -scratch  -e sort -out sort.txt -err stderr.txt -i -d  -if group.txt -of sort.txt -cf  -cdmfile -status files -a -n group.txt
+2017-02-16 21:44:58,266-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-14 status=8
+2017-02-16 21:44:58,266-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-14 status=1
+2017-02-16 21:44:58,266-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-14 status=2
+2017-02-16 21:44:58,307-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,307-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-14 status=7
+2017-02-16 21:44:58,307-0200 DEBUG swift START jobid=sort-tb6th24n-0
+2017-02-16 21:44:58,308-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,308-0200 INFO  swift SUCCESS jobid=sort-tb6th24n-0 - Success file found
+2017-02-16 21:44:58,308-0200 DEBUG swift STAGING_OUT jobid=sort-tb6th24n-0
+2017-02-16 21:44:58,308-0200 INFO  swift START jobid=sort-tb6th24n-0 - Staging out files
+2017-02-16 21:44:58,308-0200 DEBUG swift stageouts: [file://localhost/sort.txt]
+2017-02-16 21:44:58,308-0200 DEBUG swift FILE_STAGE_OUT_START srcname=sort.txt srcdir=pagerank_final-run003/shared/ srchost=local destdir= desthost=localhost provider=file jobid=sort-tb6th24n-0
+2017-02-16 21:44:58,308-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,309-0200 DEBUG swift CDM: file://localhost/sort.txt : DEFAULT
+2017-02-16 21:44:58,309-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,309-0200 DEBUG swift FILE_STAGE_OUT_END srcname=sort.txt srcdir=pagerank_final-run003/shared/ srchost=local destdir= desthost=localhost provider=file
+2017-02-16 21:44:58,310-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,310-0200 INFO  swift END jobid=sort-tb6th24n-0 - Staging out finished
+2017-02-16 21:44:58,311-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,311-0200 DEBUG swift JOB_END jobid=sort-tb6th24n-0
+2017-02-16 21:44:58,311-0200 INFO  swift END_SUCCESS jobid=sort-tb6th24n tr=sort
+2017-02-16 21:44:58,311-0200 DEBUG swift PROCEDURE_END line=28 thread=2-0-14-11 name=sort
+2017-02-16 21:44:58,312-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 8898200, JVMThreads: 31
+2017-02-16 21:44:58,312-0200 INFO  RuntimeStats$ProgressTicker   Finished successfully:12
+2017-02-16 21:44:58,318-0200 DEBUG swift Starting cleanups
+2017-02-16 21:44:58,319-0200 INFO  swift START cleanups=[[pagerank_final-run003, local]]
+2017-02-16 21:44:58,319-0200 INFO  swift START dir=pagerank_final-run003 host=local
+2017-02-16 21:44:58,319-0200 DEBUG swift cdmfile 
+2017-02-16 21:44:58,319-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:58,319-0200 INFO  swift END dir=pagerank_final-run003 host=local
+2017-02-16 21:44:58,320-0200 INFO  swift END cleanups=[[pagerank_final-run003, local]]
+2017-02-16 21:44:58,320-0200 DEBUG swift Ending cleanups
+2017-02-16 21:44:58,323-0200 INFO  FileGarbageCollector Failed to clean <cleaned>:any - Closed
+java.lang.NullPointerException
+	at org.griphyn.vdl.mapping.nodes.AbstractFutureArrayDataNode.getFringePaths(AbstractFutureArrayDataNode.java:225)
+	at org.griphyn.vdl.mapping.nodes.AbstractDataNode.getFringePaths(AbstractDataNode.java:314)
+	at org.griphyn.vdl.mapping.file.FileGarbageCollector.run(FileGarbageCollector.java:112)
+	at java.lang.Thread.run(Thread.java:745)
+2017-02-16 21:44:58,327-0200 INFO  FileGarbageCollector Failed to clean <cleaned>:any - Closed
+java.lang.NullPointerException
+	at org.griphyn.vdl.mapping.nodes.AbstractFutureArrayDataNode.getFringePaths(AbstractFutureArrayDataNode.java:225)
+	at org.griphyn.vdl.mapping.nodes.AbstractDataNode.getFringePaths(AbstractDataNode.java:314)
+	at org.griphyn.vdl.mapping.file.FileGarbageCollector.run(FileGarbageCollector.java:112)
+	at java.lang.Thread.run(Thread.java:745)
+2017-02-16 21:44:58,327-0200 INFO  Loader Swift finished with no errors

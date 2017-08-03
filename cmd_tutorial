@@ -1,0 +1,162 @@
+============================
+- Carregar módulo do Swift -
+============================
+
+> module load swift/0.96.2 
+
+============================
+- Configurações ------------
+============================
+
+> export SWIFT_USERHOME=$SCRATCH
+
+============================
+- Tutorial -----------------
+============================
+TODO: Colocar swift.conf nos diretórios 
+
+-- Copiar diretório tutorial do swift para o SCRATCH
+
+> cd tutorial 
+> source setup.sh
+
+= 0. Hello Swift ==========
+
+> cd hello
+> swift hello.swift
+
+> swiftlog -import-provenance <run_id>
+
+> cd ..
+
+= 1. Part01 ==========
+
+> cd part01
+> swift p1.swift
+> cat sim.out
+
+> swiftlog -import-provenance <run_id>
+
+> cd ..
+
+= 2. Part02 ==========
+
+> cd part02
+> swift p1.swift
+> ls -ltrh output
+> cat output/sim_1.out
+
+> swiftlog -import-provenance <run_id>
+
+> cd ..
+
+= 3. Part03 ==========
+
+> cd part03
+> swift p3.swift
+> ls -ltrh output
+> more output/*out
+
+> swiftlog -import-provenance <run_id>
+
+> cd ..
+
+= 4. Part04 ==========
+
+> cd part04
+> swift p4.swift
+> ls -ltrh output
+> more output/sim_1.log
+
+> swiftlog -import-provenance <run_id>
+
+> cd ..
+
+= 5. Part05 ==========
+
+> cd part05
+> swift p5.swift
+> ls -ltrh output
+> more output/average*
+
+> swiftlog -import-provenance <run_id>
+
+> cd ..
+
+= 6. Part06 ==========
+
+> cd part06
+> swift p6.swift
+> ls -ltrh output
+> more output/average*
+
+> swiftlog -import-provenance <run_id>
+
+> cd ..
+
+============================
+- Pagerank -----------------
+============================
+
+> cd ../pagerank
+> tar xfz raw.en3.tar.gz
+> swift pagerank.swift -word=Brazil
+> more sort.txt
+
+> swiftlog -import-provenance <run_id>
+
+============================
+- C-Ray --------------------
+============================
+
+> cd ../c-ray
+> export PATH:./bin:$PATH
+> swift c-ray.swift 
+
+> swiftlog -import-provenance <run_id>
+
+============================
+- SwiftGecko----------------
+============================
+
+> cd ../swift-gecko
+> export PATH:./bin:$PATH
+> swift allvsall.swift
+
+> swiftlog -import-provenance <run_id>
+
+============================
+- Análises -----------------
+============================
+
+> sqlite3 ~/swift_provenance.db
+> .mode column
+> .mode list
+> .header on
+
+Consultas:
+
+- 1. Listar tabelas do bd 
+> .tables
+
+- 2. Listar execuções de workflows
+> select * from script_run;
+
+- 3. Listar quantidade de atividades executadas por cada workflow
+> select script_run_id, count(*) from app_exec group by script_run_id;     
+
+- 4. Listar média de duração das atividades de cada workflow
+> select s.script_run_id, a.app_name, avg(a.duration) as avg_duration from resource_usage r, app_exec a, script_run s
+where a.app_exec_id = r.app_exec_id
+and s.script_run_id = a.script_run_id
+group by a.app_name order by s.script_run_id;
+
+- 5. Listar arquivos gerados por cada atividade dos workflows
+> select a.script_run_id, a.app_name, f.name from staged_out 
+natural join app_exec a natural join file f
+order by a.script_run_id;
+
+0. Sair do sqlite3
+> .q
+
+

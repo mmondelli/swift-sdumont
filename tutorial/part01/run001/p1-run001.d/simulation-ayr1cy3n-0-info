@@ -1,0 +1,54 @@
+checking for paramfile
+No paramfile specified
+Getarg -jobdir=s. Rest is -scratch  -d  -if  -of sim.out -cf  -cdmfile -status files -e simulate -out sim.out -err -i -a
+Getarg -scratch=. Rest is -d  -if  -of sim.out -cf  -cdmfile -status files -e simulate -out sim.out -err -i -a
+Progress  2017-02-14 08:58:51.931804416-0200  LOG_START
+
+_____________________________________________________________________________
+
+        Wrapper (_swiftwrap)
+_____________________________________________________________________________
+
+Getarg -d=. Rest is -if  -of sim.out -cf  -cdmfile -status files -e simulate -out sim.out -err -i -a
+Getarg -if=. Rest is -of sim.out -cf  -cdmfile -status files -e simulate -out sim.out -err -i -a
+Getarg -of=sim.out. Rest is -cf  -cdmfile -status files -e simulate -out sim.out -err -i -a
+Getarg -cf=. Rest is -cdmfile -status files -e simulate -out sim.out -err -i -a
+Getarg -cdmfile=. Rest is -status files -e simulate -out sim.out -err -i -a
+Getarg -status=files. Rest is -e simulate -out sim.out -err -i -a
+Job directory mode is: link on shared filesystem
+PID=18701
+HOST=
+PWD=/home/mluiza/swift-k/examples/tutorial/part01/swiftwork/p1-run001
+DIR=jobs/s/simulation-ayr1cy3n-0
+DIRS=
+INF=
+OUTF=sim.out
+COLLECT=
+CDM_FILE=
+Progress  2017-02-14 08:58:51.936928616-0200  CREATE_JOBDIR
+Created job directory: jobs/s/simulation-ayr1cy3n-0
+Progress  2017-02-14 08:58:51.939090130-0200  CREATE_INPUTDIR
+Progress  2017-02-14 08:58:51.940294784-0200  LINK_INPUTS
+Getarg -e=simulate. Rest is -out sim.out -err -i -a
+Getarg -out=sim.out. Rest is -err -i -a
+Getarg -err=. Rest is -i -a
+Getarg -i=. Rest is -a
+EXEC=simulate
+STDIN=
+STDOUT=sim.out
+STDERR=
+ARGS=
+ARGC=0
+ACTUALEXEC=/home/mluiza/swift-k/examples/tutorial/bin/simulate
+Progress  2017-02-14 08:58:51.945093422-0200  EXECUTE
+APP_RESOURCES=real_secs:0.15,kernel_secs:0.01,user_secs:0.00,percent_cpu:10%,max_rss:1588,avg_rss:0,avg_tot_vm:0,avg_priv_data:0,avg_priv_stack:0,avg_shared_text:0,page_size:4096,major_pgfaults:5,minor_pgfaults:3558,swaps:0,invol_context_switches:15,vol_waits:39,fs_reads:752,fs_writes:32,sock_recv:0,sock_send:0,signals:0,exit_status:0
+Progress  2017-02-14 08:58:52.116381106-0200  DONE EXITCODE=0
+linkOutput EC: 0, SRC: _stdout_1.txt, TARGET: _stdout.txt, SWIFT_OUTPUT: sim.out
+linkOutput EC: 0, SRC: _stderr_1.txt, TARGET: _stderr.txt, SWIFT_OUTPUT: 
+Progress  2017-02-14 08:58:52.125377890-0200  EXECUTE_DONE
+Moving back to workflow directory /home/mluiza/swift-k/examples/tutorial/part01/swiftwork/p1-run001
+Job ran successfully
+Progress  2017-02-14 08:58:52.127291278-0200  MOVING_OUTPUTS sim.out
+Progress  2017-02-14 08:58:52.130365120-0200  RM_JOBDIR
+Progress  2017-02-14 08:58:52.133033249-0200  TOUCH_SUCCESS
+Progress  2017-02-14 08:58:52.149388126-0200  END

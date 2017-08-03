@@ -1,0 +1,46 @@
+checking for paramfile
+paramfile is: 
+Progress  2017-02-16 21:44:58.223840349-0200  LOG_START
+
+_____________________________________________________________________________
+
+        Wrapper (_swiftwrap)
+_____________________________________________________________________________
+
+Job directory mode is: link on shared filesystem
+PID=19221
+HOST=
+PWD=/home/mondelli/Dropbox/Docker/swift_verao/pagerank/swiftwork/pagerank_final-run003
+DIR=jobs/c/cat-sb6th24n-0
+EXEC=/bin/cat
+STDIN=
+STDOUT=group.txt
+STDERR=stderr.txt
+DIRS=count
+INF=count/count_word0002.txt|count/count_word0001.txt|count/count_word0003.txt|count/count_word0004.txt|count/count_word0000.txt
+OUTF=group.txt
+COLLECT=
+CDM_FILE=
+ARGS=count/count_word0000.txt count/count_word0001.txt count/count_word0002.txt count/count_word0003.txt count/count_word0004.txt
+ARGC=5
+MPI_RANK=
+PMI_RANK=
+Progress  2017-02-16 21:44:58.230059183-0200  CREATE_JOBDIR
+Created job directory: jobs/c/cat-sb6th24n-0
+Progress  2017-02-16 21:44:58.233000211-0200  CREATE_INPUTDIR
+Created output directory: jobs/c/cat-sb6th24n-0/count
+Progress  2017-02-16 21:44:58.234990929-0200  LINK_INPUTS
+Linked input: /home/mondelli/Dropbox/Docker/swift_verao/pagerank/swiftwork/pagerank_final-run003/shared/count/count_word0002.txt to jobs/c/cat-sb6th24n-0/count/count_word0002.txt
+Linked input: /home/mondelli/Dropbox/Docker/swift_verao/pagerank/swiftwork/pagerank_final-run003/shared/count/count_word0001.txt to jobs/c/cat-sb6th24n-0/count/count_word0001.txt
+Linked input: /home/mondelli/Dropbox/Docker/swift_verao/pagerank/swiftwork/pagerank_final-run003/shared/count/count_word0003.txt to jobs/c/cat-sb6th24n-0/count/count_word0003.txt
+Linked input: /home/mondelli/Dropbox/Docker/swift_verao/pagerank/swiftwork/pagerank_final-run003/shared/count/count_word0004.txt to jobs/c/cat-sb6th24n-0/count/count_word0004.txt
+Linked input: /home/mondelli/Dropbox/Docker/swift_verao/pagerank/swiftwork/pagerank_final-run003/shared/count/count_word0000.txt to jobs/c/cat-sb6th24n-0/count/count_word0000.txt
+Progress  2017-02-16 21:44:58.240037646-0200  EXECUTE
+APP_RESOURCES=real_secs:0.00,kernel_secs:0.00,user_secs:0.00,percent_cpu:?%,max_rss:676,avg_rss:0,avg_tot_vm:0,avg_priv_data:0,avg_priv_stack:0,avg_shared_text:0,page_size:4096,major_pgfaults:0,minor_pgfaults:212,swaps:0,invol_context_switches:1,vol_waits:1,fs_reads:0,fs_writes:8,sock_recv:0,sock_send:0,signals:0,exit_status:0
+Moving back to workflow directory /home/mondelli/Dropbox/Docker/swift_verao/pagerank/swiftwork/pagerank_final-run003
+Progress  2017-02-16 21:44:58.243934661-0200  EXECUTE_DONE
+Job ran successfully
+Progress  2017-02-16 21:44:58.244984479-0200  MOVING_OUTPUTS group.txt
+Progress  2017-02-16 21:44:58.246806225-0200  RM_JOBDIR
+Progress  2017-02-16 21:44:58.248425824-0200  TOUCH_SUCCESS
+Progress  2017-02-16 21:44:58.249760990-0200  END

@@ -1,0 +1,41 @@
+Progress  2017-02-17 12:19:19.196861785-0200  LOG_START
+
+_____________________________________________________________________________
+
+        Wrapper (_swiftwrap)
+_____________________________________________________________________________
+
+Job directory mode is: link on shared filesystem
+PID=8861
+HOST=
+PWD=/home/mondelli/Dropbox/Docker/swift_verao/pagerank/swiftwork/pagerank-run006
+DIR=jobs/g/grep-surrh34n-0
+EXEC=/bin/grep
+STDIN=
+STDOUT=select/select0002.txt
+STDERR=stderr.txt
+DIRS=select|raw.en3
+INF=raw.en3/englishText_30000_40000
+OUTF=select/select0002.txt
+COLLECT=
+CDM_FILE=
+ARGS=-o -w Brazil raw.en3/englishText_30000_40000
+ARGC=4
+MPI_RANK=
+PMI_RANK=
+Progress  2017-02-17 12:19:19.211802691-0200  CREATE_JOBDIR
+Created job directory: jobs/g/grep-surrh34n-0
+Progress  2017-02-17 12:19:19.222430942-0200  CREATE_INPUTDIR
+Created output directory: jobs/g/grep-surrh34n-0/select
+Created output directory: jobs/g/grep-surrh34n-0/raw.en3
+Progress  2017-02-17 12:19:19.231116034-0200  LINK_INPUTS
+Linked input: /home/mondelli/Dropbox/Docker/swift_verao/pagerank/swiftwork/pagerank-run006/shared/raw.en3/englishText_30000_40000 to jobs/g/grep-surrh34n-0/raw.en3/englishText_30000_40000
+Progress  2017-02-17 12:19:19.234567993-0200  EXECUTE
+APP_RESOURCES=real_secs:0.03,kernel_secs:0.00,user_secs:0.02,percent_cpu:92%,max_rss:1092,avg_rss:0,avg_tot_vm:0,avg_priv_data:0,avg_priv_stack:0,avg_shared_text:0,page_size:4096,major_pgfaults:0,minor_pgfaults:329,swaps:0,invol_context_switches:9,vol_waits:1,fs_reads:0,fs_writes:8,sock_recv:0,sock_send:0,signals:0,exit_status:0
+Moving back to workflow directory /home/mondelli/Dropbox/Docker/swift_verao/pagerank/swiftwork/pagerank-run006
+Progress  2017-02-17 12:19:19.296647330-0200  EXECUTE_DONE
+Job ran successfully
+Progress  2017-02-17 12:19:19.300632913-0200  MOVING_OUTPUTS select/select0002.txt
+Progress  2017-02-17 12:19:19.312600734-0200  RM_JOBDIR
+Progress  2017-02-17 12:19:19.317454896-0200  TOUCH_SUCCESS
+Progress  2017-02-17 12:19:19.319808352-0200  END

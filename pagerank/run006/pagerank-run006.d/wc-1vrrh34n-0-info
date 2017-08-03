@@ -1,0 +1,41 @@
+Progress  2017-02-17 12:19:19.424133026-0200  LOG_START
+
+_____________________________________________________________________________
+
+        Wrapper (_swiftwrap)
+_____________________________________________________________________________
+
+Job directory mode is: link on shared filesystem
+PID=9073
+HOST=
+PWD=/home/mondelli/Dropbox/Docker/swift_verao/pagerank/swiftwork/pagerank-run006
+DIR=jobs/w/wc-1vrrh34n-0
+EXEC=/usr/bin/wc
+STDIN=
+STDOUT=count/count_word0003.txt
+STDERR=stderr.txt
+DIRS=select|count
+INF=select/select0003.txt
+OUTF=count/count_word0003.txt
+COLLECT=
+CDM_FILE=
+ARGS=-w select/select0003.txt
+ARGC=2
+MPI_RANK=
+PMI_RANK=
+Progress  2017-02-17 12:19:19.440156622-0200  CREATE_JOBDIR
+Created job directory: jobs/w/wc-1vrrh34n-0
+Progress  2017-02-17 12:19:19.446668809-0200  CREATE_INPUTDIR
+Created output directory: jobs/w/wc-1vrrh34n-0/select
+Created output directory: jobs/w/wc-1vrrh34n-0/count
+Progress  2017-02-17 12:19:19.453156877-0200  LINK_INPUTS
+Linked input: /home/mondelli/Dropbox/Docker/swift_verao/pagerank/swiftwork/pagerank-run006/shared/select/select0003.txt to jobs/w/wc-1vrrh34n-0/select/select0003.txt
+Progress  2017-02-17 12:19:19.459973879-0200  EXECUTE
+APP_RESOURCES=real_secs:0.00,kernel_secs:0.00,user_secs:0.00,percent_cpu:0%,max_rss:788,avg_rss:0,avg_tot_vm:0,avg_priv_data:0,avg_priv_stack:0,avg_shared_text:0,page_size:4096,major_pgfaults:0,minor_pgfaults:242,swaps:0,invol_context_switches:0,vol_waits:1,fs_reads:0,fs_writes:8,sock_recv:0,sock_send:0,signals:0,exit_status:0
+Moving back to workflow directory /home/mondelli/Dropbox/Docker/swift_verao/pagerank/swiftwork/pagerank-run006
+Progress  2017-02-17 12:19:19.471856057-0200  EXECUTE_DONE
+Job ran successfully
+Progress  2017-02-17 12:19:19.477739769-0200  MOVING_OUTPUTS count/count_word0003.txt
+Progress  2017-02-17 12:19:19.480842769-0200  RM_JOBDIR
+Progress  2017-02-17 12:19:19.484637115-0200  TOUCH_SUCCESS
+Progress  2017-02-17 12:19:19.488085301-0200  END

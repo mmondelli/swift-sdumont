@@ -1,0 +1,41 @@
+checking for paramfile
+paramfile is: 
+Progress  2017-02-17 11:49:10.897929377-0200  LOG_START
+
+_____________________________________________________________________________
+
+        Wrapper (_swiftwrap)
+_____________________________________________________________________________
+
+Job directory mode is: link on shared filesystem
+PID=7654
+HOST=
+PWD=/home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/part04/swiftwork/p4-run003
+DIR=jobs/s/simulate-jnlkg34n-0
+EXEC=/home/mondelli/swift-k/examples/tutorial/bin/simulate
+STDIN=
+STDOUT=output/sim_8.out
+STDERR=output/sim_8.log
+DIRS=output
+INF=
+OUTF=output/sim_8.log|output/sim_8.out
+COLLECT=
+CDM_FILE=
+ARGS=--timesteps 1 --range 100 --nvalues 5
+ARGC=6
+MPI_RANK=
+PMI_RANK=
+Progress  2017-02-17 11:49:10.934297753-0200  CREATE_JOBDIR
+Created job directory: jobs/s/simulate-jnlkg34n-0
+Progress  2017-02-17 11:49:10.940828961-0200  CREATE_INPUTDIR
+Created output directory: jobs/s/simulate-jnlkg34n-0/output
+Progress  2017-02-17 11:49:10.955586425-0200  LINK_INPUTS
+Progress  2017-02-17 11:49:10.961194591-0200  EXECUTE
+APP_RESOURCES=real_secs:1.02,kernel_secs:0.01,user_secs:0.00,percent_cpu:1%,max_rss:1616,avg_rss:0,avg_tot_vm:0,avg_priv_data:0,avg_priv_stack:0,avg_shared_text:0,page_size:4096,major_pgfaults:0,minor_pgfaults:3608,swaps:0,invol_context_switches:13,vol_waits:23,fs_reads:0,fs_writes:32,sock_recv:0,sock_send:0,signals:0,exit_status:0
+Moving back to workflow directory /home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/part04/swiftwork/p4-run003
+Progress  2017-02-17 11:49:11.997339483-0200  EXECUTE_DONE
+Job ran successfully
+Progress  2017-02-17 11:49:12.005878078-0200  MOVING_OUTPUTS output/sim_8.log|output/sim_8.out
+Progress  2017-02-17 11:49:12.013840978-0200  RM_JOBDIR
+Progress  2017-02-17 11:49:12.024299773-0200  TOUCH_SUCCESS
+Progress  2017-02-17 11:49:12.036858288-0200  END

@@ -1,0 +1,41 @@
+Progress  2017-02-16 21:44:56.715618931-0200  LOG_START
+
+_____________________________________________________________________________
+
+        Wrapper (_swiftwrap)
+_____________________________________________________________________________
+
+Job directory mode is: link on shared filesystem
+PID=18879
+HOST=
+PWD=/home/mondelli/Dropbox/Docker/swift_verao/pagerank/swiftwork/pagerank_final-run003
+DIR=jobs/g/grep-kb6th24n-0
+EXEC=/bin/grep
+STDIN=
+STDOUT=select/select0000.txt
+STDERR=stderr.txt
+DIRS=select|raw.en3
+INF=raw.en3/englishText_0_10000
+OUTF=select/select0000.txt
+COLLECT=
+CDM_FILE=
+ARGS=-o -w Brazil raw.en3/englishText_0_10000
+ARGC=4
+MPI_RANK=
+PMI_RANK=
+Progress  2017-02-16 21:44:56.721527499-0200  CREATE_JOBDIR
+Created job directory: jobs/g/grep-kb6th24n-0
+Progress  2017-02-16 21:44:56.727727396-0200  CREATE_INPUTDIR
+Created output directory: jobs/g/grep-kb6th24n-0/select
+Created output directory: jobs/g/grep-kb6th24n-0/raw.en3
+Progress  2017-02-16 21:44:56.739231596-0200  LINK_INPUTS
+Linked input: /home/mondelli/Dropbox/Docker/swift_verao/pagerank/swiftwork/pagerank_final-run003/shared/raw.en3/englishText_0_10000 to jobs/g/grep-kb6th24n-0/raw.en3/englishText_0_10000
+Progress  2017-02-16 21:44:57.916046043-0200  EXECUTE
+APP_RESOURCES=real_secs:0.07,kernel_secs:0.00,user_secs:0.03,percent_cpu:45%,max_rss:1092,avg_rss:0,avg_tot_vm:0,avg_priv_data:0,avg_priv_stack:0,avg_shared_text:0,page_size:4096,major_pgfaults:0,minor_pgfaults:329,swaps:0,invol_context_switches:21,vol_waits:1,fs_reads:0,fs_writes:8,sock_recv:0,sock_send:0,signals:0,exit_status:0
+Moving back to workflow directory /home/mondelli/Dropbox/Docker/swift_verao/pagerank/swiftwork/pagerank_final-run003
+Progress  2017-02-16 21:44:57.999205344-0200  EXECUTE_DONE
+Job ran successfully
+Progress  2017-02-16 21:44:58.002221891-0200  MOVING_OUTPUTS select/select0000.txt
+Progress  2017-02-16 21:44:58.008961371-0200  RM_JOBDIR
+Progress  2017-02-16 21:44:58.012335596-0200  TOUCH_SUCCESS
+Progress  2017-02-16 21:44:58.032926582-0200  END

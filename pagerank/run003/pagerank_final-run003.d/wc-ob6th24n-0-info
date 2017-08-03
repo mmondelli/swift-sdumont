@@ -1,0 +1,45 @@
+checking for paramfile
+paramfile is: 
+checking for paramfile
+paramfile is: 
+Progress  2017-02-16 21:44:58.096567504-0200  LOG_START
+
+_____________________________________________________________________________
+
+        Wrapper (_swiftwrap)
+_____________________________________________________________________________
+
+Job directory mode is: link on shared filesystem
+PID=19073
+HOST=
+PWD=/home/mondelli/Dropbox/Docker/swift_verao/pagerank/swiftwork/pagerank_final-run003
+DIR=jobs/w/wc-ob6th24n-0
+EXEC=/usr/bin/wc
+STDIN=
+STDOUT=count/count_word0001.txt
+STDERR=stderr.txt
+DIRS=select|count
+INF=select/select0001.txt
+OUTF=count/count_word0001.txt
+COLLECT=
+CDM_FILE=
+ARGS=-w select/select0001.txt
+ARGC=2
+MPI_RANK=
+PMI_RANK=
+Progress  2017-02-16 21:44:58.107416819-0200  CREATE_JOBDIR
+Created job directory: jobs/w/wc-ob6th24n-0
+Progress  2017-02-16 21:44:58.119378907-0200  CREATE_INPUTDIR
+Created output directory: jobs/w/wc-ob6th24n-0/select
+Created output directory: jobs/w/wc-ob6th24n-0/count
+Progress  2017-02-16 21:44:58.127483940-0200  LINK_INPUTS
+Linked input: /home/mondelli/Dropbox/Docker/swift_verao/pagerank/swiftwork/pagerank_final-run003/shared/select/select0001.txt to jobs/w/wc-ob6th24n-0/select/select0001.txt
+Progress  2017-02-16 21:44:58.135005254-0200  EXECUTE
+APP_RESOURCES=real_secs:0.00,kernel_secs:0.00,user_secs:0.00,percent_cpu:0%,max_rss:784,avg_rss:0,avg_tot_vm:0,avg_priv_data:0,avg_priv_stack:0,avg_shared_text:0,page_size:4096,major_pgfaults:0,minor_pgfaults:241,swaps:0,invol_context_switches:3,vol_waits:1,fs_reads:0,fs_writes:8,sock_recv:0,sock_send:0,signals:0,exit_status:0
+Moving back to workflow directory /home/mondelli/Dropbox/Docker/swift_verao/pagerank/swiftwork/pagerank_final-run003
+Progress  2017-02-16 21:44:58.150956434-0200  EXECUTE_DONE
+Job ran successfully
+Progress  2017-02-16 21:44:58.157298004-0200  MOVING_OUTPUTS count/count_word0001.txt
+Progress  2017-02-16 21:44:58.161517571-0200  RM_JOBDIR
+Progress  2017-02-16 21:44:58.168186461-0200  TOUCH_SUCCESS
+Progress  2017-02-16 21:44:58.176654463-0200  END

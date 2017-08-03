@@ -1,0 +1,13 @@
+Swift trunk git-rev: 18aec82244c5611381528bc361888c553570c66e heads/master 6574
+RunID: run002
+Progress: Thu, 16 Feb 2017 21:42:42-0200
+Progress: Thu, 16 Feb 2017 21:42:43-0200  Selecting site:1  Active:10  Finished successfully:11
+Progress: Thu, 16 Feb 2017 21:43:01-0200  Active:10  Finished successfully:12
+Progress: Thu, 16 Feb 2017 21:43:02-0200  Active:9  Stage out:1  Finished successfully:12
+Progress: Thu, 16 Feb 2017 21:43:03-0200  Active:9  Finished successfully:13
+Progress: Thu, 16 Feb 2017 21:43:06-0200  Active:8  Finished successfully:14
+Progress: Thu, 16 Feb 2017 21:43:07-0200  Active:7  Stage out:1  Finished successfully:14
+Progress: Thu, 16 Feb 2017 21:43:08-0200  Active:6  Finished successfully:16
+Progress: Thu, 16 Feb 2017 21:43:10-0200  Active:2  Finished successfully:20
+Progress: Thu, 16 Feb 2017 21:43:11-0200  Active:1  Finished successfully:21
+Final status: Thu, 16 Feb 2017 21:43:12-0200  Finished successfully:23

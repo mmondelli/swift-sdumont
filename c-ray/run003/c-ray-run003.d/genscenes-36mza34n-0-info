@@ -1,0 +1,41 @@
+checking for paramfile
+paramfile is: 
+Progress  2017-02-17 09:29:08.069459747-0200  LOG_START
+
+_____________________________________________________________________________
+
+        Wrapper (_swiftwrap)
+_____________________________________________________________________________
+
+Job directory mode is: link on shared filesystem
+PID=29432
+HOST=
+PWD=/home/mondelli/Dropbox/Docker/swift_verao/c-ray/swiftwork/c-ray-run003
+DIR=jobs/g/genscenes-36mza34n-0
+EXEC=/home/mondelli/Dropbox/Docker/swift_verao/c-ray/bin/genscenes
+STDIN=
+STDOUT=scene.0008.data
+STDERR=stderr.txt
+DIRS=
+INF=tscene
+OUTF=scene.0008.data
+COLLECT=
+CDM_FILE=
+ARGS=8 10 tscene
+ARGC=3
+MPI_RANK=
+PMI_RANK=
+Progress  2017-02-17 09:29:08.083476876-0200  CREATE_JOBDIR
+Created job directory: jobs/g/genscenes-36mza34n-0
+Progress  2017-02-17 09:29:08.089187396-0200  CREATE_INPUTDIR
+Progress  2017-02-17 09:29:08.102207587-0200  LINK_INPUTS
+Linked input: /home/mondelli/Dropbox/Docker/swift_verao/c-ray/swiftwork/c-ray-run003/shared/tscene to jobs/g/genscenes-36mza34n-0/tscene
+Progress  2017-02-17 09:29:08.114734870-0200  EXECUTE
+APP_RESOURCES=real_secs:0.04,kernel_secs:0.00,user_secs:0.00,percent_cpu:15%,max_rss:964,avg_rss:0,avg_tot_vm:0,avg_priv_data:0,avg_priv_stack:0,avg_shared_text:0,page_size:4096,major_pgfaults:0,minor_pgfaults:1688,swaps:0,invol_context_switches:11,vol_waits:18,fs_reads:0,fs_writes:48,sock_recv:0,sock_send:0,signals:0,exit_status:0
+Moving back to workflow directory /home/mondelli/Dropbox/Docker/swift_verao/c-ray/swiftwork/c-ray-run003
+Progress  2017-02-17 09:29:08.179505326-0200  EXECUTE_DONE
+Job ran successfully
+Progress  2017-02-17 09:29:08.181289233-0200  MOVING_OUTPUTS scene.0008.data
+Progress  2017-02-17 09:29:08.194555655-0200  RM_JOBDIR
+Progress  2017-02-17 09:29:08.201084303-0200  TOUCH_SUCCESS
+Progress  2017-02-17 09:29:08.228068794-0200  END

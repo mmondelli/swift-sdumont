@@ -1,0 +1,45 @@
+checking for paramfile
+paramfile is: 
+checking for paramfile
+paramfile is: 
+Progress  2017-02-16 21:44:56.711179302-0200  LOG_START
+
+_____________________________________________________________________________
+
+        Wrapper (_swiftwrap)
+_____________________________________________________________________________
+
+Job directory mode is: link on shared filesystem
+PID=18869
+HOST=
+PWD=/home/mondelli/Dropbox/Docker/swift_verao/pagerank/swiftwork/pagerank_final-run003
+DIR=jobs/g/grep-lb6th24n-0
+EXEC=/bin/grep
+STDIN=
+STDOUT=select/select0002.txt
+STDERR=stderr.txt
+DIRS=select|raw.en3
+INF=raw.en3/englishText_30000_40000
+OUTF=select/select0002.txt
+COLLECT=
+CDM_FILE=
+ARGS=-o -w Brazil raw.en3/englishText_30000_40000
+ARGC=4
+MPI_RANK=
+PMI_RANK=
+Progress  2017-02-16 21:44:56.723556678-0200  CREATE_JOBDIR
+Created job directory: jobs/g/grep-lb6th24n-0
+Progress  2017-02-16 21:44:56.731935588-0200  CREATE_INPUTDIR
+Created output directory: jobs/g/grep-lb6th24n-0/select
+Created output directory: jobs/g/grep-lb6th24n-0/raw.en3
+Progress  2017-02-16 21:44:56.742359285-0200  LINK_INPUTS
+Linked input: /home/mondelli/Dropbox/Docker/swift_verao/pagerank/swiftwork/pagerank_final-run003/shared/raw.en3/englishText_30000_40000 to jobs/g/grep-lb6th24n-0/raw.en3/englishText_30000_40000
+Progress  2017-02-16 21:44:57.916246656-0200  EXECUTE
+APP_RESOURCES=real_secs:0.06,kernel_secs:0.00,user_secs:0.03,percent_cpu:56%,max_rss:1088,avg_rss:0,avg_tot_vm:0,avg_priv_data:0,avg_priv_stack:0,avg_shared_text:0,page_size:4096,major_pgfaults:0,minor_pgfaults:330,swaps:0,invol_context_switches:111,vol_waits:1,fs_reads:0,fs_writes:8,sock_recv:0,sock_send:0,signals:0,exit_status:0
+Moving back to workflow directory /home/mondelli/Dropbox/Docker/swift_verao/pagerank/swiftwork/pagerank_final-run003
+Progress  2017-02-16 21:44:57.999885447-0200  EXECUTE_DONE
+Job ran successfully
+Progress  2017-02-16 21:44:58.003734150-0200  MOVING_OUTPUTS select/select0002.txt
+Progress  2017-02-16 21:44:58.007303661-0200  RM_JOBDIR
+Progress  2017-02-16 21:44:58.011225840-0200  TOUCH_SUCCESS
+Progress  2017-02-16 21:44:58.015910665-0200  END

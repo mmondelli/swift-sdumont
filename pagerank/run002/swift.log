@@ -1,0 +1,142 @@
+2017-02-16 21:44:18,923-0200 INFO  Loader JAVA Oracle Corporation Java HotSpot(TM) 64-Bit Server VM 1.7.0_80
+2017-02-16 21:44:18,926-0200 INFO  Loader VERSION Swift trunk git-rev: 18aec82244c5611381528bc361888c553570c66e heads/master 6574
+2017-02-16 21:44:18,926-0200 INFO  Loader RUN_ID run002
+2017-02-16 21:44:18,926-0200 INFO  Loader ARGUMENTS [-runid, run002, -logfile, /home/mondelli/Dropbox/Docker/swift_verao/pagerank/run002/swift.log, pagerank_final.swift, -word=Brazil]
+2017-02-16 21:44:18,926-0200 INFO  Loader MAX_HEAP 954728448
+2017-02-16 21:44:18,926-0200 INFO  Loader GLOBUS_HOSTNAME mondelli-520U4C
+2017-02-16 21:44:18,926-0200 INFO  Loader CWD /home/mondelli/Dropbox/Docker/swift_verao/pagerank/.
+2017-02-16 21:44:18,928-0200 DEBUG Loader SWIFT_CONFIGURATION 
+[D] /home/mondelli/swift-k/dist/swift-svn/etc/swift.conf
+[C] <Command Line>
+{
+	TCPPortRange: "50000, 50100"                               # [D] line 27
+	alwaysTransferWrapperLog: true                             # [D] line 61
+	executionRetries: 0                                        # [D] line 137
+	fileOperationsThrottle: 8                                  # [D] line 121
+	fileTransfersThrottle: 4                                   # [D] line 107
+	hostJobSubmitThrottle: 2                                   # [D] line 95
+	jobSubmitThrottle: 4                                       # [D] line 83
+	keepSiteDir: false                                         # [D] line 131
+	lazyErrors: true                                           # [D] line 41
+	logProvenance: false                                       # [D] line 200
+	maxForeachThreads: 16384                                   # [D] line 194
+	replicationEnabled: false                                  # [D] line 146
+	replicationLimit: 3                                        # [D] line 157
+	replicationMinQueueTime: 60                                # [D] line 153
+	site.local {
+		app.ALL.executable: "*"                                   # [D] line 235
+		execution.type: "local"                                   # [D] line 223
+		filesystem.type: "local"                                  # [D] line 226
+		initialParallelTasks: 8                                   # [D] line 230
+		maxParallelTasks: 16                                      # [D] line 229
+		workDirectory: "swiftwork"                                # [D] line 232
+	}
+	sites: [local]                                             # [D] line 239
+	tracingEnabled: false                                      # [D] line 51
+}
+
+2017-02-16 21:44:18,929-0200 DEBUG textfiles BEGIN SWIFTSCRIPT:
+type file; 
+
+#USE: swift pagerank.swift -word=Brazil
+
+string w = arg("word");
+
+file text[] <filesys_mapper; location="./raw.en3", prefix="english">;
+file select[] <simple_mapper; location="./select", prefix="select", suffix=".txt">;
+file count[] <simple_mapper; location="./count", prefix="count_word", suffix=".txt">;
+file group <"group.txt">;
+file sort <"sort.txt">;
+
+app (file o) select_word (file i, string word)
+{
+	grep "-o" "-w" word filename(i) stdout=filename(o);
+}
+
+app (file o) count_word (file i)
+{
+	wc "-w" filename(i) stdout=filename(o);
+}
+
+app (file o) group_count (file i[])
+{
+	cat filenames(i) stdout=filename(o);
+}
+
+app (file o) sort (file i)
+{
+	sort "-n" filename(i) stdout=filename(o);
+}
+
+foreach t,i in text
+{
+	select[i] = select_word(text[i], w);
+	count[i] = count_word(select[i]);
+}
+
+group = group_count(count);
+sort = sort(group);
+
+
+2017-02-16 21:44:18,929-0200 DEBUG textfiles END SWIFTSCRIPT:
+2017-02-16 21:44:18,929-0200 DEBUG Loader kmlversion is >9f6c1ed4-f975-4fb5-9fcf-7994f9fda617-no-provenance<
+2017-02-16 21:44:18,929-0200 DEBUG Loader build version is >9f6c1ed4-f975-4fb5-9fcf-7994f9fda617-no-provenance<
+2017-02-16 21:44:18,929-0200 DEBUG Loader Recompilation suppressed.
+2017-02-16 21:44:19,891-0200 INFO  Loader RUN_START
+2017-02-16 21:44:19,897-0200 INFO  SwiftExecutor swift.home = /home/mondelli/swift-k/dist/swift-svn
+2017-02-16 21:44:19,941-0200 INFO  AbstractScheduler Setting resources to: {local=local}
+2017-02-16 21:44:19,948-0200 INFO  GlobalSubmitQueue No global submit throttle set. Using default (1024)
+2017-02-16 21:44:19,966-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:19,967-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:19,969-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:44:20,007-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 28616576, JVMThreads: 16
+2017-02-16 21:44:20,007-0200 INFO  RuntimeStats$ProgressTicker 
+2017-02-16 21:44:20,009-0200 DEBUG swift PROCEDURE line=28 thread=2-0-14-11 name=sort
+2017-02-16 21:44:20,009-0200 DEBUG swift PROCEDURE line=23 thread=2-0-13-10 name=group_count
+2017-02-16 21:44:20,016-0200 INFO  Executor Run failed
+java.lang.IllegalArgumentException: Directory not found: ./raw.en3
+	assignment @ pagerank_final, line: 192
+Caused by: java.lang.IllegalArgumentException: Directory not found: ./raw.en3
+	at org.griphyn.vdl.mapping.file.AbstractFileMapper.existing(AbstractFileMapper.java:236)
+	at org.griphyn.vdl.mapping.file.FileSystemArrayMapper.existing(FileSystemArrayMapper.java:44)
+	at org.griphyn.vdl.mapping.file.AbstractFileMapper.existing(AbstractFileMapper.java:218)
+	at org.griphyn.vdl.mapping.nodes.InitMapper.checkInputs(InitMapper.java:201)
+	at org.griphyn.vdl.mapping.nodes.InitMapper.initialize(InitMapper.java:147)
+	at org.griphyn.vdl.mapping.nodes.InitMapper.futureUpdated(InitMapper.java:157)
+	at org.griphyn.vdl.mapping.nodes.AbstractFutureDataNode.notifyListeners(AbstractFutureDataNode.java:72)
+	at org.griphyn.vdl.mapping.nodes.AbstractDataNode.postCloseActions(AbstractDataNode.java:330)
+	at org.griphyn.vdl.mapping.nodes.AbstractFutureNonCompositeDataNode.setValue(AbstractFutureNonCompositeDataNode.java:103)
+	at org.griphyn.vdl.karajan.lib.SetFieldValue.deepCopy(SetFieldValue.java:229)
+	at org.griphyn.vdl.karajan.lib.SetFieldValue.function(SetFieldValue.java:176)
+	at org.griphyn.vdl.karajan.lib.SwiftFunction.runBody(SwiftFunction.java:82)
+	at org.globus.cog.karajan.compiled.nodes.InternalFunction.run(InternalFunction.java:175)
+	at org.globus.cog.karajan.compiled.nodes.CompoundNode.runChild(CompoundNode.java:112)
+	at org.globus.cog.karajan.compiled.nodes.UParallel$1.run(UParallel.java:91)
+	at k.thr.LWThread.run(LWThread.java:291)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at java.lang.Thread.run(Thread.java:745)
+
+	at org.griphyn.vdl.karajan.lib.SetFieldValue.function(SetFieldValue.java:188)
+	at org.griphyn.vdl.karajan.lib.SwiftFunction.runBody(SwiftFunction.java:82)
+	at org.globus.cog.karajan.compiled.nodes.InternalFunction.run(InternalFunction.java:175)
+	at org.globus.cog.karajan.compiled.nodes.CompoundNode.runChild(CompoundNode.java:112)
+	at org.globus.cog.karajan.compiled.nodes.UParallel$1.run(UParallel.java:91)
+	at k.thr.LWThread.run(LWThread.java:291)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.IllegalArgumentException: Directory not found: ./raw.en3
+	at org.griphyn.vdl.mapping.file.AbstractFileMapper.existing(AbstractFileMapper.java:236)
+	at org.griphyn.vdl.mapping.file.FileSystemArrayMapper.existing(FileSystemArrayMapper.java:44)
+	at org.griphyn.vdl.mapping.file.AbstractFileMapper.existing(AbstractFileMapper.java:218)
+	at org.griphyn.vdl.mapping.nodes.InitMapper.checkInputs(InitMapper.java:201)
+	at org.griphyn.vdl.mapping.nodes.InitMapper.initialize(InitMapper.java:147)
+	at org.griphyn.vdl.mapping.nodes.InitMapper.futureUpdated(InitMapper.java:157)
+	at org.griphyn.vdl.mapping.nodes.AbstractFutureDataNode.notifyListeners(AbstractFutureDataNode.java:72)
+	at org.griphyn.vdl.mapping.nodes.AbstractDataNode.postCloseActions(AbstractDataNode.java:330)
+	at org.griphyn.vdl.mapping.nodes.AbstractFutureNonCompositeDataNode.setValue(AbstractFutureNonCompositeDataNode.java:103)
+	at org.griphyn.vdl.karajan.lib.SetFieldValue.deepCopy(SetFieldValue.java:229)
+	at org.griphyn.vdl.karajan.lib.SetFieldValue.function(SetFieldValue.java:176)
+	... 8 more
+2017-02-16 21:44:20,029-0200 INFO  Loader Swift finished with errors

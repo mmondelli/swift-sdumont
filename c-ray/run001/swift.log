@@ -1,0 +1,565 @@
+2017-02-16 21:41:36,519-0200 INFO  Loader JAVA Oracle Corporation Java HotSpot(TM) 64-Bit Server VM 1.7.0_80
+2017-02-16 21:41:36,523-0200 INFO  Loader VERSION Swift trunk git-rev: 18aec82244c5611381528bc361888c553570c66e heads/master 6574
+2017-02-16 21:41:36,523-0200 INFO  Loader RUN_ID run001
+2017-02-16 21:41:36,523-0200 INFO  Loader ARGUMENTS [-runid, run001, -logfile, /home/mondelli/Dropbox/Docker/swift_verao/c-ray/run001/swift.log, c-ray.swift]
+2017-02-16 21:41:36,523-0200 INFO  Loader MAX_HEAP 954728448
+2017-02-16 21:41:36,523-0200 INFO  Loader GLOBUS_HOSTNAME mondelli-520U4C
+2017-02-16 21:41:36,523-0200 INFO  Loader CWD /home/mondelli/Dropbox/Docker/swift_verao/c-ray/.
+2017-02-16 21:41:36,525-0200 DEBUG Loader SWIFT_CONFIGURATION 
+[D] /home/mondelli/swift-k/dist/swift-svn/etc/swift.conf
+[R] swift.conf
+[C] <Command Line>
+{
+	TCPPortRange: "50000,51000"                                # [R] line 27
+	alwaysTransferWrapperLog: true                             # [R] line 32
+	executionRetries: 0                                        # [R] line 29
+	fileOperationsThrottle: 8                                  # [D] line 121
+	fileTransfersThrottle: 4                                   # [D] line 107
+	hostJobSubmitThrottle: 2                                   # [D] line 95
+	jobSubmitThrottle: 4                                       # [D] line 83
+	keepSiteDir: true                                          # [R] line 30
+	lazyErrors: false                                          # [R] line 28
+	logProvenance: false                                       # [D] line 200
+	maxForeachThreads: 16384                                   # [D] line 194
+	providerStagingPinSwiftFiles: false                        # [R] line 31
+	replicationEnabled: false                                  # [D] line 146
+	replicationLimit: 3                                        # [D] line 157
+	replicationMinQueueTime: 60                                # [D] line 153
+	site {
+		local {
+			app.ALL.executable: "*"                                  # [D] line 235
+			execution.type: "local"                                  # [D] line 223
+			filesystem.type: "local"                                 # [D] line 226
+			initialParallelTasks: 8                                  # [D] line 230
+			maxParallelTasks: 16                                     # [D] line 229
+			workDirectory: "swiftwork"                               # [D] line 232
+		}
+		localhost {
+			app.ALL.executable: "*"                                  # [R] line 18
+			execution {
+				URL: "localhost"                                        # [R] line 12
+				type: "local"                                           # [R] line 11
+			}
+			initialParallelTasks: 8                                  # [R] line 17
+			maxParallelTasks: 8                                      # [R] line 16
+			staging: "direct"                                        # [R] line 14
+			workDirectory: "/tmp/mondelli/swiftwork"                 # [C]
+		}
+	}
+	sites: [localhost]                                         # [R] line 1
+	tracingEnabled: false                                      # [D] line 51
+}
+
+2017-02-16 21:41:36,527-0200 DEBUG textfiles BEGIN SWIFTSCRIPT:
+type scene;
+type image;
+type scene_template;
+type movie;
+
+int threads;
+int steps;
+string resolution;
+int delay;
+int quality;
+
+threads = toInt(arg("threads","1"));
+resolution = arg("resolution","800x600");
+steps = toInt(arg("steps","10"));
+delay = toInt(arg("delay", "0"));
+quality = toInt(arg("quality", "75"));
+
+scene_template template <"tscene">;
+
+app (scene out) generate (scene_template t, int i, int total)
+{
+	genscenes i total filename(t) stdout=filename(out);
+}
+
+app (image o) render (scene i, string r, int t)
+{
+	"c-ray-mt" "-s" r "-t" t stdin=filename(i) stdout=filename(o);
+}
+
+app (movie o) convert (image i[], int d, int q)
+{
+	convert "-delay" d "-quality" q filenames(i) filename(o);
+}
+
+scene scene_files[] <simple_mapper; location=".", prefix="scene.", suffix=".data">;
+
+image image_files[] <simple_mapper; location=".", prefix="scene.", suffix=".ppm">;
+
+movie output_movie <"output.ppm">;
+
+foreach i in [0:steps]{
+	scene_files[i] = generate(template, i, steps);
+	image_files[i] = render(scene_files[i], resolution, threads);
+}
+
+output_movie = convert(image_files, delay, quality);
+	
+
+
+ 
+
+
+
+2017-02-16 21:41:36,527-0200 DEBUG textfiles END SWIFTSCRIPT:
+2017-02-16 21:41:36,527-0200 INFO  Loader c-ray.swift: source file is new. Recompiling.
+2017-02-16 21:41:37,780-0200 INFO  Loader RUN_START
+2017-02-16 21:41:37,786-0200 INFO  SwiftExecutor swift.home = /home/mondelli/swift-k/dist/swift-svn
+2017-02-16 21:41:37,819-0200 INFO  AbstractScheduler Setting resources to: {localhost=localhost}
+2017-02-16 21:41:37,829-0200 INFO  GlobalSubmitQueue No global submit throttle set. Using default (1024)
+2017-02-16 21:41:37,843-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:41:37,844-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:41:37,859-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:41:37,875-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 153092096, UsedHeap: 7567704, JVMThreads: 16
+2017-02-16 21:41:37,875-0200 INFO  RuntimeStats$ProgressTicker 
+2017-02-16 21:41:37,879-0200 DEBUG swift PROCEDURE line=30 thread=2-0-15-12 name=convert
+2017-02-16 21:41:37,887-0200 DEBUG swift FOREACH_IT_START line=41 thread=2-0-14-11-16-0
+2017-02-16 21:41:37,887-0200 DEBUG swift SCOPE thread=2-0-14-11-16-0
+2017-02-16 21:41:37,887-0200 DEBUG swift FOREACH_IT_START line=41 thread=2-0-14-11-17-1
+2017-02-16 21:41:37,887-0200 DEBUG swift SCOPE thread=2-0-14-11-17-1
+2017-02-16 21:41:37,887-0200 DEBUG swift FOREACH_IT_START line=41 thread=2-0-14-11-18-2
+2017-02-16 21:41:37,887-0200 DEBUG swift SCOPE thread=2-0-14-11-18-2
+2017-02-16 21:41:37,888-0200 DEBUG swift FOREACH_IT_START line=41 thread=2-0-14-11-19-3
+2017-02-16 21:41:37,888-0200 DEBUG swift SCOPE thread=2-0-14-11-19-3
+2017-02-16 21:41:37,888-0200 DEBUG swift FOREACH_IT_START line=41 thread=2-0-14-11-20-4
+2017-02-16 21:41:37,888-0200 DEBUG swift SCOPE thread=2-0-14-11-20-4
+2017-02-16 21:41:37,888-0200 DEBUG swift FOREACH_IT_START line=41 thread=2-0-14-11-21-5
+2017-02-16 21:41:37,888-0200 DEBUG swift SCOPE thread=2-0-14-11-21-5
+2017-02-16 21:41:37,888-0200 DEBUG swift FOREACH_IT_START line=41 thread=2-0-14-11-22-6
+2017-02-16 21:41:37,888-0200 DEBUG swift FOREACH_IT_START line=41 thread=2-0-14-11-23-7
+2017-02-16 21:41:37,888-0200 DEBUG swift SCOPE thread=2-0-14-11-22-6
+2017-02-16 21:41:37,888-0200 DEBUG swift SCOPE thread=2-0-14-11-23-7
+2017-02-16 21:41:37,888-0200 DEBUG swift PROCEDURE line=20 thread=2-0-14-11-16-0-24-0 name=generate
+2017-02-16 21:41:37,888-0200 DEBUG swift PROCEDURE line=25 thread=2-0-14-11-16-0-25-1 name=render
+2017-02-16 21:41:37,889-0200 DEBUG swift FOREACH_IT_START line=41 thread=2-0-14-11-26-8
+2017-02-16 21:41:37,889-0200 DEBUG swift SCOPE thread=2-0-14-11-26-8
+2017-02-16 21:41:37,889-0200 DEBUG swift FOREACH_IT_START line=41 thread=2-0-14-11-27-9
+2017-02-16 21:41:37,889-0200 DEBUG swift SCOPE thread=2-0-14-11-27-9
+2017-02-16 21:41:37,889-0200 DEBUG swift FOREACH_IT_START line=41 thread=2-0-14-11-28-10
+2017-02-16 21:41:37,889-0200 DEBUG swift SCOPE thread=2-0-14-11-28-10
+2017-02-16 21:41:37,889-0200 DEBUG swift PROCEDURE line=20 thread=2-0-14-11-17-1-29-0 name=generate
+2017-02-16 21:41:37,891-0200 DEBUG swift PROCEDURE line=25 thread=2-0-14-11-17-1-30-1 name=render
+2017-02-16 21:41:37,892-0200 DEBUG swift PROCEDURE line=20 thread=2-0-14-11-18-2-31-0 name=generate
+2017-02-16 21:41:37,892-0200 DEBUG swift JOB_INIT jobid=genscenes-y6joh24n tr=genscenes
+2017-02-16 21:41:37,892-0200 DEBUG swift PROCEDURE line=25 thread=2-0-14-11-18-2-32-1 name=render
+2017-02-16 21:41:37,892-0200 DEBUG swift PROCEDURE line=20 thread=2-0-14-11-19-3-33-0 name=generate
+2017-02-16 21:41:37,892-0200 DEBUG swift JOB_INIT jobid=genscenes-17joh24n tr=genscenes
+2017-02-16 21:41:37,892-0200 DEBUG swift PROCEDURE line=25 thread=2-0-14-11-19-3-34-1 name=render
+2017-02-16 21:41:37,892-0200 DEBUG swift JOB_SITE_SELECT jobid=genscenes-y6joh24n-0
+2017-02-16 21:41:37,892-0200 DEBUG swift JOB_SITE_SELECT jobid=genscenes-17joh24n-0
+2017-02-16 21:41:37,892-0200 DEBUG swift PROCEDURE line=20 thread=2-0-14-11-20-4-35-0 name=generate
+2017-02-16 21:41:37,893-0200 DEBUG swift JOB_INIT jobid=genscenes-27joh24n tr=genscenes
+2017-02-16 21:41:37,893-0200 DEBUG swift JOB_SITE_SELECT jobid=genscenes-27joh24n-0
+2017-02-16 21:41:37,892-0200 DEBUG swift JOB_INIT jobid=genscenes-07joh24n tr=genscenes
+2017-02-16 21:41:37,893-0200 DEBUG swift JOB_SITE_SELECT jobid=genscenes-07joh24n-0
+2017-02-16 21:41:37,892-0200 DEBUG swift JOB_INIT jobid=genscenes-z6joh24n tr=genscenes
+2017-02-16 21:41:37,893-0200 DEBUG swift JOB_SITE_SELECT jobid=genscenes-z6joh24n-0
+2017-02-16 21:41:37,894-0200 DEBUG swift PROCEDURE line=25 thread=2-0-14-11-20-4-36-1 name=render
+2017-02-16 21:41:37,894-0200 DEBUG swift PROCEDURE line=20 thread=2-0-14-11-21-5-37-0 name=generate
+2017-02-16 21:41:37,894-0200 DEBUG swift JOB_INIT jobid=genscenes-37joh24n tr=genscenes
+2017-02-16 21:41:37,894-0200 DEBUG swift PROCEDURE line=25 thread=2-0-14-11-21-5-38-1 name=render
+2017-02-16 21:41:37,894-0200 DEBUG swift PROCEDURE line=20 thread=2-0-14-11-22-6-39-0 name=generate
+2017-02-16 21:41:37,894-0200 DEBUG swift JOB_SITE_SELECT jobid=genscenes-37joh24n-0
+2017-02-16 21:41:37,894-0200 DEBUG swift PROCEDURE line=25 thread=2-0-14-11-22-6-40-1 name=render
+2017-02-16 21:41:37,894-0200 DEBUG swift PROCEDURE line=20 thread=2-0-14-11-23-7-41-0 name=generate
+2017-02-16 21:41:37,894-0200 DEBUG swift JOB_INIT jobid=genscenes-47joh24n tr=genscenes
+2017-02-16 21:41:37,895-0200 DEBUG swift JOB_INIT jobid=genscenes-57joh24n tr=genscenes
+2017-02-16 21:41:37,895-0200 DEBUG swift JOB_SITE_SELECT jobid=genscenes-47joh24n-0
+2017-02-16 21:41:37,895-0200 DEBUG swift JOB_SITE_SELECT jobid=genscenes-57joh24n-0
+2017-02-16 21:41:37,897-0200 DEBUG swift PROCEDURE line=25 thread=2-0-14-11-23-7-42-1 name=render
+2017-02-16 21:41:37,897-0200 DEBUG swift PROCEDURE line=20 thread=2-0-14-11-26-8-43-0 name=generate
+2017-02-16 21:41:37,898-0200 DEBUG swift JOB_INIT jobid=genscenes-67joh24n tr=genscenes
+2017-02-16 21:41:37,898-0200 DEBUG swift JOB_SITE_SELECT jobid=genscenes-67joh24n-0
+2017-02-16 21:41:37,898-0200 DEBUG swift PROCEDURE line=20 thread=2-0-14-11-27-9-45-0 name=generate
+2017-02-16 21:41:37,898-0200 DEBUG swift PROCEDURE line=25 thread=2-0-14-11-26-8-44-1 name=render
+2017-02-16 21:41:37,898-0200 DEBUG swift JOB_INIT jobid=genscenes-77joh24n tr=genscenes
+2017-02-16 21:41:37,898-0200 DEBUG swift PROCEDURE line=25 thread=2-0-14-11-27-9-46-1 name=render
+2017-02-16 21:41:37,898-0200 DEBUG swift JOB_SITE_SELECT jobid=genscenes-77joh24n-0
+2017-02-16 21:41:37,898-0200 DEBUG swift PROCEDURE line=20 thread=2-0-14-11-28-10-47-0 name=generate
+2017-02-16 21:41:37,898-0200 DEBUG swift JOB_INIT jobid=genscenes-87joh24n tr=genscenes
+2017-02-16 21:41:37,899-0200 DEBUG swift PROCEDURE line=25 thread=2-0-14-11-28-10-48-1 name=render
+2017-02-16 21:41:37,899-0200 DEBUG swift JOB_SITE_SELECT jobid=genscenes-87joh24n-0
+2017-02-16 21:41:37,899-0200 DEBUG swift THREAD_ASSOCIATION jobid=genscenes-y6joh24n-0 host=localhost thread=2-0-14-11-16-0-24-0
+2017-02-16 21:41:37,899-0200 DEBUG swift THREAD_ASSOCIATION jobid=genscenes-07joh24n-0 host=localhost thread=2-0-14-11-17-1-29-0
+2017-02-16 21:41:37,899-0200 DEBUG swift THREAD_ASSOCIATION jobid=genscenes-37joh24n-0 host=localhost thread=2-0-14-11-21-5-37-0
+2017-02-16 21:41:37,900-0200 DEBUG swift THREAD_ASSOCIATION jobid=genscenes-67joh24n-0 host=localhost thread=2-0-14-11-26-8-43-0
+2017-02-16 21:41:37,901-0200 DEBUG swift JOB_START jobid=genscenes-67joh24n-0 tr=genscenes arguments=[8, 10, /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene] tmpdir=c-ray-run001/jobs/g/genscenes-67joh24n-0
+2017-02-16 21:41:37,902-0200 DEBUG swift JOB_START jobid=genscenes-37joh24n-0 tr=genscenes arguments=[5, 10, /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene] tmpdir=c-ray-run001/jobs/g/genscenes-37joh24n-0
+2017-02-16 21:41:37,902-0200 DEBUG swift JOB_START jobid=genscenes-07joh24n-0 tr=genscenes arguments=[1, 10, /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene] tmpdir=c-ray-run001/jobs/g/genscenes-07joh24n-0
+2017-02-16 21:41:37,902-0200 DEBUG swift JOB_START jobid=genscenes-y6joh24n-0 tr=genscenes arguments=[0, 10, /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene] tmpdir=c-ray-run001/jobs/g/genscenes-y6joh24n-0
+2017-02-16 21:41:37,904-0200 DEBUG swift THREAD_ASSOCIATION jobid=genscenes-77joh24n-0 host=localhost thread=2-0-14-11-27-9-45-0
+2017-02-16 21:41:37,904-0200 DEBUG swift JOB_START jobid=genscenes-77joh24n-0 tr=genscenes arguments=[9, 10, /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene] tmpdir=c-ray-run001/jobs/g/genscenes-77joh24n-0
+2017-02-16 21:41:37,905-0200 DEBUG swift THREAD_ASSOCIATION jobid=genscenes-87joh24n-0 host=localhost thread=2-0-14-11-28-10-47-0
+2017-02-16 21:41:37,906-0200 DEBUG swift THREAD_ASSOCIATION jobid=genscenes-z6joh24n-0 host=localhost thread=2-0-14-11-18-2-31-0
+2017-02-16 21:41:37,906-0200 DEBUG swift JOB_START jobid=genscenes-z6joh24n-0 tr=genscenes arguments=[2, 10, /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene] tmpdir=c-ray-run001/jobs/g/genscenes-z6joh24n-0
+2017-02-16 21:41:37,906-0200 DEBUG swift THREAD_ASSOCIATION jobid=genscenes-17joh24n-0 host=localhost thread=2-0-14-11-19-3-33-0
+2017-02-16 21:41:37,907-0200 DEBUG swift JOB_START jobid=genscenes-17joh24n-0 tr=genscenes arguments=[3, 10, /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene] tmpdir=c-ray-run001/jobs/g/genscenes-17joh24n-0
+2017-02-16 21:41:37,908-0200 DEBUG swift JOB_START jobid=genscenes-87joh24n-0 tr=genscenes arguments=[10, 10, /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene] tmpdir=c-ray-run001/jobs/g/genscenes-87joh24n-0
+2017-02-16 21:41:37,913-0200 INFO  Execute JOB_TASK jobid=genscenes-y6joh24n-0 taskid=task-24 exec=/bin/bash dir=c-ray-run001/jobs/g/genscenes-y6joh24n-0 args=_swiftwrap.staging -e genscenes -out /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0000.data -err stderr.txt -i -d /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./. -if /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene -of /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0000.data -cf  -cdmfile  -status provider -a 0 10 /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene
+2017-02-16 21:41:37,913-0200 INFO  Execute JOB_TASK jobid=genscenes-07joh24n-0 taskid=task-29 exec=/bin/bash dir=c-ray-run001/jobs/g/genscenes-07joh24n-0 args=_swiftwrap.staging -e genscenes -out /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0001.data -err stderr.txt -i -d /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./. -if /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene -of /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0001.data -cf  -cdmfile  -status provider -a 1 10 /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene
+2017-02-16 21:41:37,913-0200 INFO  Execute JOB_TASK jobid=genscenes-77joh24n-0 taskid=task-45 exec=/bin/bash dir=c-ray-run001/jobs/g/genscenes-77joh24n-0 args=_swiftwrap.staging -e genscenes -out /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0009.data -err stderr.txt -i -d /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./. -if /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene -of /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0009.data -cf  -cdmfile  -status provider -a 9 10 /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene
+2017-02-16 21:41:37,913-0200 INFO  Execute JOB_TASK jobid=genscenes-37joh24n-0 taskid=task-37 exec=/bin/bash dir=c-ray-run001/jobs/g/genscenes-37joh24n-0 args=_swiftwrap.staging -e genscenes -out /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0005.data -err stderr.txt -i -d /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./. -if /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene -of /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0005.data -cf  -cdmfile  -status provider -a 5 10 /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene
+2017-02-16 21:41:37,913-0200 INFO  Execute JOB_TASK jobid=genscenes-67joh24n-0 taskid=task-43 exec=/bin/bash dir=c-ray-run001/jobs/g/genscenes-67joh24n-0 args=_swiftwrap.staging -e genscenes -out /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0008.data -err stderr.txt -i -d /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./. -if /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene -of /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0008.data -cf  -cdmfile  -status provider -a 8 10 /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene
+2017-02-16 21:41:37,913-0200 INFO  Execute JOB_TASK jobid=genscenes-17joh24n-0 taskid=task-33 exec=/bin/bash dir=c-ray-run001/jobs/g/genscenes-17joh24n-0 args=_swiftwrap.staging -e genscenes -out /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0003.data -err stderr.txt -i -d /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./. -if /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene -of /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0003.data -cf  -cdmfile  -status provider -a 3 10 /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene
+2017-02-16 21:41:37,913-0200 INFO  Execute JOB_TASK jobid=genscenes-z6joh24n-0 taskid=task-31 exec=/bin/bash dir=c-ray-run001/jobs/g/genscenes-z6joh24n-0 args=_swiftwrap.staging -e genscenes -out /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0002.data -err stderr.txt -i -d /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./. -if /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene -of /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0002.data -cf  -cdmfile  -status provider -a 2 10 /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene
+2017-02-16 21:41:37,915-0200 DEBUG swift THREAD_ASSOCIATION jobid=genscenes-47joh24n-0 host=localhost thread=2-0-14-11-22-6-39-0
+2017-02-16 21:41:37,915-0200 DEBUG swift JOB_START jobid=genscenes-47joh24n-0 tr=genscenes arguments=[6, 10, /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene] tmpdir=c-ray-run001/jobs/g/genscenes-47joh24n-0
+2017-02-16 21:41:37,913-0200 INFO  Execute JOB_TASK jobid=genscenes-87joh24n-0 taskid=task-47 exec=/bin/bash dir=c-ray-run001/jobs/g/genscenes-87joh24n-0 args=_swiftwrap.staging -e genscenes -out /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0010.data -err stderr.txt -i -d /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./. -if /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene -of /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0010.data -cf  -cdmfile  -status provider -a 10 10 /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene
+2017-02-16 21:41:37,916-0200 INFO  Execute JOB_TASK jobid=genscenes-47joh24n-0 taskid=task-39 exec=/bin/bash dir=c-ray-run001/jobs/g/genscenes-47joh24n-0 args=_swiftwrap.staging -e genscenes -out /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0006.data -err stderr.txt -i -d /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./. -if /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene -of /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0006.data -cf  -cdmfile  -status provider -a 6 10 /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene
+2017-02-16 21:41:37,925-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-24 status=8
+2017-02-16 21:41:37,925-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-29 status=8
+2017-02-16 21:41:37,925-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-24 status=1
+2017-02-16 21:41:37,925-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-29 status=1
+2017-02-16 21:41:37,925-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-43 status=8
+2017-02-16 21:41:37,925-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-33 status=8
+2017-02-16 21:41:37,925-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-24 status=16
+2017-02-16 21:41:37,926-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-29 status=16
+2017-02-16 21:41:37,927-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-43 status=1
+2017-02-16 21:41:37,927-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-31 status=8
+2017-02-16 21:41:37,927-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-31 status=1
+2017-02-16 21:41:37,927-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-47 status=8
+2017-02-16 21:41:37,927-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-33 status=1
+2017-02-16 21:41:37,928-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-45 status=8
+2017-02-16 21:41:37,928-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-33 status=16
+2017-02-16 21:41:37,929-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-43 status=16
+2017-02-16 21:41:37,929-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-31 status=16
+2017-02-16 21:41:37,931-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-47 status=1
+2017-02-16 21:41:37,931-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-37 status=8
+2017-02-16 21:41:37,936-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-29 status=2
+2017-02-16 21:41:37,938-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-47 status=16
+2017-02-16 21:41:37,940-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-24 status=2
+2017-02-16 21:41:37,941-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-33 status=2
+2017-02-16 21:41:37,943-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-45 status=1
+2017-02-16 21:41:37,943-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-39 status=8
+2017-02-16 21:41:37,943-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-39 status=1
+2017-02-16 21:41:37,943-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-39 status=16
+2017-02-16 21:41:37,943-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-45 status=16
+2017-02-16 21:41:37,948-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-37 status=1
+2017-02-16 21:41:37,948-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-37 status=16
+2017-02-16 21:41:37,962-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-37 status=2
+2017-02-16 21:41:37,966-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-47 status=2
+2017-02-16 21:41:37,979-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-31 status=2
+2017-02-16 21:41:37,987-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-43 status=2
+2017-02-16 21:41:37,989-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-45 status=2
+2017-02-16 21:41:37,992-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-39 status=2
+2017-02-16 21:41:38,003-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-33 status=17
+2017-02-16 21:41:38,004-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-16 21:41:38,004-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-33 status=7
+2017-02-16 21:41:38,004-0200 DEBUG swift JOB_END jobid=genscenes-17joh24n-0
+2017-02-16 21:41:38,005-0200 INFO  swift END_SUCCESS jobid=genscenes-17joh24n tr=genscenes
+2017-02-16 21:41:38,005-0200 DEBUG swift PROCEDURE_END line=20 thread=2-0-14-11-19-3-33-0 name=generate
+2017-02-16 21:41:38,005-0200 DEBUG swift JOB_INIT jobid=c-ray-mt-97joh24n tr=c-ray-mt
+2017-02-16 21:41:38,005-0200 DEBUG swift JOB_SITE_SELECT jobid=c-ray-mt-97joh24n-0
+2017-02-16 21:41:38,005-0200 DEBUG swift THREAD_ASSOCIATION jobid=genscenes-27joh24n-0 host=localhost thread=2-0-14-11-20-4-35-0
+2017-02-16 21:41:38,006-0200 DEBUG swift JOB_START jobid=genscenes-27joh24n-0 tr=genscenes arguments=[4, 10, /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene] tmpdir=c-ray-run001/jobs/g/genscenes-27joh24n-0
+2017-02-16 21:41:38,006-0200 INFO  Execute JOB_TASK jobid=genscenes-27joh24n-0 taskid=task-35 exec=/bin/bash dir=c-ray-run001/jobs/g/genscenes-27joh24n-0 args=_swiftwrap.staging -e genscenes -out /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0004.data -err stderr.txt -i -d /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./. -if /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene -of /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0004.data -cf  -cdmfile  -status provider -a 4 10 /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene
+2017-02-16 21:41:38,008-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-35 status=8
+2017-02-16 21:41:38,008-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-35 status=1
+2017-02-16 21:41:38,011-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-35 status=16
+2017-02-16 21:41:38,012-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-35 status=2
+2017-02-16 21:41:38,035-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-47 status=17
+2017-02-16 21:41:38,036-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-16 21:41:38,036-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-47 status=7
+2017-02-16 21:41:38,036-0200 DEBUG swift JOB_END jobid=genscenes-87joh24n-0
+2017-02-16 21:41:38,036-0200 INFO  swift END_SUCCESS jobid=genscenes-87joh24n tr=genscenes
+2017-02-16 21:41:38,036-0200 DEBUG swift PROCEDURE_END line=20 thread=2-0-14-11-28-10-47-0 name=generate
+2017-02-16 21:41:38,037-0200 DEBUG swift JOB_INIT jobid=c-ray-mt-a7joh24n tr=c-ray-mt
+2017-02-16 21:41:38,037-0200 DEBUG swift JOB_SITE_SELECT jobid=c-ray-mt-a7joh24n-0
+2017-02-16 21:41:38,037-0200 DEBUG swift THREAD_ASSOCIATION jobid=genscenes-57joh24n-0 host=localhost thread=2-0-14-11-23-7-41-0
+2017-02-16 21:41:38,038-0200 DEBUG swift JOB_START jobid=genscenes-57joh24n-0 tr=genscenes arguments=[7, 10, /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene] tmpdir=c-ray-run001/jobs/g/genscenes-57joh24n-0
+2017-02-16 21:41:38,038-0200 INFO  Execute JOB_TASK jobid=genscenes-57joh24n-0 taskid=task-41 exec=/bin/bash dir=c-ray-run001/jobs/g/genscenes-57joh24n-0 args=_swiftwrap.staging -e genscenes -out /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0007.data -err stderr.txt -i -d /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./. -if /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene -of /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0007.data -cf  -cdmfile  -status provider -a 7 10 /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./tscene
+2017-02-16 21:41:38,039-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-41 status=8
+2017-02-16 21:41:38,039-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-41 status=1
+2017-02-16 21:41:38,039-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-41 status=16
+2017-02-16 21:41:38,040-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-29 status=17
+2017-02-16 21:41:38,040-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-16 21:41:38,041-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-29 status=7
+2017-02-16 21:41:38,041-0200 DEBUG swift JOB_END jobid=genscenes-07joh24n-0
+2017-02-16 21:41:38,041-0200 INFO  swift END_SUCCESS jobid=genscenes-07joh24n tr=genscenes
+2017-02-16 21:41:38,041-0200 DEBUG swift PROCEDURE_END line=20 thread=2-0-14-11-17-1-29-0 name=generate
+2017-02-16 21:41:38,041-0200 DEBUG swift JOB_INIT jobid=c-ray-mt-b7joh24n tr=c-ray-mt
+2017-02-16 21:41:38,041-0200 DEBUG swift JOB_SITE_SELECT jobid=c-ray-mt-b7joh24n-0
+2017-02-16 21:41:38,042-0200 DEBUG swift THREAD_ASSOCIATION jobid=c-ray-mt-97joh24n-0 host=localhost thread=2-0-14-11-19-3-34-1
+2017-02-16 21:41:38,042-0200 DEBUG swift JOB_START jobid=c-ray-mt-97joh24n-0 tr=c-ray-mt arguments=[-s, 800x600, -t, 1] tmpdir=c-ray-run001/jobs/c/c-ray-mt-97joh24n-0
+2017-02-16 21:41:38,043-0200 INFO  Execute JOB_TASK jobid=c-ray-mt-97joh24n-0 taskid=task-34 exec=/bin/bash dir=c-ray-run001/jobs/c/c-ray-mt-97joh24n-0 args=_swiftwrap.staging -e c-ray-mt -out /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0003.ppm -err stderr.txt -i /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0003.data -d /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./. -if /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0003.data -of /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0003.ppm -cf  -cdmfile  -status provider -a -s 800x600 -t 1
+2017-02-16 21:41:38,043-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-24 status=17
+2017-02-16 21:41:38,044-0200 INFO  LateBindingScheduler jobs queued: 3
+2017-02-16 21:41:38,044-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-24 status=7
+2017-02-16 21:41:38,044-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-34 status=8
+2017-02-16 21:41:38,044-0200 DEBUG swift JOB_END jobid=genscenes-y6joh24n-0
+2017-02-16 21:41:38,044-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-34 status=1
+2017-02-16 21:41:38,044-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-34 status=16
+2017-02-16 21:41:38,044-0200 INFO  swift END_SUCCESS jobid=genscenes-y6joh24n tr=genscenes
+2017-02-16 21:41:38,044-0200 DEBUG swift PROCEDURE_END line=20 thread=2-0-14-11-16-0-24-0 name=generate
+2017-02-16 21:41:38,045-0200 DEBUG swift JOB_INIT jobid=c-ray-mt-c7joh24n tr=c-ray-mt
+2017-02-16 21:41:38,045-0200 DEBUG swift JOB_SITE_SELECT jobid=c-ray-mt-c7joh24n-0
+2017-02-16 21:41:38,045-0200 DEBUG swift THREAD_ASSOCIATION jobid=c-ray-mt-a7joh24n-0 host=localhost thread=2-0-14-11-28-10-48-1
+2017-02-16 21:41:38,046-0200 DEBUG swift JOB_START jobid=c-ray-mt-a7joh24n-0 tr=c-ray-mt arguments=[-s, 800x600, -t, 1] tmpdir=c-ray-run001/jobs/c/c-ray-mt-a7joh24n-0
+2017-02-16 21:41:38,046-0200 INFO  Execute JOB_TASK jobid=c-ray-mt-a7joh24n-0 taskid=task-48 exec=/bin/bash dir=c-ray-run001/jobs/c/c-ray-mt-a7joh24n-0 args=_swiftwrap.staging -e c-ray-mt -out /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0010.ppm -err stderr.txt -i /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0010.data -d /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./. -if /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0010.data -of /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0010.ppm -cf  -cdmfile  -status provider -a -s 800x600 -t 1
+2017-02-16 21:41:38,047-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-48 status=8
+2017-02-16 21:41:38,047-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-48 status=1
+2017-02-16 21:41:38,047-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-45 status=17
+2017-02-16 21:41:38,047-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-48 status=16
+2017-02-16 21:41:38,048-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-16 21:41:38,048-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-45 status=7
+2017-02-16 21:41:38,048-0200 DEBUG swift JOB_END jobid=genscenes-77joh24n-0
+2017-02-16 21:41:38,048-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-48 status=2
+2017-02-16 21:41:38,048-0200 INFO  swift END_SUCCESS jobid=genscenes-77joh24n tr=genscenes
+2017-02-16 21:41:38,048-0200 DEBUG swift PROCEDURE_END line=20 thread=2-0-14-11-27-9-45-0 name=generate
+2017-02-16 21:41:38,048-0200 DEBUG swift JOB_INIT jobid=c-ray-mt-d7joh24n tr=c-ray-mt
+2017-02-16 21:41:38,048-0200 DEBUG swift JOB_SITE_SELECT jobid=c-ray-mt-d7joh24n-0
+2017-02-16 21:41:38,049-0200 DEBUG swift THREAD_ASSOCIATION jobid=c-ray-mt-b7joh24n-0 host=localhost thread=2-0-14-11-17-1-30-1
+2017-02-16 21:41:38,049-0200 DEBUG swift JOB_START jobid=c-ray-mt-b7joh24n-0 tr=c-ray-mt arguments=[-s, 800x600, -t, 1] tmpdir=c-ray-run001/jobs/c/c-ray-mt-b7joh24n-0
+2017-02-16 21:41:38,050-0200 INFO  Execute JOB_TASK jobid=c-ray-mt-b7joh24n-0 taskid=task-30 exec=/bin/bash dir=c-ray-run001/jobs/c/c-ray-mt-b7joh24n-0 args=_swiftwrap.staging -e c-ray-mt -out /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0001.ppm -err stderr.txt -i /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0001.data -d /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./. -if /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0001.data -of /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0001.ppm -cf  -cdmfile  -status provider -a -s 800x600 -t 1
+2017-02-16 21:41:38,050-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-30 status=8
+2017-02-16 21:41:38,051-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-30 status=1
+2017-02-16 21:41:38,051-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-30 status=16
+2017-02-16 21:41:38,052-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-30 status=2
+2017-02-16 21:41:38,058-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-43 status=17
+2017-02-16 21:41:38,058-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-16 21:41:38,058-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-43 status=7
+2017-02-16 21:41:38,059-0200 DEBUG swift JOB_END jobid=genscenes-67joh24n-0
+2017-02-16 21:41:38,060-0200 INFO  swift END_SUCCESS jobid=genscenes-67joh24n tr=genscenes
+2017-02-16 21:41:38,060-0200 DEBUG swift PROCEDURE_END line=20 thread=2-0-14-11-26-8-43-0 name=generate
+2017-02-16 21:41:38,060-0200 DEBUG swift JOB_INIT jobid=c-ray-mt-e7joh24n tr=c-ray-mt
+2017-02-16 21:41:38,060-0200 DEBUG swift JOB_SITE_SELECT jobid=c-ray-mt-e7joh24n-0
+2017-02-16 21:41:38,061-0200 DEBUG swift THREAD_ASSOCIATION jobid=c-ray-mt-c7joh24n-0 host=localhost thread=2-0-14-11-16-0-25-1
+2017-02-16 21:41:38,061-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-41 status=2
+2017-02-16 21:41:38,062-0200 DEBUG swift JOB_START jobid=c-ray-mt-c7joh24n-0 tr=c-ray-mt arguments=[-s, 800x600, -t, 1] tmpdir=c-ray-run001/jobs/c/c-ray-mt-c7joh24n-0
+2017-02-16 21:41:38,062-0200 INFO  Execute JOB_TASK jobid=c-ray-mt-c7joh24n-0 taskid=task-25 exec=/bin/bash dir=c-ray-run001/jobs/c/c-ray-mt-c7joh24n-0 args=_swiftwrap.staging -e c-ray-mt -out /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0000.ppm -err stderr.txt -i /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0000.data -d /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./. -if /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0000.data -of /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0000.ppm -cf  -cdmfile  -status provider -a -s 800x600 -t 1
+2017-02-16 21:41:38,062-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-31 status=17
+2017-02-16 21:41:38,062-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-37 status=17
+2017-02-16 21:41:38,063-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-25 status=8
+2017-02-16 21:41:38,063-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-25 status=1
+2017-02-16 21:41:38,063-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-25 status=16
+2017-02-16 21:41:38,067-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-34 status=2
+2017-02-16 21:41:38,069-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-16 21:41:38,069-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-37 status=7
+2017-02-16 21:41:38,070-0200 DEBUG swift JOB_END jobid=genscenes-37joh24n-0
+2017-02-16 21:41:38,070-0200 INFO  swift END_SUCCESS jobid=genscenes-37joh24n tr=genscenes
+2017-02-16 21:41:38,070-0200 DEBUG swift PROCEDURE_END line=20 thread=2-0-14-11-21-5-37-0 name=generate
+2017-02-16 21:41:38,071-0200 DEBUG swift JOB_INIT jobid=c-ray-mt-f7joh24n tr=c-ray-mt
+2017-02-16 21:41:38,071-0200 DEBUG swift JOB_SITE_SELECT jobid=c-ray-mt-f7joh24n-0
+2017-02-16 21:41:38,072-0200 INFO  LateBindingScheduler jobs queued: 3
+2017-02-16 21:41:38,072-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-31 status=7
+2017-02-16 21:41:38,072-0200 DEBUG swift JOB_END jobid=genscenes-z6joh24n-0
+2017-02-16 21:41:38,072-0200 INFO  swift END_SUCCESS jobid=genscenes-z6joh24n tr=genscenes
+2017-02-16 21:41:38,072-0200 DEBUG swift PROCEDURE_END line=20 thread=2-0-14-11-18-2-31-0 name=generate
+2017-02-16 21:41:38,073-0200 DEBUG swift JOB_INIT jobid=c-ray-mt-g7joh24n tr=c-ray-mt
+2017-02-16 21:41:38,073-0200 DEBUG swift JOB_SITE_SELECT jobid=c-ray-mt-g7joh24n-0
+2017-02-16 21:41:38,073-0200 DEBUG swift THREAD_ASSOCIATION jobid=c-ray-mt-d7joh24n-0 host=localhost thread=2-0-14-11-27-9-46-1
+2017-02-16 21:41:38,073-0200 DEBUG swift THREAD_ASSOCIATION jobid=c-ray-mt-e7joh24n-0 host=localhost thread=2-0-14-11-26-8-44-1
+2017-02-16 21:41:38,074-0200 DEBUG swift JOB_START jobid=c-ray-mt-e7joh24n-0 tr=c-ray-mt arguments=[-s, 800x600, -t, 1] tmpdir=c-ray-run001/jobs/c/c-ray-mt-e7joh24n-0
+2017-02-16 21:41:38,074-0200 DEBUG swift JOB_START jobid=c-ray-mt-d7joh24n-0 tr=c-ray-mt arguments=[-s, 800x600, -t, 1] tmpdir=c-ray-run001/jobs/c/c-ray-mt-d7joh24n-0
+2017-02-16 21:41:38,074-0200 INFO  Execute JOB_TASK jobid=c-ray-mt-e7joh24n-0 taskid=task-44 exec=/bin/bash dir=c-ray-run001/jobs/c/c-ray-mt-e7joh24n-0 args=_swiftwrap.staging -e c-ray-mt -out /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0008.ppm -err stderr.txt -i /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0008.data -d /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./. -if /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0008.data -of /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0008.ppm -cf  -cdmfile  -status provider -a -s 800x600 -t 1
+2017-02-16 21:41:38,074-0200 INFO  Execute JOB_TASK jobid=c-ray-mt-d7joh24n-0 taskid=task-46 exec=/bin/bash dir=c-ray-run001/jobs/c/c-ray-mt-d7joh24n-0 args=_swiftwrap.staging -e c-ray-mt -out /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0009.ppm -err stderr.txt -i /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0009.data -d /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./. -if /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0009.data -of /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0009.ppm -cf  -cdmfile  -status provider -a -s 800x600 -t 1
+2017-02-16 21:41:38,075-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-44 status=8
+2017-02-16 21:41:38,075-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-44 status=1
+2017-02-16 21:41:38,075-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-44 status=16
+2017-02-16 21:41:38,075-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-46 status=8
+2017-02-16 21:41:38,075-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-46 status=1
+2017-02-16 21:41:38,075-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-46 status=16
+2017-02-16 21:41:38,083-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-25 status=2
+2017-02-16 21:41:38,084-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-46 status=2
+2017-02-16 21:41:38,084-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-44 status=2
+2017-02-16 21:41:38,097-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-39 status=17
+2017-02-16 21:41:38,098-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-16 21:41:38,098-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-39 status=7
+2017-02-16 21:41:38,098-0200 DEBUG swift JOB_END jobid=genscenes-47joh24n-0
+2017-02-16 21:41:38,099-0200 INFO  swift END_SUCCESS jobid=genscenes-47joh24n tr=genscenes
+2017-02-16 21:41:38,099-0200 DEBUG swift PROCEDURE_END line=20 thread=2-0-14-11-22-6-39-0 name=generate
+2017-02-16 21:41:38,099-0200 DEBUG swift JOB_INIT jobid=c-ray-mt-h7joh24n tr=c-ray-mt
+2017-02-16 21:41:38,099-0200 DEBUG swift JOB_SITE_SELECT jobid=c-ray-mt-h7joh24n-0
+2017-02-16 21:41:38,100-0200 DEBUG swift THREAD_ASSOCIATION jobid=c-ray-mt-f7joh24n-0 host=localhost thread=2-0-14-11-21-5-38-1
+2017-02-16 21:41:38,100-0200 DEBUG swift JOB_START jobid=c-ray-mt-f7joh24n-0 tr=c-ray-mt arguments=[-s, 800x600, -t, 1] tmpdir=c-ray-run001/jobs/c/c-ray-mt-f7joh24n-0
+2017-02-16 21:41:38,101-0200 INFO  Execute JOB_TASK jobid=c-ray-mt-f7joh24n-0 taskid=task-38 exec=/bin/bash dir=c-ray-run001/jobs/c/c-ray-mt-f7joh24n-0 args=_swiftwrap.staging -e c-ray-mt -out /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0005.ppm -err stderr.txt -i /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0005.data -d /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./. -if /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0005.data -of /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0005.ppm -cf  -cdmfile  -status provider -a -s 800x600 -t 1
+2017-02-16 21:41:38,101-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-38 status=8
+2017-02-16 21:41:38,101-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-38 status=1
+2017-02-16 21:41:38,101-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-38 status=16
+2017-02-16 21:41:38,107-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-38 status=2
+2017-02-16 21:41:38,113-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-35 status=17
+2017-02-16 21:41:38,114-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-16 21:41:38,114-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-35 status=7
+2017-02-16 21:41:38,114-0200 DEBUG swift JOB_END jobid=genscenes-27joh24n-0
+2017-02-16 21:41:38,114-0200 INFO  swift END_SUCCESS jobid=genscenes-27joh24n tr=genscenes
+2017-02-16 21:41:38,114-0200 DEBUG swift PROCEDURE_END line=20 thread=2-0-14-11-20-4-35-0 name=generate
+2017-02-16 21:41:38,115-0200 DEBUG swift JOB_INIT jobid=c-ray-mt-i7joh24n tr=c-ray-mt
+2017-02-16 21:41:38,115-0200 DEBUG swift JOB_SITE_SELECT jobid=c-ray-mt-i7joh24n-0
+2017-02-16 21:41:38,115-0200 DEBUG swift THREAD_ASSOCIATION jobid=c-ray-mt-g7joh24n-0 host=localhost thread=2-0-14-11-18-2-32-1
+2017-02-16 21:41:38,116-0200 DEBUG swift JOB_START jobid=c-ray-mt-g7joh24n-0 tr=c-ray-mt arguments=[-s, 800x600, -t, 1] tmpdir=c-ray-run001/jobs/c/c-ray-mt-g7joh24n-0
+2017-02-16 21:41:38,117-0200 INFO  Execute JOB_TASK jobid=c-ray-mt-g7joh24n-0 taskid=task-32 exec=/bin/bash dir=c-ray-run001/jobs/c/c-ray-mt-g7joh24n-0 args=_swiftwrap.staging -e c-ray-mt -out /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0002.ppm -err stderr.txt -i /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0002.data -d /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./. -if /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0002.data -of /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0002.ppm -cf  -cdmfile  -status provider -a -s 800x600 -t 1
+2017-02-16 21:41:38,117-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-32 status=8
+2017-02-16 21:41:38,117-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-32 status=1
+2017-02-16 21:41:38,117-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-32 status=16
+2017-02-16 21:41:38,119-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-32 status=2
+2017-02-16 21:41:38,208-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-41 status=17
+2017-02-16 21:41:38,208-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-16 21:41:38,208-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-41 status=7
+2017-02-16 21:41:38,209-0200 DEBUG swift JOB_END jobid=genscenes-57joh24n-0
+2017-02-16 21:41:38,209-0200 INFO  swift END_SUCCESS jobid=genscenes-57joh24n tr=genscenes
+2017-02-16 21:41:38,209-0200 DEBUG swift PROCEDURE_END line=20 thread=2-0-14-11-23-7-41-0 name=generate
+2017-02-16 21:41:38,209-0200 DEBUG swift JOB_INIT jobid=c-ray-mt-j7joh24n tr=c-ray-mt
+2017-02-16 21:41:38,209-0200 DEBUG swift JOB_SITE_SELECT jobid=c-ray-mt-j7joh24n-0
+2017-02-16 21:41:38,210-0200 DEBUG swift THREAD_ASSOCIATION jobid=c-ray-mt-h7joh24n-0 host=localhost thread=2-0-14-11-22-6-40-1
+2017-02-16 21:41:38,210-0200 DEBUG swift JOB_START jobid=c-ray-mt-h7joh24n-0 tr=c-ray-mt arguments=[-s, 800x600, -t, 1] tmpdir=c-ray-run001/jobs/c/c-ray-mt-h7joh24n-0
+2017-02-16 21:41:38,211-0200 INFO  Execute JOB_TASK jobid=c-ray-mt-h7joh24n-0 taskid=task-40 exec=/bin/bash dir=c-ray-run001/jobs/c/c-ray-mt-h7joh24n-0 args=_swiftwrap.staging -e c-ray-mt -out /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0006.ppm -err stderr.txt -i /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0006.data -d /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./. -if /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0006.data -of /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0006.ppm -cf  -cdmfile  -status provider -a -s 800x600 -t 1
+2017-02-16 21:41:38,212-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-40 status=8
+2017-02-16 21:41:38,212-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-40 status=1
+2017-02-16 21:41:38,213-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-40 status=16
+2017-02-16 21:41:38,223-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-40 status=2
+2017-02-16 21:41:38,876-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 153092096, UsedHeap: 17570312, JVMThreads: 39
+2017-02-16 21:41:38,877-0200 INFO  RuntimeStats$ProgressTicker   Selecting site:2  Active:9  Finished successfully:11
+2017-02-16 21:41:39,877-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 153092096, UsedHeap: 17996832, JVMThreads: 39
+2017-02-16 21:41:40,877-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 153092096, UsedHeap: 18508728, JVMThreads: 39
+2017-02-16 21:41:41,877-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 153092096, UsedHeap: 18508768, JVMThreads: 39
+2017-02-16 21:41:42,878-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 153092096, UsedHeap: 18764688, JVMThreads: 39
+2017-02-16 21:41:43,878-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 153092096, UsedHeap: 18764728, JVMThreads: 39
+2017-02-16 21:41:44,878-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 153092096, UsedHeap: 18764768, JVMThreads: 39
+2017-02-16 21:41:45,878-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 153092096, UsedHeap: 18764808, JVMThreads: 39
+2017-02-16 21:41:46,878-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 153092096, UsedHeap: 18764848, JVMThreads: 39
+2017-02-16 21:41:47,879-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 153092096, UsedHeap: 18764888, JVMThreads: 39
+2017-02-16 21:41:48,879-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 153092096, UsedHeap: 19020920, JVMThreads: 39
+2017-02-16 21:41:49,879-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 153092096, UsedHeap: 19020960, JVMThreads: 39
+2017-02-16 21:41:50,879-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 153092096, UsedHeap: 20300752, JVMThreads: 39
+2017-02-16 21:41:51,879-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 153092096, UsedHeap: 20300792, JVMThreads: 39
+2017-02-16 21:41:52,880-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 153092096, UsedHeap: 20300832, JVMThreads: 39
+2017-02-16 21:41:53,880-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 153092096, UsedHeap: 20300872, JVMThreads: 39
+2017-02-16 21:41:54,880-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 153092096, UsedHeap: 20300912, JVMThreads: 39
+2017-02-16 21:41:55,880-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 153092096, UsedHeap: 20300952, JVMThreads: 39
+2017-02-16 21:41:56,283-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-48 status=17
+2017-02-16 21:41:56,284-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-16 21:41:56,284-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-48 status=7
+2017-02-16 21:41:56,284-0200 DEBUG swift JOB_END jobid=c-ray-mt-a7joh24n-0
+2017-02-16 21:41:56,284-0200 INFO  swift END_SUCCESS jobid=c-ray-mt-a7joh24n tr=c-ray-mt
+2017-02-16 21:41:56,284-0200 DEBUG swift PROCEDURE_END line=25 thread=2-0-14-11-28-10-48-1 name=render
+2017-02-16 21:41:56,284-0200 DEBUG swift FOREACH_IT_END line=41 thread=2-0-14-11-28-10
+2017-02-16 21:41:56,288-0200 DEBUG swift THREAD_ASSOCIATION jobid=c-ray-mt-i7joh24n-0 host=localhost thread=2-0-14-11-20-4-36-1
+2017-02-16 21:41:56,288-0200 DEBUG swift JOB_START jobid=c-ray-mt-i7joh24n-0 tr=c-ray-mt arguments=[-s, 800x600, -t, 1] tmpdir=c-ray-run001/jobs/c/c-ray-mt-i7joh24n-0
+2017-02-16 21:41:56,289-0200 INFO  Execute JOB_TASK jobid=c-ray-mt-i7joh24n-0 taskid=task-36 exec=/bin/bash dir=c-ray-run001/jobs/c/c-ray-mt-i7joh24n-0 args=_swiftwrap.staging -e c-ray-mt -out /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0004.ppm -err stderr.txt -i /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0004.data -d /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./. -if /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0004.data -of /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0004.ppm -cf  -cdmfile  -status provider -a -s 800x600 -t 1
+2017-02-16 21:41:56,289-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-36 status=8
+2017-02-16 21:41:56,289-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-36 status=1
+2017-02-16 21:41:56,290-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-36 status=16
+2017-02-16 21:41:56,307-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-36 status=2
+2017-02-16 21:41:56,880-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 153092096, UsedHeap: 20589656, JVMThreads: 39
+2017-02-16 21:41:56,881-0200 INFO  RuntimeStats$ProgressTicker   Selecting site:1  Active:9  Finished successfully:12
+2017-02-16 21:41:57,881-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 153092096, UsedHeap: 21101680, JVMThreads: 39
+2017-02-16 21:41:58,881-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 153092096, UsedHeap: 21357632, JVMThreads: 39
+2017-02-16 21:41:59,338-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-34 status=17
+2017-02-16 21:41:59,339-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-16 21:41:59,339-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-34 status=7
+2017-02-16 21:41:59,339-0200 DEBUG swift JOB_END jobid=c-ray-mt-97joh24n-0
+2017-02-16 21:41:59,339-0200 INFO  swift END_SUCCESS jobid=c-ray-mt-97joh24n tr=c-ray-mt
+2017-02-16 21:41:59,339-0200 DEBUG swift PROCEDURE_END line=25 thread=2-0-14-11-19-3-34-1 name=render
+2017-02-16 21:41:59,339-0200 DEBUG swift THREAD_ASSOCIATION jobid=c-ray-mt-j7joh24n-0 host=localhost thread=2-0-14-11-23-7-42-1
+2017-02-16 21:41:59,340-0200 DEBUG swift JOB_START jobid=c-ray-mt-j7joh24n-0 tr=c-ray-mt arguments=[-s, 800x600, -t, 1] tmpdir=c-ray-run001/jobs/c/c-ray-mt-j7joh24n-0
+2017-02-16 21:41:59,340-0200 DEBUG swift FOREACH_IT_END line=41 thread=2-0-14-11-19-3
+2017-02-16 21:41:59,345-0200 INFO  Execute JOB_TASK jobid=c-ray-mt-j7joh24n-0 taskid=task-42 exec=/bin/bash dir=c-ray-run001/jobs/c/c-ray-mt-j7joh24n-0 args=_swiftwrap.staging -e c-ray-mt -out /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0007.ppm -err stderr.txt -i /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0007.data -d /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./. -if /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0007.data -of /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0007.ppm -cf  -cdmfile  -status provider -a -s 800x600 -t 1
+2017-02-16 21:41:59,346-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-42 status=8
+2017-02-16 21:41:59,346-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-42 status=1
+2017-02-16 21:41:59,346-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-42 status=16
+2017-02-16 21:41:59,360-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-42 status=2
+2017-02-16 21:41:59,882-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 153092096, UsedHeap: 21613640, JVMThreads: 39
+2017-02-16 21:41:59,882-0200 INFO  RuntimeStats$ProgressTicker   Active:9  Finished successfully:13
+2017-02-16 21:42:00,240-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-40 status=17
+2017-02-16 21:42:00,240-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:42:00,240-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-40 status=7
+2017-02-16 21:42:00,241-0200 DEBUG swift JOB_END jobid=c-ray-mt-h7joh24n-0
+2017-02-16 21:42:00,241-0200 INFO  swift END_SUCCESS jobid=c-ray-mt-h7joh24n tr=c-ray-mt
+2017-02-16 21:42:00,241-0200 DEBUG swift PROCEDURE_END line=25 thread=2-0-14-11-22-6-40-1 name=render
+2017-02-16 21:42:00,241-0200 DEBUG swift FOREACH_IT_END line=41 thread=2-0-14-11-22-6
+2017-02-16 21:42:00,273-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-44 status=17
+2017-02-16 21:42:00,273-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:42:00,273-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-44 status=7
+2017-02-16 21:42:00,274-0200 DEBUG swift JOB_END jobid=c-ray-mt-e7joh24n-0
+2017-02-16 21:42:00,274-0200 INFO  swift END_SUCCESS jobid=c-ray-mt-e7joh24n tr=c-ray-mt
+2017-02-16 21:42:00,274-0200 DEBUG swift PROCEDURE_END line=25 thread=2-0-14-11-26-8-44-1 name=render
+2017-02-16 21:42:00,274-0200 DEBUG swift FOREACH_IT_END line=41 thread=2-0-14-11-26-8
+2017-02-16 21:42:00,614-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-38 status=17
+2017-02-16 21:42:00,615-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:42:00,615-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-38 status=7
+2017-02-16 21:42:00,615-0200 DEBUG swift JOB_END jobid=c-ray-mt-f7joh24n-0
+2017-02-16 21:42:00,615-0200 INFO  swift END_SUCCESS jobid=c-ray-mt-f7joh24n tr=c-ray-mt
+2017-02-16 21:42:00,616-0200 DEBUG swift PROCEDURE_END line=25 thread=2-0-14-11-21-5-38-1 name=render
+2017-02-16 21:42:00,616-0200 DEBUG swift FOREACH_IT_END line=41 thread=2-0-14-11-21-5
+2017-02-16 21:42:00,882-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 153092096, UsedHeap: 22554240, JVMThreads: 39
+2017-02-16 21:42:00,882-0200 INFO  RuntimeStats$ProgressTicker   Active:6  Finished successfully:16
+2017-02-16 21:42:00,956-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-46 status=17
+2017-02-16 21:42:00,956-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:42:00,956-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-46 status=7
+2017-02-16 21:42:00,957-0200 DEBUG swift JOB_END jobid=c-ray-mt-d7joh24n-0
+2017-02-16 21:42:00,957-0200 INFO  swift END_SUCCESS jobid=c-ray-mt-d7joh24n tr=c-ray-mt
+2017-02-16 21:42:00,957-0200 DEBUG swift PROCEDURE_END line=25 thread=2-0-14-11-27-9-46-1 name=render
+2017-02-16 21:42:00,957-0200 DEBUG swift FOREACH_IT_END line=41 thread=2-0-14-11-27-9
+2017-02-16 21:42:01,571-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-25 status=17
+2017-02-16 21:42:01,572-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:42:01,572-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-25 status=7
+2017-02-16 21:42:01,572-0200 DEBUG swift JOB_END jobid=c-ray-mt-c7joh24n-0
+2017-02-16 21:42:01,572-0200 INFO  swift END_SUCCESS jobid=c-ray-mt-c7joh24n tr=c-ray-mt
+2017-02-16 21:42:01,572-0200 DEBUG swift PROCEDURE_END line=25 thread=2-0-14-11-16-0-25-1 name=render
+2017-02-16 21:42:01,572-0200 DEBUG swift FOREACH_IT_END line=41 thread=2-0-14-11-16-0
+2017-02-16 21:42:01,836-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-30 status=17
+2017-02-16 21:42:01,837-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:42:01,837-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-30 status=7
+2017-02-16 21:42:01,837-0200 DEBUG swift JOB_END jobid=c-ray-mt-b7joh24n-0
+2017-02-16 21:42:01,838-0200 INFO  swift END_SUCCESS jobid=c-ray-mt-b7joh24n tr=c-ray-mt
+2017-02-16 21:42:01,838-0200 DEBUG swift PROCEDURE_END line=25 thread=2-0-14-11-17-1-30-1 name=render
+2017-02-16 21:42:01,838-0200 DEBUG swift FOREACH_IT_END line=41 thread=2-0-14-11-17-1
+2017-02-16 21:42:01,876-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-32 status=17
+2017-02-16 21:42:01,877-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:42:01,877-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-32 status=7
+2017-02-16 21:42:01,877-0200 DEBUG swift JOB_END jobid=c-ray-mt-g7joh24n-0
+2017-02-16 21:42:01,877-0200 INFO  swift END_SUCCESS jobid=c-ray-mt-g7joh24n tr=c-ray-mt
+2017-02-16 21:42:01,877-0200 DEBUG swift PROCEDURE_END line=25 thread=2-0-14-11-18-2-32-1 name=render
+2017-02-16 21:42:01,878-0200 DEBUG swift FOREACH_IT_END line=41 thread=2-0-14-11-18-2
+2017-02-16 21:42:01,882-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 153092096, UsedHeap: 22587160, JVMThreads: 39
+2017-02-16 21:42:01,883-0200 INFO  RuntimeStats$ProgressTicker   Active:2  Finished successfully:20
+2017-02-16 21:42:02,883-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 153092096, UsedHeap: 22587200, JVMThreads: 39
+2017-02-16 21:42:03,883-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 153092096, UsedHeap: 22587240, JVMThreads: 39
+2017-02-16 21:42:04,883-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 153092096, UsedHeap: 22587280, JVMThreads: 39
+2017-02-16 21:42:05,676-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-36 status=17
+2017-02-16 21:42:05,676-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:42:05,676-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-36 status=7
+2017-02-16 21:42:05,677-0200 DEBUG swift JOB_END jobid=c-ray-mt-i7joh24n-0
+2017-02-16 21:42:05,677-0200 INFO  swift END_SUCCESS jobid=c-ray-mt-i7joh24n tr=c-ray-mt
+2017-02-16 21:42:05,677-0200 DEBUG swift PROCEDURE_END line=25 thread=2-0-14-11-20-4-36-1 name=render
+2017-02-16 21:42:05,677-0200 DEBUG swift FOREACH_IT_END line=41 thread=2-0-14-11-20-4
+2017-02-16 21:42:05,883-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 153092096, UsedHeap: 22843232, JVMThreads: 39
+2017-02-16 21:42:05,884-0200 INFO  RuntimeStats$ProgressTicker   Active:1  Finished successfully:21
+2017-02-16 21:42:06,317-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-42 status=17
+2017-02-16 21:42:06,318-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:42:06,318-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-42 status=7
+2017-02-16 21:42:06,319-0200 DEBUG swift JOB_END jobid=c-ray-mt-j7joh24n-0
+2017-02-16 21:42:06,319-0200 INFO  swift END_SUCCESS jobid=c-ray-mt-j7joh24n tr=c-ray-mt
+2017-02-16 21:42:06,319-0200 DEBUG swift PROCEDURE_END line=25 thread=2-0-14-11-23-7-42-1 name=render
+2017-02-16 21:42:06,319-0200 DEBUG swift FOREACH_IT_END line=41 thread=2-0-14-11-23-7
+2017-02-16 21:42:06,319-0200 DEBUG swift JOB_INIT jobid=convert-k7joh24n tr=convert
+2017-02-16 21:42:06,319-0200 DEBUG swift JOB_SITE_SELECT jobid=convert-k7joh24n-0
+2017-02-16 21:42:06,320-0200 DEBUG swift THREAD_ASSOCIATION jobid=convert-k7joh24n-0 host=localhost thread=2-0-15-12
+2017-02-16 21:42:06,323-0200 DEBUG swift JOB_START jobid=convert-k7joh24n-0 tr=convert arguments=[-delay, 0, -quality, 75, /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0000.ppm, /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0001.ppm, /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0002.ppm, /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0003.ppm, /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0004.ppm, /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0005.ppm, /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0006.ppm, /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0007.ppm, /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0008.ppm, /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0009.ppm, /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0010.ppm, /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./output.ppm] tmpdir=c-ray-run001/jobs/c/convert-k7joh24n-0
+2017-02-16 21:42:06,324-0200 INFO  Execute JOB_TASK jobid=convert-k7joh24n-0 taskid=task-15 exec=/bin/bash dir=c-ray-run001/jobs/c/convert-k7joh24n-0 args=_swiftwrap.staging -e convert -out stdout.txt -err stderr.txt -i -d /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./. -if /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0006.ppm|/home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0009.ppm|/home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0008.ppm|/home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0002.ppm|/home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0003.ppm|/home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0000.ppm|/home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0007.ppm|/home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0005.ppm|/home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0001.ppm|/home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0004.ppm|/home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0010.ppm -of /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./output.ppm -cf  -cdmfile  -status provider -a -delay 0 -quality 75 /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0000.ppm /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0001.ppm /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0002.ppm /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0003.ppm /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0004.ppm /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0005.ppm /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0006.ppm /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0007.ppm /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0008.ppm /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0009.ppm /home/mondelli/Dropbox/Docker/swift_verao/c-ray/././scene.0010.ppm /home/mondelli/Dropbox/Docker/swift_verao/c-ray/./output.ppm
+2017-02-16 21:42:06,325-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-15 status=8
+2017-02-16 21:42:06,325-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-15 status=1
+2017-02-16 21:42:06,325-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-15 status=16
+2017-02-16 21:42:06,326-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-15 status=2
+2017-02-16 21:42:06,447-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-15 status=17
+2017-02-16 21:42:06,448-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-16 21:42:06,448-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-15 status=7
+2017-02-16 21:42:06,448-0200 DEBUG swift JOB_END jobid=convert-k7joh24n-0
+2017-02-16 21:42:06,449-0200 INFO  swift END_SUCCESS jobid=convert-k7joh24n tr=convert
+2017-02-16 21:42:06,449-0200 DEBUG swift PROCEDURE_END line=30 thread=2-0-15-12 name=convert
+2017-02-16 21:42:06,449-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 153092096, UsedHeap: 23107352, JVMThreads: 39
+2017-02-16 21:42:06,449-0200 INFO  RuntimeStats$ProgressTicker   Finished successfully:23
+2017-02-16 21:42:06,459-0200 DEBUG swift Starting cleanups
+2017-02-16 21:42:06,460-0200 INFO  swift START cleanups=[]
+2017-02-16 21:42:06,460-0200 INFO  swift END cleanups=[]
+2017-02-16 21:42:06,460-0200 DEBUG swift Ending cleanups
+2017-02-16 21:42:06,463-0200 INFO  FileGarbageCollector Failed to clean <cleaned>:any - Closed
+java.lang.NullPointerException
+	at org.griphyn.vdl.mapping.nodes.AbstractFutureArrayDataNode.getFringePaths(AbstractFutureArrayDataNode.java:225)
+	at org.griphyn.vdl.mapping.nodes.AbstractDataNode.getFringePaths(AbstractDataNode.java:314)
+	at org.griphyn.vdl.mapping.file.FileGarbageCollector.run(FileGarbageCollector.java:112)
+	at java.lang.Thread.run(Thread.java:745)
+2017-02-16 21:42:06,465-0200 INFO  Loader Swift finished with no errors

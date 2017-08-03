@@ -1,0 +1,43 @@
+checking for paramfile
+paramfile is: 
+checking for paramfile
+paramfile is: 
+Progress  2017-02-17 09:29:08.244852735-0200  LOG_START
+
+_____________________________________________________________________________
+
+        Wrapper (_swiftwrap)
+_____________________________________________________________________________
+
+Job directory mode is: link on shared filesystem
+PID=29706
+HOST=
+PWD=/home/mondelli/Dropbox/Docker/swift_verao/c-ray/swiftwork/c-ray-run003
+DIR=jobs/c/c-ray-mt-76mza34n-0
+EXEC=/home/mondelli/Dropbox/Docker/swift_verao/c-ray/bin/c-ray-mt
+STDIN=scene.0004.data
+STDOUT=scene.0004.ppm
+STDERR=stderr.txt
+DIRS=
+INF=scene.0004.data
+OUTF=scene.0004.ppm
+COLLECT=
+CDM_FILE=
+ARGS=-s 800x600 -t 1
+ARGC=4
+MPI_RANK=
+PMI_RANK=
+Progress  2017-02-17 09:29:08.272922677-0200  CREATE_JOBDIR
+Created job directory: jobs/c/c-ray-mt-76mza34n-0
+Progress  2017-02-17 09:29:08.281772353-0200  CREATE_INPUTDIR
+Progress  2017-02-17 09:29:08.282931962-0200  LINK_INPUTS
+Linked input: /home/mondelli/Dropbox/Docker/swift_verao/c-ray/swiftwork/c-ray-run003/shared/scene.0004.data to jobs/c/c-ray-mt-76mza34n-0/scene.0004.data
+Progress  2017-02-17 09:29:08.290057938-0200  EXECUTE
+APP_RESOURCES=real_secs:29.75,kernel_secs:0.02,user_secs:10.43,percent_cpu:35%,max_rss:2828,avg_rss:0,avg_tot_vm:0,avg_priv_data:0,avg_priv_stack:0,avg_shared_text:0,page_size:4096,major_pgfaults:0,minor_pgfaults:761,swaps:0,invol_context_switches:3837,vol_waits:2,fs_reads:0,fs_writes:2824,sock_recv:0,sock_send:0,signals:0,exit_status:0
+Moving back to workflow directory /home/mondelli/Dropbox/Docker/swift_verao/c-ray/swiftwork/c-ray-run003
+Progress  2017-02-17 09:29:38.062480507-0200  EXECUTE_DONE
+Job ran successfully
+Progress  2017-02-17 09:29:38.063973862-0200  MOVING_OUTPUTS scene.0004.ppm
+Progress  2017-02-17 09:29:38.066588374-0200  RM_JOBDIR
+Progress  2017-02-17 09:29:38.071844675-0200  TOUCH_SUCCESS
+Progress  2017-02-17 09:29:38.084691060-0200  END

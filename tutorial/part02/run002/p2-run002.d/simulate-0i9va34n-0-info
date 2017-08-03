@@ -1,0 +1,39 @@
+Progress  2017-02-17 09:26:43.844179413-0200  LOG_START
+
+_____________________________________________________________________________
+
+        Wrapper (_swiftwrap)
+_____________________________________________________________________________
+
+Job directory mode is: link on shared filesystem
+PID=24111
+HOST=
+PWD=/home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/part02/swiftwork/p2-run002
+DIR=jobs/s/simulate-0i9va34n-0
+EXEC=/home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/bin/simulate
+STDIN=
+STDOUT=output/sim_9.out
+STDERR=stderr.txt
+DIRS=output
+INF=
+OUTF=output/sim_9.out
+COLLECT=
+CDM_FILE=
+ARGS=
+ARGC=0
+MPI_RANK=
+PMI_RANK=
+Progress  2017-02-17 09:26:43.861174261-0200  CREATE_JOBDIR
+Created job directory: jobs/s/simulate-0i9va34n-0
+Progress  2017-02-17 09:26:43.871753142-0200  CREATE_INPUTDIR
+Created output directory: jobs/s/simulate-0i9va34n-0/output
+Progress  2017-02-17 09:26:43.877151733-0200  LINK_INPUTS
+Progress  2017-02-17 09:26:43.881355977-0200  EXECUTE
+APP_RESOURCES=real_secs:0.03,kernel_secs:0.01,user_secs:0.00,percent_cpu:40%,max_rss:1624,avg_rss:0,avg_tot_vm:0,avg_priv_data:0,avg_priv_stack:0,avg_shared_text:0,page_size:4096,major_pgfaults:0,minor_pgfaults:3617,swaps:0,invol_context_switches:18,vol_waits:26,fs_reads:0,fs_writes:32,sock_recv:0,sock_send:0,signals:0,exit_status:0
+Moving back to workflow directory /home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/part02/swiftwork/p2-run002
+Progress  2017-02-17 09:26:43.943769601-0200  EXECUTE_DONE
+Job ran successfully
+Progress  2017-02-17 09:26:43.952380224-0200  MOVING_OUTPUTS output/sim_9.out
+Progress  2017-02-17 09:26:43.958343306-0200  RM_JOBDIR
+Progress  2017-02-17 09:26:43.966907623-0200  TOUCH_SUCCESS
+Progress  2017-02-17 09:26:43.978476503-0200  END

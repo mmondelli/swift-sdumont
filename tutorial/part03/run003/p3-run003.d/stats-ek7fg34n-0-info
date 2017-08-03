@@ -1,0 +1,52 @@
+checking for paramfile
+paramfile is: 
+Progress  2017-02-17 11:45:21.535236493-0200  LOG_START
+
+_____________________________________________________________________________
+
+        Wrapper (_swiftwrap)
+_____________________________________________________________________________
+
+Job directory mode is: link on shared filesystem
+PID=6388
+HOST=
+PWD=/home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/part03/swiftwork/p3-run003
+DIR=jobs/s/stats-ek7fg34n-0
+EXEC=/home/mondelli/swift-k/examples/tutorial/bin/stats
+STDIN=
+STDOUT=output/average.out
+STDERR=stderr.txt
+DIRS=_concurrent/sims-18-2-0|output
+INF=_concurrent/sims-18-2-0/[8]|_concurrent/sims-18-2-0/[7]|_concurrent/sims-18-2-0/[5]|_concurrent/sims-18-2-0/[3]|_concurrent/sims-18-2-0/[4]|_concurrent/sims-18-2-0/[9]|_concurrent/sims-18-2-0/[2]|_concurrent/sims-18-2-0/[0]|_concurrent/sims-18-2-0/[1]|_concurrent/sims-18-2-0/[6]
+OUTF=output/average.out
+COLLECT=
+CDM_FILE=
+ARGS=_concurrent/sims-18-2-0/[0] _concurrent/sims-18-2-0/[1] _concurrent/sims-18-2-0/[2] _concurrent/sims-18-2-0/[3] _concurrent/sims-18-2-0/[4] _concurrent/sims-18-2-0/[5] _concurrent/sims-18-2-0/[6] _concurrent/sims-18-2-0/[7] _concurrent/sims-18-2-0/[8] _concurrent/sims-18-2-0/[9]
+ARGC=10
+MPI_RANK=
+PMI_RANK=
+Progress  2017-02-17 11:45:21.551034842-0200  CREATE_JOBDIR
+Created job directory: jobs/s/stats-ek7fg34n-0
+Progress  2017-02-17 11:45:21.554622433-0200  CREATE_INPUTDIR
+Created output directory: jobs/s/stats-ek7fg34n-0/_concurrent/sims-18-2-0
+Created output directory: jobs/s/stats-ek7fg34n-0/output
+Progress  2017-02-17 11:45:21.558924978-0200  LINK_INPUTS
+Linked input: /home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/part03/swiftwork/p3-run003/shared/_concurrent/sims-18-2-0/[8] to jobs/s/stats-ek7fg34n-0/_concurrent/sims-18-2-0/[8]
+Linked input: /home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/part03/swiftwork/p3-run003/shared/_concurrent/sims-18-2-0/[7] to jobs/s/stats-ek7fg34n-0/_concurrent/sims-18-2-0/[7]
+Linked input: /home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/part03/swiftwork/p3-run003/shared/_concurrent/sims-18-2-0/[5] to jobs/s/stats-ek7fg34n-0/_concurrent/sims-18-2-0/[5]
+Linked input: /home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/part03/swiftwork/p3-run003/shared/_concurrent/sims-18-2-0/[3] to jobs/s/stats-ek7fg34n-0/_concurrent/sims-18-2-0/[3]
+Linked input: /home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/part03/swiftwork/p3-run003/shared/_concurrent/sims-18-2-0/[4] to jobs/s/stats-ek7fg34n-0/_concurrent/sims-18-2-0/[4]
+Linked input: /home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/part03/swiftwork/p3-run003/shared/_concurrent/sims-18-2-0/[9] to jobs/s/stats-ek7fg34n-0/_concurrent/sims-18-2-0/[9]
+Linked input: /home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/part03/swiftwork/p3-run003/shared/_concurrent/sims-18-2-0/[2] to jobs/s/stats-ek7fg34n-0/_concurrent/sims-18-2-0/[2]
+Linked input: /home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/part03/swiftwork/p3-run003/shared/_concurrent/sims-18-2-0/[0] to jobs/s/stats-ek7fg34n-0/_concurrent/sims-18-2-0/[0]
+Linked input: /home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/part03/swiftwork/p3-run003/shared/_concurrent/sims-18-2-0/[1] to jobs/s/stats-ek7fg34n-0/_concurrent/sims-18-2-0/[1]
+Linked input: /home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/part03/swiftwork/p3-run003/shared/_concurrent/sims-18-2-0/[6] to jobs/s/stats-ek7fg34n-0/_concurrent/sims-18-2-0/[6]
+Progress  2017-02-17 11:45:21.574483702-0200  EXECUTE
+APP_RESOURCES=real_secs:0.03,kernel_secs:0.00,user_secs:0.00,percent_cpu:32%,max_rss:1272,avg_rss:0,avg_tot_vm:0,avg_priv_data:0,avg_priv_stack:0,avg_shared_text:0,page_size:4096,major_pgfaults:0,minor_pgfaults:2228,swaps:0,invol_context_switches:14,vol_waits:16,fs_reads:8,fs_writes:24,sock_recv:0,sock_send:0,signals:0,exit_status:0
+Moving back to workflow directory /home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/part03/swiftwork/p3-run003
+Progress  2017-02-17 11:45:21.612917548-0200  EXECUTE_DONE
+Job ran successfully
+Progress  2017-02-17 11:45:21.614619795-0200  MOVING_OUTPUTS output/average.out
+Progress  2017-02-17 11:45:21.617942395-0200  RM_JOBDIR
+Progress  2017-02-17 11:45:21.621482596-0200  TOUCH_SUCCESS
+Progress  2017-02-17 11:45:21.623747999-0200  END

@@ -1,0 +1,87 @@
+
+Called as: /home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/bin/stats: 
+
+Start time: Sex Fev 17 09:28:09 BRST 2017
+Running as user: uid=1000(mondelli) gid=1000(mondelli) groups=1000(mondelli),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),108(lpadmin),124(sambashare)
+Running on node: mondelli-520U4C
+Node IP address: 192.168.1.115 172.17.0.1 
+
+Environment:
+
+CLUTTER_IM_MODULE=xim
+COLORTERM=gnome-terminal
+COMPIZ_BIN_PATH=/usr/bin/
+COMPIZ_CONFIG_PROFILE=ubuntu
+DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-uyxzSHasGv
+DEFAULTS_PATH=/usr/share/gconf/ubuntu.default.path
+DESKTOP_SESSION=ubuntu
+DISPLAY=:0
+EXEC=/home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/bin/stats
+GDM_LANG=en_US
+GDMSESSION=ubuntu
+GNOME_DESKTOP_SESSION_ID=this-is-deprecated
+GTK_IM_MODULE=ibus
+GTK_MODULES=overlay-scrollbar:unity-gtk-module
+HOME=/home/mondelli
+IM_CONFIG_PHASE=1
+INSTANCE=
+JOB=dbus
+LANG=en_US.UTF-8
+LANGUAGE=en_US
+LC_ADDRESS=pt_BR.UTF-8
+LC_IDENTIFICATION=pt_BR.UTF-8
+LC_MEASUREMENT=pt_BR.UTF-8
+LC_MONETARY=pt_BR.UTF-8
+LC_NAME=pt_BR.UTF-8
+LC_NUMERIC=pt_BR.UTF-8
+LC_PAPER=pt_BR.UTF-8
+LC_TELEPHONE=pt_BR.UTF-8
+LC_TIME=pt_BR.UTF-8
+LESSCLOSE=/usr/bin/lesspipe %s %s
+LESSOPEN=| /usr/bin/lesspipe %s
+LOGNAME=mondelli
+LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lz=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.axa=00;36:*.oga=00;36:*.spx=00;36:*.xspf=00;36:
+MANDATORY_PATH=/usr/share/gconf/ubuntu.mandatory.path
+MPJ_HOME=/home/mondelli/scicumulus/mpj-v0_44
+NLSPATH=/usr/dt/lib/nls/msg/%L/%N.cat
+OLDPWD=/home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/part05/swiftwork/p5-run002
+ORIGEXEC=stats
+PATH=/home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/bin:/home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/bin:/home/mondelli/Dropbox/Docker/swift_verao/c-ray/bin:/home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/bin:/home/mondelli/Dropbox/Docker/swift_verao/c-ray/bin:/home/mondelli/Dropbox/Docker/swift_verao/c-ray/bin:/home/mondelli/scriptsSwift/c-ray/c-ray-1.1:/home/mondelli/scriptsSwift/c-ray/c-ray-exercicio:/home/mondelli/scicumulus/mpj-v0_44/bin:/home/mondelli/gapf_swift:/home/mondelli/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/mondelli/provenancedb:/home/mondelli/Programs/parallelblast_2.0.9:/home/mondelli/Programs/codigoDE:/home/mondelli/swift-k/examples/tutorial/bin:/home/mondelli/standard-RAxML:/usr/bin/exm-install/turbine/bin:/usr/bin/exm-install/stc/bin:/home/mondelli/Programs/gecko/bin:/home/mondelli/swift-k/dist/swift-svn/bin:/home/mondelli/.subread-1.5.0-Linux-x86_64/bin:/home/mondelli/Programs/bowtie:/sbin:/bin:/usr/bin
+PWD=/home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/part05/swiftwork/p5-run002/jobs/s/stats-f67ya34n-0
+PYTHONPATH=:/home/mondelli/Programs/paratrac
+QT4_IM_MODULE=ibus
+QT_IM_MODULE=ibus
+QT_QPA_PLATFORMTHEME=appmenu-qt5
+R_HOME=/usr/lib/R
+SELINUX_INIT=YES
+SESSION_MANAGER=local/mondelli-520U4C:@/tmp/.ICE-unix/2588,unix/mondelli-520U4C:/tmp/.ICE-unix/2588
+SESSIONTYPE=gnome-session
+SESSION=ubuntu
+SHELL=/bin/bash
+SHLVL=3
+SSH_AGENT_LAUNCHER=upstart
+SSH_AGENT_PID=2511
+SSH_AUTH_SOCK=/tmp/ssh-3TOHABoIERJF/agent.2504
+SWIFT_HOME=/home/mondelli/swift-k/dist/swift-svn
+TERM=xterm
+TEXTDOMAINDIR=/usr/share/locale/
+TEXTDOMAIN=im-config
+UPSTART_SESSION=unix:abstract=/com/ubuntu/upstart-session/1000/2424
+USER=mondelli
+_=/usr/bin/time
+VTE_VERSION=3409
+WINDOWID=60817419
+XAUTHORITY=/home/mondelli/.Xauthority
+XDG_CONFIG_DIRS=/etc/xdg/xdg-ubuntu:/usr/share/upstart/xdg:/etc/xdg
+XDG_CURRENT_DESKTOP=Unity
+XDG_DATA_DIRS=/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/
+XDG_GREETER_DATA_DIR=/var/lib/lightdm-data/mondelli
+XDG_MENU_PREFIX=gnome-
+XDG_RUNTIME_DIR=/run/user/1000
+XDG_SEAT_PATH=/org/freedesktop/DisplayManager/Seat0
+XDG_SEAT=seat0
+XDG_SESSION_ID=c2
+XDG_SESSION_PATH=/org/freedesktop/DisplayManager/Session0
+XDG_VTNR=7
+XFILESEARCHPATH=/usr/dt/app-defaults/%L/Dt
+XMODIFIERS=@im=ibus

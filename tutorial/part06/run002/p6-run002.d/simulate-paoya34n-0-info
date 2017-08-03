@@ -1,0 +1,53 @@
+checking for paramfile
+paramfile is: 
+checking for paramfile
+paramfile is: 
+checking for paramfile
+paramfile is: 
+checking for paramfile
+paramfile is: 
+checking for paramfile
+paramfile is: 
+checking for paramfile
+paramfile is: 
+checking for paramfile
+paramfile is: 
+Progress  2017-02-17 09:28:27.748554714-0200  LOG_START
+
+_____________________________________________________________________________
+
+        Wrapper (_swiftwrap)
+_____________________________________________________________________________
+
+Job directory mode is: link on shared filesystem
+PID=27675
+HOST=
+PWD=/home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/part06/swiftwork/p6-run002
+DIR=jobs/s/simulate-paoya34n-0
+EXEC=/home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/bin/simulate
+STDIN=
+STDOUT=output/bias_4.dat
+STDERR=stderr.txt
+DIRS=output
+INF=
+OUTF=output/bias_4.dat
+COLLECT=
+CDM_FILE=
+ARGS=-r 1000 -n 20
+ARGC=4
+MPI_RANK=
+PMI_RANK=
+Progress  2017-02-17 09:28:27.783596743-0200  CREATE_JOBDIR
+Created job directory: jobs/s/simulate-paoya34n-0
+Progress  2017-02-17 09:28:27.803663166-0200  CREATE_INPUTDIR
+Created output directory: jobs/s/simulate-paoya34n-0/output
+Progress  2017-02-17 09:28:27.810385909-0200  LINK_INPUTS
+Progress  2017-02-17 09:28:27.818897649-0200  EXECUTE
+APP_RESOURCES=real_secs:0.04,kernel_secs:0.01,user_secs:0.00,percent_cpu:31%,max_rss:1624,avg_rss:0,avg_tot_vm:0,avg_priv_data:0,avg_priv_stack:0,avg_shared_text:0,page_size:4096,major_pgfaults:0,minor_pgfaults:3621,swaps:0,invol_context_switches:11,vol_waits:24,fs_reads:0,fs_writes:32,sock_recv:0,sock_send:0,signals:0,exit_status:0
+Moving back to workflow directory /home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/part06/swiftwork/p6-run002
+Progress  2017-02-17 09:28:27.883880088-0200  EXECUTE_DONE
+Job ran successfully
+Progress  2017-02-17 09:28:27.889635084-0200  MOVING_OUTPUTS output/bias_4.dat
+Progress  2017-02-17 09:28:27.898985774-0200  RM_JOBDIR
+Progress  2017-02-17 09:28:27.908952701-0200  TOUCH_SUCCESS
+Progress  2017-02-17 09:28:27.935051995-0200  END

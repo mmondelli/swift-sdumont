@@ -1,0 +1,47 @@
+checking for paramfile
+paramfile is: 
+checking for paramfile
+paramfile is: 
+checking for paramfile
+paramfile is: 
+Progress  2017-02-16 21:40:35.605213533-0200  LOG_START
+
+_____________________________________________________________________________
+
+        Wrapper (_swiftwrap)
+_____________________________________________________________________________
+
+Job directory mode is: link on shared filesystem
+PID=14866
+HOST=
+PWD=/home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/part06/swiftwork/p6-run001
+DIR=jobs/s/simulate-q03nh24n-0
+EXEC=/home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/bin/simulate
+STDIN=
+STDOUT=output/sim_6.out
+STDERR=output/sim_6.log
+DIRS=output
+INF=output/seed.dat|output/bias_6.dat
+OUTF=output/sim_6.out|output/sim_6.log
+COLLECT=
+CDM_FILE=
+ARGS=-t 1 -r 100 -B output/bias_6.dat -x 1000000 -n 10 -S output/seed.dat
+ARGC=12
+MPI_RANK=
+PMI_RANK=
+Progress  2017-02-16 21:40:35.625375111-0200  CREATE_JOBDIR
+Created job directory: jobs/s/simulate-q03nh24n-0
+Progress  2017-02-16 21:40:35.635876416-0200  CREATE_INPUTDIR
+Created output directory: jobs/s/simulate-q03nh24n-0/output
+Progress  2017-02-16 21:40:35.643756147-0200  LINK_INPUTS
+Linked input: /home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/part06/swiftwork/p6-run001/shared/output/seed.dat to jobs/s/simulate-q03nh24n-0/output/seed.dat
+Linked input: /home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/part06/swiftwork/p6-run001/shared/output/bias_6.dat to jobs/s/simulate-q03nh24n-0/output/bias_6.dat
+Progress  2017-02-16 21:40:35.661387559-0200  EXECUTE
+APP_RESOURCES=real_secs:1.03,kernel_secs:0.00,user_secs:0.00,percent_cpu:1%,max_rss:1656,avg_rss:0,avg_tot_vm:0,avg_priv_data:0,avg_priv_stack:0,avg_shared_text:0,page_size:4096,major_pgfaults:0,minor_pgfaults:3358,swaps:0,invol_context_switches:42,vol_waits:22,fs_reads:0,fs_writes:32,sock_recv:0,sock_send:0,signals:0,exit_status:0
+Moving back to workflow directory /home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/part06/swiftwork/p6-run001
+Progress  2017-02-16 21:40:36.705919450-0200  EXECUTE_DONE
+Job ran successfully
+Progress  2017-02-16 21:40:36.709795976-0200  MOVING_OUTPUTS output/sim_6.out|output/sim_6.log
+Progress  2017-02-16 21:40:36.736968136-0200  RM_JOBDIR
+Progress  2017-02-16 21:40:36.739455439-0200  TOUCH_SUCCESS
+Progress  2017-02-16 21:40:36.742029443-0200  END

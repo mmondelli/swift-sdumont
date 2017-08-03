@@ -1,0 +1,1009 @@
+2017-02-17 09:29:06,819-0200 INFO  Loader JAVA Oracle Corporation Java HotSpot(TM) 64-Bit Server VM 1.7.0_80
+2017-02-17 09:29:06,821-0200 INFO  Loader VERSION Swift trunk git-rev: 18aec82244c5611381528bc361888c553570c66e heads/master 6574
+2017-02-17 09:29:06,821-0200 INFO  Loader RUN_ID run003
+2017-02-17 09:29:06,822-0200 INFO  Loader ARGUMENTS [-runid, run003, -logfile, /home/mondelli/Dropbox/Docker/swift_verao/c-ray/run003/swift.log, c-ray.swift]
+2017-02-17 09:29:06,822-0200 INFO  Loader MAX_HEAP 954728448
+2017-02-17 09:29:06,822-0200 INFO  Loader GLOBUS_HOSTNAME mondelli-520U4C
+2017-02-17 09:29:06,822-0200 INFO  Loader CWD /home/mondelli/Dropbox/Docker/swift_verao/c-ray/.
+2017-02-17 09:29:06,823-0200 DEBUG Loader SWIFT_CONFIGURATION 
+[D] /home/mondelli/swift-k/dist/swift-svn/etc/swift.conf
+[C] <Command Line>
+{
+	TCPPortRange: "50000, 50100"                               # [D] line 27
+	alwaysTransferWrapperLog: true                             # [D] line 61
+	executionRetries: 0                                        # [D] line 137
+	fileOperationsThrottle: 8                                  # [D] line 121
+	fileTransfersThrottle: 4                                   # [D] line 107
+	hostJobSubmitThrottle: 2                                   # [D] line 95
+	jobSubmitThrottle: 4                                       # [D] line 83
+	keepSiteDir: false                                         # [D] line 131
+	lazyErrors: true                                           # [D] line 41
+	logProvenance: false                                       # [D] line 200
+	maxForeachThreads: 16384                                   # [D] line 194
+	replicationEnabled: false                                  # [D] line 146
+	replicationLimit: 3                                        # [D] line 157
+	replicationMinQueueTime: 60                                # [D] line 153
+	site.local {
+		app.ALL.executable: "*"                                   # [D] line 235
+		execution.type: "local"                                   # [D] line 223
+		filesystem.type: "local"                                  # [D] line 226
+		initialParallelTasks: 8                                   # [D] line 230
+		maxParallelTasks: 16                                      # [D] line 229
+		workDirectory: "swiftwork"                                # [D] line 232
+	}
+	sites: [local]                                             # [D] line 239
+	tracingEnabled: false                                      # [D] line 51
+}
+
+2017-02-17 09:29:06,824-0200 DEBUG textfiles BEGIN SWIFTSCRIPT:
+type scene;
+type image;
+type scene_template;
+type movie;
+
+int threads;
+int steps;
+string resolution;
+int delay;
+int quality;
+
+threads = toInt(arg("threads","1"));
+resolution = arg("resolution","800x600");
+steps = toInt(arg("steps","10"));
+delay = toInt(arg("delay", "0"));
+quality = toInt(arg("quality", "75"));
+
+scene_template template <"tscene">;
+
+app (scene out) generate (scene_template t, int i, int total)
+{
+	genscenes i total filename(t) stdout=filename(out);
+}
+
+app (image o) render (scene i, string r, int t)
+{
+	"c-ray-mt" "-s" r "-t" t stdin=filename(i) stdout=filename(o);
+}
+
+app (movie o) convert (image i[], int d, int q)
+{
+	convert "-delay" d "-quality" q filenames(i) filename(o);
+}
+
+scene scene_files[] <simple_mapper; location=".", prefix="scene.", suffix=".data">;
+
+image image_files[] <simple_mapper; location=".", prefix="scene.", suffix=".ppm">;
+
+movie output_movie <"output.ppm">;
+
+foreach i in [0:steps]{
+	scene_files[i] = generate(template, i, steps);
+	image_files[i] = render(scene_files[i], resolution, threads);
+}
+
+output_movie = convert(image_files, delay, quality);
+	
+
+
+ 
+
+
+
+2017-02-17 09:29:06,824-0200 DEBUG textfiles END SWIFTSCRIPT:
+2017-02-17 09:29:06,824-0200 DEBUG Loader kmlversion is >9f6c1ed4-f975-4fb5-9fcf-7994f9fda617-no-provenance<
+2017-02-17 09:29:06,824-0200 DEBUG Loader build version is >9f6c1ed4-f975-4fb5-9fcf-7994f9fda617-no-provenance<
+2017-02-17 09:29:06,825-0200 DEBUG Loader Recompilation suppressed.
+2017-02-17 09:29:07,761-0200 INFO  Loader RUN_START
+2017-02-17 09:29:07,767-0200 INFO  SwiftExecutor swift.home = /home/mondelli/swift-k/dist/swift-svn
+2017-02-17 09:29:07,812-0200 INFO  AbstractScheduler Setting resources to: {local=local}
+2017-02-17 09:29:07,822-0200 INFO  GlobalSubmitQueue No global submit throttle set. Using default (1024)
+2017-02-17 09:29:07,840-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:07,842-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:07,843-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:07,881-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 29127936, JVMThreads: 16
+2017-02-17 09:29:07,882-0200 INFO  RuntimeStats$ProgressTicker 
+2017-02-17 09:29:07,887-0200 DEBUG swift PROCEDURE line=30 thread=2-0-15-12 name=convert
+2017-02-17 09:29:07,892-0200 DEBUG swift FOREACH_IT_START line=41 thread=2-0-14-11-16-0
+2017-02-17 09:29:07,893-0200 DEBUG swift SCOPE thread=2-0-14-11-16-0
+2017-02-17 09:29:07,893-0200 DEBUG swift FOREACH_IT_START line=41 thread=2-0-14-11-17-1
+2017-02-17 09:29:07,893-0200 DEBUG swift SCOPE thread=2-0-14-11-17-1
+2017-02-17 09:29:07,893-0200 DEBUG swift FOREACH_IT_START line=41 thread=2-0-14-11-18-2
+2017-02-17 09:29:07,893-0200 DEBUG swift SCOPE thread=2-0-14-11-18-2
+2017-02-17 09:29:07,893-0200 DEBUG swift FOREACH_IT_START line=41 thread=2-0-14-11-19-3
+2017-02-17 09:29:07,893-0200 DEBUG swift SCOPE thread=2-0-14-11-19-3
+2017-02-17 09:29:07,893-0200 DEBUG swift FOREACH_IT_START line=41 thread=2-0-14-11-20-4
+2017-02-17 09:29:07,893-0200 DEBUG swift SCOPE thread=2-0-14-11-20-4
+2017-02-17 09:29:07,893-0200 DEBUG swift FOREACH_IT_START line=41 thread=2-0-14-11-21-5
+2017-02-17 09:29:07,893-0200 DEBUG swift SCOPE thread=2-0-14-11-21-5
+2017-02-17 09:29:07,893-0200 DEBUG swift FOREACH_IT_START line=41 thread=2-0-14-11-22-6
+2017-02-17 09:29:07,893-0200 DEBUG swift SCOPE thread=2-0-14-11-22-6
+2017-02-17 09:29:07,893-0200 DEBUG swift FOREACH_IT_START line=41 thread=2-0-14-11-23-7
+2017-02-17 09:29:07,893-0200 DEBUG swift SCOPE thread=2-0-14-11-23-7
+2017-02-17 09:29:07,893-0200 DEBUG swift FOREACH_IT_START line=41 thread=2-0-14-11-24-8
+2017-02-17 09:29:07,893-0200 DEBUG swift SCOPE thread=2-0-14-11-24-8
+2017-02-17 09:29:07,893-0200 DEBUG swift FOREACH_IT_START line=41 thread=2-0-14-11-25-9
+2017-02-17 09:29:07,893-0200 DEBUG swift SCOPE thread=2-0-14-11-25-9
+2017-02-17 09:29:07,893-0200 DEBUG swift FOREACH_IT_START line=41 thread=2-0-14-11-26-10
+2017-02-17 09:29:07,893-0200 DEBUG swift SCOPE thread=2-0-14-11-26-10
+2017-02-17 09:29:07,894-0200 DEBUG swift PROCEDURE line=20 thread=2-0-14-11-16-0-27-0 name=generate
+2017-02-17 09:29:07,894-0200 DEBUG swift PROCEDURE line=20 thread=2-0-14-11-17-1-29-0 name=generate
+2017-02-17 09:29:07,894-0200 DEBUG swift PROCEDURE line=25 thread=2-0-14-11-16-0-28-1 name=render
+2017-02-17 09:29:07,895-0200 DEBUG swift PROCEDURE line=20 thread=2-0-14-11-18-2-31-0 name=generate
+2017-02-17 09:29:07,895-0200 DEBUG swift PROCEDURE line=25 thread=2-0-14-11-17-1-30-1 name=render
+2017-02-17 09:29:07,895-0200 DEBUG swift PROCEDURE line=25 thread=2-0-14-11-18-2-32-1 name=render
+2017-02-17 09:29:07,895-0200 DEBUG swift PROCEDURE line=20 thread=2-0-14-11-19-3-33-0 name=generate
+2017-02-17 09:29:07,897-0200 DEBUG swift JOB_INIT jobid=genscenes-v5mza34n tr=genscenes
+2017-02-17 09:29:07,898-0200 DEBUG swift JOB_INIT jobid=genscenes-x5mza34n tr=genscenes
+2017-02-17 09:29:07,898-0200 DEBUG swift JOB_SITE_SELECT jobid=genscenes-v5mza34n-0
+2017-02-17 09:29:07,898-0200 DEBUG swift JOB_SITE_SELECT jobid=genscenes-x5mza34n-0
+2017-02-17 09:29:07,898-0200 DEBUG swift JOB_INIT jobid=genscenes-y5mza34n tr=genscenes
+2017-02-17 09:29:07,899-0200 DEBUG swift JOB_SITE_SELECT jobid=genscenes-y5mza34n-0
+2017-02-17 09:29:07,899-0200 DEBUG swift PROCEDURE line=25 thread=2-0-14-11-19-3-34-1 name=render
+2017-02-17 09:29:07,900-0200 DEBUG swift PROCEDURE line=20 thread=2-0-14-11-20-4-35-0 name=generate
+2017-02-17 09:29:07,900-0200 DEBUG swift JOB_INIT jobid=genscenes-z5mza34n tr=genscenes
+2017-02-17 09:29:07,900-0200 DEBUG swift JOB_SITE_SELECT jobid=genscenes-z5mza34n-0
+2017-02-17 09:29:07,901-0200 DEBUG swift PROCEDURE line=20 thread=2-0-14-11-21-5-37-0 name=generate
+2017-02-17 09:29:07,901-0200 DEBUG swift JOB_INIT jobid=genscenes-06mza34n tr=genscenes
+2017-02-17 09:29:07,901-0200 DEBUG swift JOB_SITE_SELECT jobid=genscenes-06mza34n-0
+2017-02-17 09:29:07,902-0200 DEBUG swift PROCEDURE line=25 thread=2-0-14-11-21-5-38-1 name=render
+2017-02-17 09:29:07,902-0200 DEBUG swift PROCEDURE line=20 thread=2-0-14-11-22-6-39-0 name=generate
+2017-02-17 09:29:07,902-0200 DEBUG swift PROCEDURE line=25 thread=2-0-14-11-22-6-40-1 name=render
+2017-02-17 09:29:07,902-0200 DEBUG swift JOB_INIT jobid=genscenes-16mza34n tr=genscenes
+2017-02-17 09:29:07,902-0200 DEBUG swift PROCEDURE line=20 thread=2-0-14-11-23-7-41-0 name=generate
+2017-02-17 09:29:07,902-0200 DEBUG swift JOB_SITE_SELECT jobid=genscenes-16mza34n-0
+2017-02-17 09:29:07,903-0200 DEBUG swift JOB_INIT jobid=genscenes-26mza34n tr=genscenes
+2017-02-17 09:29:07,904-0200 DEBUG swift PROCEDURE line=25 thread=2-0-14-11-23-7-42-1 name=render
+2017-02-17 09:29:07,904-0200 DEBUG swift PROCEDURE line=20 thread=2-0-14-11-24-8-43-0 name=generate
+2017-02-17 09:29:07,904-0200 DEBUG swift PROCEDURE line=25 thread=2-0-14-11-24-8-44-1 name=render
+2017-02-17 09:29:07,904-0200 DEBUG swift JOB_INIT jobid=genscenes-36mza34n tr=genscenes
+2017-02-17 09:29:07,904-0200 DEBUG swift JOB_SITE_SELECT jobid=genscenes-26mza34n-0
+2017-02-17 09:29:07,904-0200 DEBUG swift PROCEDURE line=20 thread=2-0-14-11-25-9-45-0 name=generate
+2017-02-17 09:29:07,904-0200 DEBUG swift JOB_SITE_SELECT jobid=genscenes-36mza34n-0
+2017-02-17 09:29:07,904-0200 DEBUG swift JOB_INIT jobid=genscenes-46mza34n tr=genscenes
+2017-02-17 09:29:07,904-0200 DEBUG swift PROCEDURE line=25 thread=2-0-14-11-25-9-46-1 name=render
+2017-02-17 09:29:07,904-0200 DEBUG swift JOB_SITE_SELECT jobid=genscenes-46mza34n-0
+2017-02-17 09:29:07,904-0200 DEBUG swift PROCEDURE line=20 thread=2-0-14-11-26-10-47-0 name=generate
+2017-02-17 09:29:07,904-0200 DEBUG swift PROCEDURE line=25 thread=2-0-14-11-26-10-48-1 name=render
+2017-02-17 09:29:07,905-0200 DEBUG swift JOB_INIT jobid=genscenes-56mza34n tr=genscenes
+2017-02-17 09:29:07,905-0200 DEBUG swift JOB_SITE_SELECT jobid=genscenes-56mza34n-0
+2017-02-17 09:29:07,905-0200 DEBUG swift THREAD_ASSOCIATION jobid=genscenes-06mza34n-0 host=local thread=2-0-14-11-21-5-37-0
+2017-02-17 09:29:07,905-0200 DEBUG swift JOB_INIT jobid=genscenes-66mza34n tr=genscenes
+2017-02-17 09:29:07,905-0200 DEBUG swift JOB_SITE_SELECT jobid=genscenes-66mza34n-0
+2017-02-17 09:29:07,905-0200 DEBUG swift THREAD_ASSOCIATION jobid=genscenes-z5mza34n-0 host=local thread=2-0-14-11-20-4-35-0
+2017-02-17 09:29:07,905-0200 DEBUG swift THREAD_ASSOCIATION jobid=genscenes-16mza34n-0 host=local thread=2-0-14-11-22-6-39-0
+2017-02-17 09:29:07,906-0200 INFO  swift START host=local - Initializing shared directory
+2017-02-17 09:29:07,905-0200 DEBUG swift THREAD_ASSOCIATION jobid=genscenes-y5mza34n-0 host=local thread=2-0-14-11-17-1-29-0
+2017-02-17 09:29:07,907-0200 DEBUG swift THREAD_ASSOCIATION jobid=genscenes-x5mza34n-0 host=local thread=2-0-14-11-19-3-33-0
+2017-02-17 09:29:07,908-0200 DEBUG swift THREAD_ASSOCIATION jobid=genscenes-v5mza34n-0 host=local thread=2-0-14-11-18-2-31-0
+2017-02-17 09:29:07,908-0200 DEBUG swift THREAD_ASSOCIATION jobid=genscenes-26mza34n-0 host=local thread=2-0-14-11-23-7-41-0
+2017-02-17 09:29:07,909-0200 DEBUG swift THREAD_ASSOCIATION jobid=genscenes-46mza34n-0 host=local thread=2-0-14-11-25-9-45-0
+2017-02-17 09:29:07,909-0200 DEBUG swift THREAD_ASSOCIATION jobid=genscenes-36mza34n-0 host=local thread=2-0-14-11-24-8-43-0
+2017-02-17 09:29:07,909-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:07,913-0200 DEBUG swift PROCEDURE line=25 thread=2-0-14-11-20-4-36-1 name=render
+2017-02-17 09:29:07,923-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:07,924-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:07,924-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:07,926-0200 INFO  swift END host=local - Done initializing shared directory
+2017-02-17 09:29:07,929-0200 INFO  swift START jobid=genscenes-46mza34n-0 host=local - Initializing directory structure
+2017-02-17 09:29:07,929-0200 INFO  swift START jobid=genscenes-y5mza34n-0 host=local - Initializing directory structure
+2017-02-17 09:29:07,929-0200 INFO  swift START path= dir=c-ray-run003/shared - Creating directory structure
+2017-02-17 09:29:07,930-0200 INFO  swift START jobid=genscenes-06mza34n-0 host=local - Initializing directory structure
+2017-02-17 09:29:07,930-0200 INFO  swift START jobid=genscenes-z5mza34n-0 host=local - Initializing directory structure
+2017-02-17 09:29:07,930-0200 INFO  swift START jobid=genscenes-36mza34n-0 host=local - Initializing directory structure
+2017-02-17 09:29:07,930-0200 INFO  swift START jobid=genscenes-26mza34n-0 host=local - Initializing directory structure
+2017-02-17 09:29:07,931-0200 INFO  swift START jobid=genscenes-x5mza34n-0 host=local - Initializing directory structure
+2017-02-17 09:29:07,931-0200 INFO  swift START jobid=genscenes-16mza34n-0 host=local - Initializing directory structure
+2017-02-17 09:29:07,929-0200 INFO  swift START jobid=genscenes-v5mza34n-0 host=local - Initializing directory structure
+2017-02-17 09:29:07,932-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:07,932-0200 INFO  swift END jobid=genscenes-46mza34n-0 - Done initializing directory structure
+2017-02-17 09:29:07,933-0200 INFO  swift START jobid=genscenes-46mza34n-0 - Staging in files [file://localhost/tscene]
+2017-02-17 09:29:07,933-0200 INFO  swift END jobid=genscenes-06mza34n-0 - Done initializing directory structure
+2017-02-17 09:29:07,933-0200 INFO  swift START jobid=genscenes-06mza34n-0 - Staging in files [file://localhost/tscene]
+2017-02-17 09:29:07,933-0200 INFO  swift END jobid=genscenes-z5mza34n-0 - Done initializing directory structure
+2017-02-17 09:29:07,933-0200 INFO  swift START jobid=genscenes-z5mza34n-0 - Staging in files [file://localhost/tscene]
+2017-02-17 09:29:07,934-0200 INFO  swift END jobid=genscenes-36mza34n-0 - Done initializing directory structure
+2017-02-17 09:29:07,934-0200 INFO  swift START jobid=genscenes-36mza34n-0 - Staging in files [file://localhost/tscene]
+2017-02-17 09:29:07,934-0200 INFO  swift END jobid=genscenes-26mza34n-0 - Done initializing directory structure
+2017-02-17 09:29:07,934-0200 INFO  swift END jobid=genscenes-x5mza34n-0 - Done initializing directory structure
+2017-02-17 09:29:07,934-0200 INFO  swift START jobid=genscenes-26mza34n-0 - Staging in files [file://localhost/tscene]
+2017-02-17 09:29:07,934-0200 INFO  swift START jobid=genscenes-x5mza34n-0 - Staging in files [file://localhost/tscene]
+2017-02-17 09:29:07,934-0200 INFO  swift END jobid=genscenes-16mza34n-0 - Done initializing directory structure
+2017-02-17 09:29:07,934-0200 INFO  swift START jobid=genscenes-16mza34n-0 - Staging in files [file://localhost/tscene]
+2017-02-17 09:29:07,934-0200 INFO  swift END jobid=genscenes-v5mza34n-0 - Done initializing directory structure
+2017-02-17 09:29:07,934-0200 INFO  swift START jobid=genscenes-v5mza34n-0 - Staging in files [file://localhost/tscene]
+2017-02-17 09:29:07,937-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:07,937-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:07,938-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:07,938-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:07,938-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:07,938-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:07,938-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:07,938-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:07,933-0200 INFO  swift END jobid=genscenes-y5mza34n-0 - Done initializing directory structure
+2017-02-17 09:29:07,941-0200 INFO  swift START jobid=genscenes-y5mza34n-0 - Staging in files [file://localhost/tscene]
+2017-02-17 09:29:07,943-0200 DEBUG swift CDM: file://localhost/tscene : DEFAULT
+2017-02-17 09:29:07,943-0200 DEBUG swift CDM: file://localhost/tscene : DEFAULT
+2017-02-17 09:29:07,943-0200 DEBUG swift CDM: file://localhost/tscene : DEFAULT
+2017-02-17 09:29:07,946-0200 DEBUG swift FILE_STAGE_IN_START file=tscene srchost=localhost srcdir= srcname=tscene desthost=local destdir=c-ray-run003/shared/ provider=file policy=DEFAULT
+2017-02-17 09:29:07,943-0200 DEBUG swift CDM: file://localhost/tscene : DEFAULT
+2017-02-17 09:29:07,947-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:07,947-0200 DEBUG swift CDM: file://localhost/tscene : DEFAULT
+2017-02-17 09:29:07,947-0200 DEBUG swift CDM: file://localhost/tscene : DEFAULT
+2017-02-17 09:29:07,947-0200 DEBUG swift CDM: file://localhost/tscene : DEFAULT
+2017-02-17 09:29:07,947-0200 DEBUG swift CDM: file://localhost/tscene : DEFAULT
+2017-02-17 09:29:07,947-0200 DEBUG swift CDM: file://localhost/tscene : DEFAULT
+2017-02-17 09:29:07,948-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:07,948-0200 DEBUG swift FILE_STAGE_IN_END file=tscene srchost=localhost srcdir= srcname=tscene desthost=local destdir=c-ray-run003/shared/ provider=file
+2017-02-17 09:29:07,950-0200 INFO  swift END jobid=genscenes-26mza34n-0 - Staging in finished
+2017-02-17 09:29:07,950-0200 DEBUG swift JOB_START jobid=genscenes-26mza34n-0 tr=genscenes arguments=[7, 10, tscene] tmpdir=c-ray-run003/jobs/g/genscenes-26mza34n-0
+2017-02-17 09:29:07,953-0200 INFO  swift END jobid=genscenes-06mza34n-0 - Staging in finished
+2017-02-17 09:29:07,953-0200 DEBUG swift JOB_START jobid=genscenes-06mza34n-0 tr=genscenes arguments=[5, 10, tscene] tmpdir=c-ray-run003/jobs/g/genscenes-06mza34n-0
+2017-02-17 09:29:07,953-0200 INFO  swift END jobid=genscenes-z5mza34n-0 - Staging in finished
+2017-02-17 09:29:07,953-0200 DEBUG swift JOB_START jobid=genscenes-z5mza34n-0 tr=genscenes arguments=[4, 10, tscene] tmpdir=c-ray-run003/jobs/g/genscenes-z5mza34n-0
+2017-02-17 09:29:07,953-0200 INFO  Execute JOB_TASK jobid=genscenes-26mza34n-0 taskid=task-41 exec=/bin/bash dir=c-ray-run003 args=shared/_swiftwrap genscenes-26mza34n-0 -jobdir g -scratch  -e genscenes -out scene.0007.data -err stderr.txt -i -d  -if tscene -of scene.0007.data -cf  -cdmfile -status files -a 7 10 tscene
+2017-02-17 09:29:07,954-0200 INFO  Execute JOB_TASK jobid=genscenes-06mza34n-0 taskid=task-37 exec=/bin/bash dir=c-ray-run003 args=shared/_swiftwrap genscenes-06mza34n-0 -jobdir g -scratch  -e genscenes -out scene.0005.data -err stderr.txt -i -d  -if tscene -of scene.0005.data -cf  -cdmfile -status files -a 5 10 tscene
+2017-02-17 09:29:07,954-0200 INFO  Execute JOB_TASK jobid=genscenes-z5mza34n-0 taskid=task-35 exec=/bin/bash dir=c-ray-run003 args=shared/_swiftwrap genscenes-z5mza34n-0 -jobdir g -scratch  -e genscenes -out scene.0004.data -err stderr.txt -i -d  -if tscene -of scene.0004.data -cf  -cdmfile -status files -a 4 10 tscene
+2017-02-17 09:29:07,954-0200 INFO  swift END jobid=genscenes-x5mza34n-0 - Staging in finished
+2017-02-17 09:29:07,954-0200 DEBUG swift JOB_START jobid=genscenes-x5mza34n-0 tr=genscenes arguments=[3, 10, tscene] tmpdir=c-ray-run003/jobs/g/genscenes-x5mza34n-0
+2017-02-17 09:29:07,954-0200 INFO  Execute JOB_TASK jobid=genscenes-x5mza34n-0 taskid=task-33 exec=/bin/bash dir=c-ray-run003 args=shared/_swiftwrap genscenes-x5mza34n-0 -jobdir g -scratch  -e genscenes -out scene.0003.data -err stderr.txt -i -d  -if tscene -of scene.0003.data -cf  -cdmfile -status files -a 3 10 tscene
+2017-02-17 09:29:07,953-0200 INFO  swift END jobid=genscenes-46mza34n-0 - Staging in finished
+2017-02-17 09:29:07,955-0200 DEBUG swift JOB_START jobid=genscenes-46mza34n-0 tr=genscenes arguments=[9, 10, tscene] tmpdir=c-ray-run003/jobs/g/genscenes-46mza34n-0
+2017-02-17 09:29:07,955-0200 INFO  swift END jobid=genscenes-16mza34n-0 - Staging in finished
+2017-02-17 09:29:07,955-0200 DEBUG swift JOB_START jobid=genscenes-16mza34n-0 tr=genscenes arguments=[6, 10, tscene] tmpdir=c-ray-run003/jobs/g/genscenes-16mza34n-0
+2017-02-17 09:29:07,955-0200 INFO  Execute JOB_TASK jobid=genscenes-46mza34n-0 taskid=task-45 exec=/bin/bash dir=c-ray-run003 args=shared/_swiftwrap genscenes-46mza34n-0 -jobdir g -scratch  -e genscenes -out scene.0009.data -err stderr.txt -i -d  -if tscene -of scene.0009.data -cf  -cdmfile -status files -a 9 10 tscene
+2017-02-17 09:29:07,955-0200 INFO  Execute JOB_TASK jobid=genscenes-16mza34n-0 taskid=task-39 exec=/bin/bash dir=c-ray-run003 args=shared/_swiftwrap genscenes-16mza34n-0 -jobdir g -scratch  -e genscenes -out scene.0006.data -err stderr.txt -i -d  -if tscene -of scene.0006.data -cf  -cdmfile -status files -a 6 10 tscene
+2017-02-17 09:29:07,956-0200 INFO  swift END jobid=genscenes-y5mza34n-0 - Staging in finished
+2017-02-17 09:29:07,956-0200 DEBUG swift JOB_START jobid=genscenes-y5mza34n-0 tr=genscenes arguments=[1, 10, tscene] tmpdir=c-ray-run003/jobs/g/genscenes-y5mza34n-0
+2017-02-17 09:29:07,956-0200 INFO  Execute JOB_TASK jobid=genscenes-y5mza34n-0 taskid=task-29 exec=/bin/bash dir=c-ray-run003 args=shared/_swiftwrap genscenes-y5mza34n-0 -jobdir g -scratch  -e genscenes -out scene.0001.data -err stderr.txt -i -d  -if tscene -of scene.0001.data -cf  -cdmfile -status files -a 1 10 tscene
+2017-02-17 09:29:07,957-0200 INFO  swift END jobid=genscenes-v5mza34n-0 - Staging in finished
+2017-02-17 09:29:07,957-0200 DEBUG swift JOB_START jobid=genscenes-v5mza34n-0 tr=genscenes arguments=[2, 10, tscene] tmpdir=c-ray-run003/jobs/g/genscenes-v5mza34n-0
+2017-02-17 09:29:07,957-0200 INFO  Execute JOB_TASK jobid=genscenes-v5mza34n-0 taskid=task-31 exec=/bin/bash dir=c-ray-run003 args=shared/_swiftwrap genscenes-v5mza34n-0 -jobdir g -scratch  -e genscenes -out scene.0002.data -err stderr.txt -i -d  -if tscene -of scene.0002.data -cf  -cdmfile -status files -a 2 10 tscene
+2017-02-17 09:29:07,958-0200 INFO  swift END jobid=genscenes-36mza34n-0 - Staging in finished
+2017-02-17 09:29:07,958-0200 DEBUG swift JOB_START jobid=genscenes-36mza34n-0 tr=genscenes arguments=[8, 10, tscene] tmpdir=c-ray-run003/jobs/g/genscenes-36mza34n-0
+2017-02-17 09:29:07,959-0200 INFO  Execute JOB_TASK jobid=genscenes-36mza34n-0 taskid=task-43 exec=/bin/bash dir=c-ray-run003 args=shared/_swiftwrap genscenes-36mza34n-0 -jobdir g -scratch  -e genscenes -out scene.0008.data -err stderr.txt -i -d  -if tscene -of scene.0008.data -cf  -cdmfile -status files -a 8 10 tscene
+2017-02-17 09:29:07,964-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-41 status=8
+2017-02-17 09:29:07,964-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-33 status=8
+2017-02-17 09:29:07,964-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-33 status=1
+2017-02-17 09:29:07,964-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-35 status=8
+2017-02-17 09:29:07,966-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-41 status=1
+2017-02-17 09:29:07,966-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-45 status=8
+2017-02-17 09:29:07,967-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-45 status=1
+2017-02-17 09:29:07,967-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-39 status=8
+2017-02-17 09:29:07,967-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-39 status=1
+2017-02-17 09:29:07,967-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-37 status=8
+2017-02-17 09:29:07,972-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-35 status=1
+2017-02-17 09:29:07,973-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-29 status=8
+2017-02-17 09:29:07,980-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-29 status=1
+2017-02-17 09:29:07,980-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-31 status=8
+2017-02-17 09:29:07,987-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-39 status=2
+2017-02-17 09:29:07,988-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-37 status=1
+2017-02-17 09:29:07,988-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-43 status=8
+2017-02-17 09:29:07,989-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-29 status=2
+2017-02-17 09:29:07,989-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-35 status=2
+2017-02-17 09:29:07,990-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-31 status=1
+2017-02-17 09:29:07,990-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-45 status=2
+2017-02-17 09:29:08,002-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-41 status=2
+2017-02-17 09:29:08,006-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-31 status=2
+2017-02-17 09:29:08,013-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-43 status=1
+2017-02-17 09:29:08,017-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-33 status=2
+2017-02-17 09:29:08,023-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-43 status=2
+2017-02-17 09:29:08,039-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-37 status=2
+2017-02-17 09:29:08,131-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,131-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-35 status=7
+2017-02-17 09:29:08,131-0200 DEBUG swift START jobid=genscenes-z5mza34n-0
+2017-02-17 09:29:08,132-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,133-0200 INFO  swift SUCCESS jobid=genscenes-z5mza34n-0 - Success file found
+2017-02-17 09:29:08,133-0200 DEBUG swift STAGING_OUT jobid=genscenes-z5mza34n-0
+2017-02-17 09:29:08,133-0200 INFO  swift START jobid=genscenes-z5mza34n-0 - Staging out files
+2017-02-17 09:29:08,133-0200 DEBUG swift stageouts: [file://localhost/./scene.0004.data]
+2017-02-17 09:29:08,134-0200 DEBUG swift FILE_STAGE_OUT_START srcname=scene.0004.data srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file jobid=genscenes-z5mza34n-0
+2017-02-17 09:29:08,135-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,135-0200 DEBUG swift CDM: file://localhost/./scene.0004.data : DEFAULT
+2017-02-17 09:29:08,137-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,138-0200 DEBUG swift FILE_STAGE_OUT_END srcname=scene.0004.data srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file
+2017-02-17 09:29:08,139-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,139-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,139-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-33 status=7
+2017-02-17 09:29:08,140-0200 DEBUG swift START jobid=genscenes-x5mza34n-0
+2017-02-17 09:29:08,140-0200 INFO  swift END jobid=genscenes-z5mza34n-0 - Staging out finished
+2017-02-17 09:29:08,141-0200 INFO  LateBindingScheduler jobs queued: 3
+2017-02-17 09:29:08,141-0200 INFO  swift SUCCESS jobid=genscenes-x5mza34n-0 - Success file found
+2017-02-17 09:29:08,141-0200 DEBUG swift STAGING_OUT jobid=genscenes-x5mza34n-0
+2017-02-17 09:29:08,141-0200 INFO  swift START jobid=genscenes-x5mza34n-0 - Staging out files
+2017-02-17 09:29:08,141-0200 DEBUG swift stageouts: [file://localhost/./scene.0003.data]
+2017-02-17 09:29:08,141-0200 DEBUG swift FILE_STAGE_OUT_START srcname=scene.0003.data srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file jobid=genscenes-x5mza34n-0
+2017-02-17 09:29:08,142-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,142-0200 DEBUG swift CDM: file://localhost/./scene.0003.data : DEFAULT
+2017-02-17 09:29:08,143-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,144-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-41 status=7
+2017-02-17 09:29:08,144-0200 DEBUG swift START jobid=genscenes-26mza34n-0
+2017-02-17 09:29:08,145-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,145-0200 INFO  swift SUCCESS jobid=genscenes-26mza34n-0 - Success file found
+2017-02-17 09:29:08,145-0200 DEBUG swift STAGING_OUT jobid=genscenes-26mza34n-0
+2017-02-17 09:29:08,145-0200 INFO  swift START jobid=genscenes-26mza34n-0 - Staging out files
+2017-02-17 09:29:08,145-0200 DEBUG swift stageouts: [file://localhost/./scene.0007.data]
+2017-02-17 09:29:08,146-0200 DEBUG swift FILE_STAGE_OUT_START srcname=scene.0007.data srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file jobid=genscenes-26mza34n-0
+2017-02-17 09:29:08,146-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,147-0200 DEBUG swift CDM: file://localhost/./scene.0007.data : DEFAULT
+2017-02-17 09:29:08,147-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,148-0200 DEBUG swift JOB_END jobid=genscenes-z5mza34n-0
+2017-02-17 09:29:08,148-0200 INFO  swift END_SUCCESS jobid=genscenes-z5mza34n tr=genscenes
+2017-02-17 09:29:08,148-0200 DEBUG swift PROCEDURE_END line=20 thread=2-0-14-11-20-4-35-0 name=generate
+2017-02-17 09:29:08,148-0200 DEBUG swift JOB_INIT jobid=c-ray-mt-76mza34n tr=c-ray-mt
+2017-02-17 09:29:08,149-0200 DEBUG swift JOB_SITE_SELECT jobid=c-ray-mt-76mza34n-0
+2017-02-17 09:29:08,162-0200 INFO  LateBindingScheduler jobs queued: 3
+2017-02-17 09:29:08,163-0200 DEBUG swift FILE_STAGE_OUT_END srcname=scene.0007.data srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file
+2017-02-17 09:29:08,163-0200 DEBUG swift THREAD_ASSOCIATION jobid=genscenes-56mza34n-0 host=local thread=2-0-14-11-26-10-47-0
+2017-02-17 09:29:08,163-0200 INFO  LateBindingScheduler jobs queued: 3
+2017-02-17 09:29:08,164-0200 INFO  swift START jobid=genscenes-56mza34n-0 host=local - Initializing directory structure
+2017-02-17 09:29:08,164-0200 INFO  swift END jobid=genscenes-56mza34n-0 - Done initializing directory structure
+2017-02-17 09:29:08,164-0200 INFO  swift START jobid=genscenes-56mza34n-0 - Staging in files [file://localhost/tscene]
+2017-02-17 09:29:08,164-0200 DEBUG swift FILE_STAGE_OUT_END srcname=scene.0003.data srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file
+2017-02-17 09:29:08,165-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,166-0200 INFO  swift END jobid=genscenes-26mza34n-0 - Staging out finished
+2017-02-17 09:29:08,166-0200 INFO  LateBindingScheduler jobs queued: 3
+2017-02-17 09:29:08,166-0200 INFO  LateBindingScheduler jobs queued: 3
+2017-02-17 09:29:08,167-0200 DEBUG swift CDM: file://localhost/tscene : DEFAULT
+2017-02-17 09:29:08,167-0200 INFO  swift END jobid=genscenes-56mza34n-0 - Staging in finished
+2017-02-17 09:29:08,167-0200 DEBUG swift JOB_START jobid=genscenes-56mza34n-0 tr=genscenes arguments=[10, 10, tscene] tmpdir=c-ray-run003/jobs/g/genscenes-56mza34n-0
+2017-02-17 09:29:08,168-0200 INFO  Execute JOB_TASK jobid=genscenes-56mza34n-0 taskid=task-47 exec=/bin/bash dir=c-ray-run003 args=shared/_swiftwrap genscenes-56mza34n-0 -jobdir g -scratch  -e genscenes -out scene.0010.data -err stderr.txt -i -d  -if tscene -of scene.0010.data -cf  -cdmfile -status files -a 10 10 tscene
+2017-02-17 09:29:08,168-0200 INFO  swift END jobid=genscenes-x5mza34n-0 - Staging out finished
+2017-02-17 09:29:08,169-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-47 status=8
+2017-02-17 09:29:08,169-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-47 status=1
+2017-02-17 09:29:08,170-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,171-0200 DEBUG swift JOB_END jobid=genscenes-26mza34n-0
+2017-02-17 09:29:08,171-0200 INFO  swift END_SUCCESS jobid=genscenes-26mza34n tr=genscenes
+2017-02-17 09:29:08,171-0200 DEBUG swift PROCEDURE_END line=20 thread=2-0-14-11-23-7-41-0 name=generate
+2017-02-17 09:29:08,171-0200 DEBUG swift JOB_INIT jobid=c-ray-mt-86mza34n tr=c-ray-mt
+2017-02-17 09:29:08,172-0200 DEBUG swift JOB_SITE_SELECT jobid=c-ray-mt-86mza34n-0
+2017-02-17 09:29:08,172-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-47 status=2
+2017-02-17 09:29:08,172-0200 DEBUG swift THREAD_ASSOCIATION jobid=genscenes-66mza34n-0 host=local thread=2-0-14-11-16-0-27-0
+2017-02-17 09:29:08,173-0200 INFO  swift START jobid=genscenes-66mza34n-0 host=local - Initializing directory structure
+2017-02-17 09:29:08,173-0200 INFO  swift END jobid=genscenes-66mza34n-0 - Done initializing directory structure
+2017-02-17 09:29:08,173-0200 INFO  swift START jobid=genscenes-66mza34n-0 - Staging in files [file://localhost/tscene]
+2017-02-17 09:29:08,174-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,174-0200 DEBUG swift CDM: file://localhost/tscene : DEFAULT
+2017-02-17 09:29:08,174-0200 INFO  swift END jobid=genscenes-66mza34n-0 - Staging in finished
+2017-02-17 09:29:08,175-0200 DEBUG swift JOB_START jobid=genscenes-66mza34n-0 tr=genscenes arguments=[0, 10, tscene] tmpdir=c-ray-run003/jobs/g/genscenes-66mza34n-0
+2017-02-17 09:29:08,175-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,175-0200 INFO  Execute JOB_TASK jobid=genscenes-66mza34n-0 taskid=task-27 exec=/bin/bash dir=c-ray-run003 args=shared/_swiftwrap genscenes-66mza34n-0 -jobdir g -scratch  -e genscenes -out scene.0000.data -err stderr.txt -i -d  -if tscene -of scene.0000.data -cf  -cdmfile -status files -a 0 10 tscene
+2017-02-17 09:29:08,175-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-27 status=8
+2017-02-17 09:29:08,176-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-27 status=1
+2017-02-17 09:29:08,176-0200 DEBUG swift JOB_END jobid=genscenes-x5mza34n-0
+2017-02-17 09:29:08,176-0200 INFO  swift END_SUCCESS jobid=genscenes-x5mza34n tr=genscenes
+2017-02-17 09:29:08,176-0200 DEBUG swift PROCEDURE_END line=20 thread=2-0-14-11-19-3-33-0 name=generate
+2017-02-17 09:29:08,176-0200 DEBUG swift JOB_INIT jobid=c-ray-mt-96mza34n tr=c-ray-mt
+2017-02-17 09:29:08,176-0200 DEBUG swift JOB_SITE_SELECT jobid=c-ray-mt-96mza34n-0
+2017-02-17 09:29:08,177-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-27 status=2
+2017-02-17 09:29:08,177-0200 DEBUG swift THREAD_ASSOCIATION jobid=c-ray-mt-76mza34n-0 host=local thread=2-0-14-11-20-4-36-1
+2017-02-17 09:29:08,178-0200 INFO  swift START jobid=c-ray-mt-76mza34n-0 host=local - Initializing directory structure
+2017-02-17 09:29:08,178-0200 INFO  swift END jobid=c-ray-mt-76mza34n-0 - Done initializing directory structure
+2017-02-17 09:29:08,178-0200 INFO  swift START jobid=c-ray-mt-76mza34n-0 - Staging in files [file://localhost/./scene.0004.data]
+2017-02-17 09:29:08,179-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,179-0200 DEBUG swift CDM: file://localhost/./scene.0004.data : DEFAULT
+2017-02-17 09:29:08,179-0200 INFO  swift END jobid=c-ray-mt-76mza34n-0 - Staging in finished
+2017-02-17 09:29:08,180-0200 DEBUG swift JOB_START jobid=c-ray-mt-76mza34n-0 tr=c-ray-mt arguments=[-s, 800x600, -t, 1] tmpdir=c-ray-run003/jobs/c/c-ray-mt-76mza34n-0
+2017-02-17 09:29:08,180-0200 INFO  Execute JOB_TASK jobid=c-ray-mt-76mza34n-0 taskid=task-36 exec=/bin/bash dir=c-ray-run003 args=shared/_swiftwrap c-ray-mt-76mza34n-0 -jobdir c -scratch  -e c-ray-mt -out scene.0004.ppm -err stderr.txt -i scene.0004.data -d  -if scene.0004.data -of scene.0004.ppm -cf  -cdmfile -status files -a -s 800x600 -t 1
+2017-02-17 09:29:08,180-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-36 status=8
+2017-02-17 09:29:08,180-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-36 status=1
+2017-02-17 09:29:08,181-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,181-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-37 status=7
+2017-02-17 09:29:08,182-0200 DEBUG swift START jobid=genscenes-06mza34n-0
+2017-02-17 09:29:08,182-0200 INFO  LateBindingScheduler jobs queued: 3
+2017-02-17 09:29:08,182-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-45 status=7
+2017-02-17 09:29:08,182-0200 INFO  LateBindingScheduler jobs queued: 3
+2017-02-17 09:29:08,182-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-31 status=7
+2017-02-17 09:29:08,182-0200 DEBUG swift START jobid=genscenes-46mza34n-0
+2017-02-17 09:29:08,183-0200 INFO  LateBindingScheduler jobs queued: 4
+2017-02-17 09:29:08,183-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-39 status=7
+2017-02-17 09:29:08,183-0200 DEBUG swift START jobid=genscenes-v5mza34n-0
+2017-02-17 09:29:08,183-0200 DEBUG swift START jobid=genscenes-16mza34n-0
+2017-02-17 09:29:08,183-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,184-0200 INFO  swift SUCCESS jobid=genscenes-06mza34n-0 - Success file found
+2017-02-17 09:29:08,184-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-36 status=2
+2017-02-17 09:29:08,184-0200 DEBUG swift STAGING_OUT jobid=genscenes-06mza34n-0
+2017-02-17 09:29:08,184-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,184-0200 INFO  swift START jobid=genscenes-06mza34n-0 - Staging out files
+2017-02-17 09:29:08,184-0200 DEBUG swift stageouts: [file://localhost/./scene.0005.data]
+2017-02-17 09:29:08,184-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,184-0200 INFO  swift SUCCESS jobid=genscenes-46mza34n-0 - Success file found
+2017-02-17 09:29:08,184-0200 DEBUG swift STAGING_OUT jobid=genscenes-46mza34n-0
+2017-02-17 09:29:08,184-0200 INFO  swift START jobid=genscenes-46mza34n-0 - Staging out files
+2017-02-17 09:29:08,184-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,184-0200 DEBUG swift stageouts: [file://localhost/./scene.0009.data]
+2017-02-17 09:29:08,185-0200 DEBUG swift FILE_STAGE_OUT_START srcname=scene.0005.data srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file jobid=genscenes-06mza34n-0
+2017-02-17 09:29:08,185-0200 INFO  swift SUCCESS jobid=genscenes-v5mza34n-0 - Success file found
+2017-02-17 09:29:08,185-0200 DEBUG swift STAGING_OUT jobid=genscenes-v5mza34n-0
+2017-02-17 09:29:08,185-0200 INFO  swift START jobid=genscenes-v5mza34n-0 - Staging out files
+2017-02-17 09:29:08,185-0200 DEBUG swift stageouts: [file://localhost/./scene.0002.data]
+2017-02-17 09:29:08,185-0200 INFO  swift SUCCESS jobid=genscenes-16mza34n-0 - Success file found
+2017-02-17 09:29:08,186-0200 DEBUG swift STAGING_OUT jobid=genscenes-16mza34n-0
+2017-02-17 09:29:08,186-0200 INFO  swift START jobid=genscenes-16mza34n-0 - Staging out files
+2017-02-17 09:29:08,186-0200 DEBUG swift stageouts: [file://localhost/./scene.0006.data]
+2017-02-17 09:29:08,186-0200 DEBUG swift FILE_STAGE_OUT_START srcname=scene.0009.data srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file jobid=genscenes-46mza34n-0
+2017-02-17 09:29:08,186-0200 INFO  LateBindingScheduler jobs queued: 3
+2017-02-17 09:29:08,186-0200 DEBUG swift FILE_STAGE_OUT_START srcname=scene.0002.data srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file jobid=genscenes-v5mza34n-0
+2017-02-17 09:29:08,186-0200 DEBUG swift FILE_STAGE_OUT_START srcname=scene.0006.data srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file jobid=genscenes-16mza34n-0
+2017-02-17 09:29:08,187-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,187-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,187-0200 DEBUG swift CDM: file://localhost/./scene.0005.data : DEFAULT
+2017-02-17 09:29:08,187-0200 DEBUG swift CDM: file://localhost/./scene.0002.data : DEFAULT
+2017-02-17 09:29:08,188-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,188-0200 DEBUG swift CDM: file://localhost/./scene.0006.data : DEFAULT
+2017-02-17 09:29:08,188-0200 DEBUG swift CDM: file://localhost/./scene.0009.data : DEFAULT
+2017-02-17 09:29:08,192-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,192-0200 DEBUG swift FILE_STAGE_OUT_END srcname=scene.0005.data srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file
+2017-02-17 09:29:08,192-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,193-0200 INFO  swift END jobid=genscenes-06mza34n-0 - Staging out finished
+2017-02-17 09:29:08,199-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,199-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,200-0200 DEBUG swift FILE_STAGE_OUT_END srcname=scene.0009.data srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file
+2017-02-17 09:29:08,200-0200 DEBUG swift FILE_STAGE_OUT_END srcname=scene.0006.data srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file
+2017-02-17 09:29:08,200-0200 INFO  LateBindingScheduler jobs queued: 3
+2017-02-17 09:29:08,200-0200 DEBUG swift FILE_STAGE_OUT_END srcname=scene.0002.data srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file
+2017-02-17 09:29:08,201-0200 INFO  LateBindingScheduler jobs queued: 5
+2017-02-17 09:29:08,201-0200 DEBUG swift JOB_END jobid=genscenes-06mza34n-0
+2017-02-17 09:29:08,201-0200 INFO  swift END_SUCCESS jobid=genscenes-06mza34n tr=genscenes
+2017-02-17 09:29:08,201-0200 DEBUG swift PROCEDURE_END line=20 thread=2-0-14-11-21-5-37-0 name=generate
+2017-02-17 09:29:08,202-0200 DEBUG swift JOB_INIT jobid=c-ray-mt-a6mza34n tr=c-ray-mt
+2017-02-17 09:29:08,202-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,202-0200 DEBUG swift JOB_SITE_SELECT jobid=c-ray-mt-a6mza34n-0
+2017-02-17 09:29:08,202-0200 INFO  LateBindingScheduler jobs queued: 3
+2017-02-17 09:29:08,202-0200 INFO  LateBindingScheduler jobs queued: 3
+2017-02-17 09:29:08,203-0200 DEBUG swift THREAD_ASSOCIATION jobid=c-ray-mt-86mza34n-0 host=local thread=2-0-14-11-23-7-42-1
+2017-02-17 09:29:08,203-0200 INFO  swift END jobid=genscenes-46mza34n-0 - Staging out finished
+2017-02-17 09:29:08,203-0200 INFO  swift END jobid=genscenes-v5mza34n-0 - Staging out finished
+2017-02-17 09:29:08,203-0200 INFO  swift END jobid=genscenes-16mza34n-0 - Staging out finished
+2017-02-17 09:29:08,204-0200 INFO  swift START jobid=c-ray-mt-86mza34n-0 host=local - Initializing directory structure
+2017-02-17 09:29:08,204-0200 INFO  swift END jobid=c-ray-mt-86mza34n-0 - Done initializing directory structure
+2017-02-17 09:29:08,204-0200 INFO  swift START jobid=c-ray-mt-86mza34n-0 - Staging in files [file://localhost/./scene.0007.data]
+2017-02-17 09:29:08,205-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,206-0200 DEBUG swift CDM: file://localhost/./scene.0007.data : DEFAULT
+2017-02-17 09:29:08,206-0200 INFO  swift END jobid=c-ray-mt-86mza34n-0 - Staging in finished
+2017-02-17 09:29:08,206-0200 DEBUG swift JOB_START jobid=c-ray-mt-86mza34n-0 tr=c-ray-mt arguments=[-s, 800x600, -t, 1] tmpdir=c-ray-run003/jobs/c/c-ray-mt-86mza34n-0
+2017-02-17 09:29:08,206-0200 INFO  Execute JOB_TASK jobid=c-ray-mt-86mza34n-0 taskid=task-42 exec=/bin/bash dir=c-ray-run003 args=shared/_swiftwrap c-ray-mt-86mza34n-0 -jobdir c -scratch  -e c-ray-mt -out scene.0007.ppm -err stderr.txt -i scene.0007.data -d  -if scene.0007.data -of scene.0007.ppm -cf  -cdmfile -status files -a -s 800x600 -t 1
+2017-02-17 09:29:08,213-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,213-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-42 status=8
+2017-02-17 09:29:08,213-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-42 status=1
+2017-02-17 09:29:08,214-0200 DEBUG swift JOB_END jobid=genscenes-46mza34n-0
+2017-02-17 09:29:08,214-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,214-0200 INFO  swift END_SUCCESS jobid=genscenes-46mza34n tr=genscenes
+2017-02-17 09:29:08,214-0200 DEBUG swift PROCEDURE_END line=20 thread=2-0-14-11-25-9-45-0 name=generate
+2017-02-17 09:29:08,214-0200 DEBUG swift JOB_INIT jobid=c-ray-mt-b6mza34n tr=c-ray-mt
+2017-02-17 09:29:08,214-0200 DEBUG swift JOB_SITE_SELECT jobid=c-ray-mt-b6mza34n-0
+2017-02-17 09:29:08,216-0200 DEBUG swift THREAD_ASSOCIATION jobid=c-ray-mt-96mza34n-0 host=local thread=2-0-14-11-19-3-34-1
+2017-02-17 09:29:08,217-0200 INFO  swift START jobid=c-ray-mt-96mza34n-0 host=local - Initializing directory structure
+2017-02-17 09:29:08,217-0200 INFO  swift END jobid=c-ray-mt-96mza34n-0 - Done initializing directory structure
+2017-02-17 09:29:08,217-0200 INFO  swift START jobid=c-ray-mt-96mza34n-0 - Staging in files [file://localhost/./scene.0003.data]
+2017-02-17 09:29:08,218-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,218-0200 DEBUG swift JOB_END jobid=genscenes-16mza34n-0
+2017-02-17 09:29:08,218-0200 DEBUG swift CDM: file://localhost/./scene.0003.data : DEFAULT
+2017-02-17 09:29:08,218-0200 INFO  swift END_SUCCESS jobid=genscenes-16mza34n tr=genscenes
+2017-02-17 09:29:08,218-0200 DEBUG swift PROCEDURE_END line=20 thread=2-0-14-11-22-6-39-0 name=generate
+2017-02-17 09:29:08,218-0200 DEBUG swift JOB_INIT jobid=c-ray-mt-c6mza34n tr=c-ray-mt
+2017-02-17 09:29:08,218-0200 INFO  swift END jobid=c-ray-mt-96mza34n-0 - Staging in finished
+2017-02-17 09:29:08,218-0200 DEBUG swift JOB_START jobid=c-ray-mt-96mza34n-0 tr=c-ray-mt arguments=[-s, 800x600, -t, 1] tmpdir=c-ray-run003/jobs/c/c-ray-mt-96mza34n-0
+2017-02-17 09:29:08,218-0200 DEBUG swift JOB_SITE_SELECT jobid=c-ray-mt-c6mza34n-0
+2017-02-17 09:29:08,219-0200 DEBUG swift THREAD_ASSOCIATION jobid=c-ray-mt-a6mza34n-0 host=local thread=2-0-14-11-21-5-38-1
+2017-02-17 09:29:08,219-0200 INFO  Execute JOB_TASK jobid=c-ray-mt-96mza34n-0 taskid=task-34 exec=/bin/bash dir=c-ray-run003 args=shared/_swiftwrap c-ray-mt-96mza34n-0 -jobdir c -scratch  -e c-ray-mt -out scene.0003.ppm -err stderr.txt -i scene.0003.data -d  -if scene.0003.data -of scene.0003.ppm -cf  -cdmfile -status files -a -s 800x600 -t 1
+2017-02-17 09:29:08,219-0200 INFO  LateBindingScheduler jobs queued: 3
+2017-02-17 09:29:08,220-0200 DEBUG swift JOB_END jobid=genscenes-v5mza34n-0
+2017-02-17 09:29:08,220-0200 INFO  swift START jobid=c-ray-mt-a6mza34n-0 host=local - Initializing directory structure
+2017-02-17 09:29:08,220-0200 INFO  swift END jobid=c-ray-mt-a6mza34n-0 - Done initializing directory structure
+2017-02-17 09:29:08,220-0200 INFO  swift END_SUCCESS jobid=genscenes-v5mza34n tr=genscenes
+2017-02-17 09:29:08,220-0200 INFO  swift START jobid=c-ray-mt-a6mza34n-0 - Staging in files [file://localhost/./scene.0005.data]
+2017-02-17 09:29:08,220-0200 DEBUG swift PROCEDURE_END line=20 thread=2-0-14-11-18-2-31-0 name=generate
+2017-02-17 09:29:08,220-0200 DEBUG swift JOB_INIT jobid=c-ray-mt-d6mza34n tr=c-ray-mt
+2017-02-17 09:29:08,220-0200 DEBUG swift JOB_SITE_SELECT jobid=c-ray-mt-d6mza34n-0
+2017-02-17 09:29:08,221-0200 DEBUG swift THREAD_ASSOCIATION jobid=c-ray-mt-b6mza34n-0 host=local thread=2-0-14-11-25-9-46-1
+2017-02-17 09:29:08,221-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-34 status=8
+2017-02-17 09:29:08,221-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-34 status=1
+2017-02-17 09:29:08,222-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,222-0200 INFO  swift START jobid=c-ray-mt-b6mza34n-0 host=local - Initializing directory structure
+2017-02-17 09:29:08,222-0200 INFO  swift END jobid=c-ray-mt-b6mza34n-0 - Done initializing directory structure
+2017-02-17 09:29:08,222-0200 INFO  swift START jobid=c-ray-mt-b6mza34n-0 - Staging in files [file://localhost/./scene.0009.data]
+2017-02-17 09:29:08,222-0200 DEBUG swift CDM: file://localhost/./scene.0005.data : DEFAULT
+2017-02-17 09:29:08,223-0200 INFO  swift END jobid=c-ray-mt-a6mza34n-0 - Staging in finished
+2017-02-17 09:29:08,223-0200 DEBUG swift JOB_START jobid=c-ray-mt-a6mza34n-0 tr=c-ray-mt arguments=[-s, 800x600, -t, 1] tmpdir=c-ray-run003/jobs/c/c-ray-mt-a6mza34n-0
+2017-02-17 09:29:08,223-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-34 status=2
+2017-02-17 09:29:08,223-0200 INFO  Execute JOB_TASK jobid=c-ray-mt-a6mza34n-0 taskid=task-38 exec=/bin/bash dir=c-ray-run003 args=shared/_swiftwrap c-ray-mt-a6mza34n-0 -jobdir c -scratch  -e c-ray-mt -out scene.0005.ppm -err stderr.txt -i scene.0005.data -d  -if scene.0005.data -of scene.0005.ppm -cf  -cdmfile -status files -a -s 800x600 -t 1
+2017-02-17 09:29:08,223-0200 INFO  LateBindingScheduler jobs queued: 4
+2017-02-17 09:29:08,223-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-29 status=7
+2017-02-17 09:29:08,224-0200 DEBUG swift START jobid=genscenes-y5mza34n-0
+2017-02-17 09:29:08,225-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-38 status=8
+2017-02-17 09:29:08,225-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-38 status=1
+2017-02-17 09:29:08,225-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,225-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,225-0200 INFO  swift SUCCESS jobid=genscenes-y5mza34n-0 - Success file found
+2017-02-17 09:29:08,225-0200 DEBUG swift STAGING_OUT jobid=genscenes-y5mza34n-0
+2017-02-17 09:29:08,225-0200 DEBUG swift CDM: file://localhost/./scene.0009.data : DEFAULT
+2017-02-17 09:29:08,225-0200 INFO  swift START jobid=genscenes-y5mza34n-0 - Staging out files
+2017-02-17 09:29:08,225-0200 DEBUG swift stageouts: [file://localhost/./scene.0001.data]
+2017-02-17 09:29:08,226-0200 INFO  swift END jobid=c-ray-mt-b6mza34n-0 - Staging in finished
+2017-02-17 09:29:08,226-0200 DEBUG swift JOB_START jobid=c-ray-mt-b6mza34n-0 tr=c-ray-mt arguments=[-s, 800x600, -t, 1] tmpdir=c-ray-run003/jobs/c/c-ray-mt-b6mza34n-0
+2017-02-17 09:29:08,226-0200 DEBUG swift FILE_STAGE_OUT_START srcname=scene.0001.data srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file jobid=genscenes-y5mza34n-0
+2017-02-17 09:29:08,226-0200 INFO  Execute JOB_TASK jobid=c-ray-mt-b6mza34n-0 taskid=task-46 exec=/bin/bash dir=c-ray-run003 args=shared/_swiftwrap c-ray-mt-b6mza34n-0 -jobdir c -scratch  -e c-ray-mt -out scene.0009.ppm -err stderr.txt -i scene.0009.data -d  -if scene.0009.data -of scene.0009.ppm -cf  -cdmfile -status files -a -s 800x600 -t 1
+2017-02-17 09:29:08,227-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-46 status=8
+2017-02-17 09:29:08,227-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-46 status=1
+2017-02-17 09:29:08,227-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,227-0200 DEBUG swift CDM: file://localhost/./scene.0001.data : DEFAULT
+2017-02-17 09:29:08,230-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,230-0200 DEBUG swift FILE_STAGE_OUT_END srcname=scene.0001.data srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file
+2017-02-17 09:29:08,231-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-46 status=2
+2017-02-17 09:29:08,231-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,232-0200 INFO  swift END jobid=genscenes-y5mza34n-0 - Staging out finished
+2017-02-17 09:29:08,236-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-38 status=2
+2017-02-17 09:29:08,236-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-42 status=2
+2017-02-17 09:29:08,237-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,240-0200 DEBUG swift JOB_END jobid=genscenes-y5mza34n-0
+2017-02-17 09:29:08,240-0200 INFO  swift END_SUCCESS jobid=genscenes-y5mza34n tr=genscenes
+2017-02-17 09:29:08,240-0200 DEBUG swift PROCEDURE_END line=20 thread=2-0-14-11-17-1-29-0 name=generate
+2017-02-17 09:29:08,240-0200 DEBUG swift JOB_INIT jobid=c-ray-mt-e6mza34n tr=c-ray-mt
+2017-02-17 09:29:08,241-0200 DEBUG swift JOB_SITE_SELECT jobid=c-ray-mt-e6mza34n-0
+2017-02-17 09:29:08,241-0200 DEBUG swift THREAD_ASSOCIATION jobid=c-ray-mt-c6mza34n-0 host=local thread=2-0-14-11-22-6-40-1
+2017-02-17 09:29:08,242-0200 INFO  swift START jobid=c-ray-mt-c6mza34n-0 host=local - Initializing directory structure
+2017-02-17 09:29:08,242-0200 INFO  swift END jobid=c-ray-mt-c6mza34n-0 - Done initializing directory structure
+2017-02-17 09:29:08,242-0200 INFO  swift START jobid=c-ray-mt-c6mza34n-0 - Staging in files [file://localhost/./scene.0006.data]
+2017-02-17 09:29:08,243-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,244-0200 DEBUG swift CDM: file://localhost/./scene.0006.data : DEFAULT
+2017-02-17 09:29:08,244-0200 INFO  swift END jobid=c-ray-mt-c6mza34n-0 - Staging in finished
+2017-02-17 09:29:08,244-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,244-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-43 status=7
+2017-02-17 09:29:08,245-0200 DEBUG swift START jobid=genscenes-36mza34n-0
+2017-02-17 09:29:08,245-0200 DEBUG swift JOB_START jobid=c-ray-mt-c6mza34n-0 tr=c-ray-mt arguments=[-s, 800x600, -t, 1] tmpdir=c-ray-run003/jobs/c/c-ray-mt-c6mza34n-0
+2017-02-17 09:29:08,246-0200 INFO  Execute JOB_TASK jobid=c-ray-mt-c6mza34n-0 taskid=task-40 exec=/bin/bash dir=c-ray-run003 args=shared/_swiftwrap c-ray-mt-c6mza34n-0 -jobdir c -scratch  -e c-ray-mt -out scene.0006.ppm -err stderr.txt -i scene.0006.data -d  -if scene.0006.data -of scene.0006.ppm -cf  -cdmfile -status files -a -s 800x600 -t 1
+2017-02-17 09:29:08,246-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-40 status=8
+2017-02-17 09:29:08,246-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-40 status=1
+2017-02-17 09:29:08,247-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,247-0200 INFO  swift SUCCESS jobid=genscenes-36mza34n-0 - Success file found
+2017-02-17 09:29:08,247-0200 DEBUG swift STAGING_OUT jobid=genscenes-36mza34n-0
+2017-02-17 09:29:08,247-0200 INFO  swift START jobid=genscenes-36mza34n-0 - Staging out files
+2017-02-17 09:29:08,247-0200 DEBUG swift stageouts: [file://localhost/./scene.0008.data]
+2017-02-17 09:29:08,248-0200 DEBUG swift FILE_STAGE_OUT_START srcname=scene.0008.data srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file jobid=genscenes-36mza34n-0
+2017-02-17 09:29:08,248-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-40 status=2
+2017-02-17 09:29:08,248-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,250-0200 DEBUG swift CDM: file://localhost/./scene.0008.data : DEFAULT
+2017-02-17 09:29:08,255-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,256-0200 DEBUG swift FILE_STAGE_OUT_END srcname=scene.0008.data srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file
+2017-02-17 09:29:08,257-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,258-0200 INFO  swift END jobid=genscenes-36mza34n-0 - Staging out finished
+2017-02-17 09:29:08,261-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,263-0200 DEBUG swift JOB_END jobid=genscenes-36mza34n-0
+2017-02-17 09:29:08,263-0200 INFO  swift END_SUCCESS jobid=genscenes-36mza34n tr=genscenes
+2017-02-17 09:29:08,263-0200 DEBUG swift PROCEDURE_END line=20 thread=2-0-14-11-24-8-43-0 name=generate
+2017-02-17 09:29:08,264-0200 DEBUG swift JOB_INIT jobid=c-ray-mt-f6mza34n tr=c-ray-mt
+2017-02-17 09:29:08,264-0200 DEBUG swift JOB_SITE_SELECT jobid=c-ray-mt-f6mza34n-0
+2017-02-17 09:29:08,264-0200 DEBUG swift THREAD_ASSOCIATION jobid=c-ray-mt-d6mza34n-0 host=local thread=2-0-14-11-18-2-32-1
+2017-02-17 09:29:08,265-0200 INFO  swift START jobid=c-ray-mt-d6mza34n-0 host=local - Initializing directory structure
+2017-02-17 09:29:08,265-0200 INFO  swift END jobid=c-ray-mt-d6mza34n-0 - Done initializing directory structure
+2017-02-17 09:29:08,265-0200 INFO  swift START jobid=c-ray-mt-d6mza34n-0 - Staging in files [file://localhost/./scene.0002.data]
+2017-02-17 09:29:08,266-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,266-0200 DEBUG swift CDM: file://localhost/./scene.0002.data : DEFAULT
+2017-02-17 09:29:08,267-0200 INFO  swift END jobid=c-ray-mt-d6mza34n-0 - Staging in finished
+2017-02-17 09:29:08,267-0200 DEBUG swift JOB_START jobid=c-ray-mt-d6mza34n-0 tr=c-ray-mt arguments=[-s, 800x600, -t, 1] tmpdir=c-ray-run003/jobs/c/c-ray-mt-d6mza34n-0
+2017-02-17 09:29:08,267-0200 INFO  Execute JOB_TASK jobid=c-ray-mt-d6mza34n-0 taskid=task-32 exec=/bin/bash dir=c-ray-run003 args=shared/_swiftwrap c-ray-mt-d6mza34n-0 -jobdir c -scratch  -e c-ray-mt -out scene.0002.ppm -err stderr.txt -i scene.0002.data -d  -if scene.0002.data -of scene.0002.ppm -cf  -cdmfile -status files -a -s 800x600 -t 1
+2017-02-17 09:29:08,268-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-32 status=8
+2017-02-17 09:29:08,268-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-32 status=1
+2017-02-17 09:29:08,277-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-32 status=2
+2017-02-17 09:29:08,396-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,396-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-47 status=7
+2017-02-17 09:29:08,396-0200 DEBUG swift START jobid=genscenes-56mza34n-0
+2017-02-17 09:29:08,397-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,397-0200 INFO  swift SUCCESS jobid=genscenes-56mza34n-0 - Success file found
+2017-02-17 09:29:08,397-0200 DEBUG swift STAGING_OUT jobid=genscenes-56mza34n-0
+2017-02-17 09:29:08,397-0200 INFO  swift START jobid=genscenes-56mza34n-0 - Staging out files
+2017-02-17 09:29:08,397-0200 DEBUG swift stageouts: [file://localhost/./scene.0010.data]
+2017-02-17 09:29:08,398-0200 DEBUG swift FILE_STAGE_OUT_START srcname=scene.0010.data srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file jobid=genscenes-56mza34n-0
+2017-02-17 09:29:08,398-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,398-0200 DEBUG swift CDM: file://localhost/./scene.0010.data : DEFAULT
+2017-02-17 09:29:08,405-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,407-0200 DEBUG swift FILE_STAGE_OUT_END srcname=scene.0010.data srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file
+2017-02-17 09:29:08,407-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,408-0200 INFO  swift END jobid=genscenes-56mza34n-0 - Staging out finished
+2017-02-17 09:29:08,424-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,424-0200 DEBUG swift JOB_END jobid=genscenes-56mza34n-0
+2017-02-17 09:29:08,424-0200 INFO  swift END_SUCCESS jobid=genscenes-56mza34n tr=genscenes
+2017-02-17 09:29:08,424-0200 DEBUG swift PROCEDURE_END line=20 thread=2-0-14-11-26-10-47-0 name=generate
+2017-02-17 09:29:08,425-0200 DEBUG swift JOB_INIT jobid=c-ray-mt-g6mza34n tr=c-ray-mt
+2017-02-17 09:29:08,425-0200 DEBUG swift JOB_SITE_SELECT jobid=c-ray-mt-g6mza34n-0
+2017-02-17 09:29:08,425-0200 DEBUG swift THREAD_ASSOCIATION jobid=c-ray-mt-e6mza34n-0 host=local thread=2-0-14-11-17-1-30-1
+2017-02-17 09:29:08,426-0200 INFO  swift START jobid=c-ray-mt-e6mza34n-0 host=local - Initializing directory structure
+2017-02-17 09:29:08,426-0200 INFO  swift END jobid=c-ray-mt-e6mza34n-0 - Done initializing directory structure
+2017-02-17 09:29:08,426-0200 INFO  swift START jobid=c-ray-mt-e6mza34n-0 - Staging in files [file://localhost/./scene.0001.data]
+2017-02-17 09:29:08,429-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,429-0200 DEBUG swift CDM: file://localhost/./scene.0001.data : DEFAULT
+2017-02-17 09:29:08,429-0200 INFO  swift END jobid=c-ray-mt-e6mza34n-0 - Staging in finished
+2017-02-17 09:29:08,429-0200 DEBUG swift JOB_START jobid=c-ray-mt-e6mza34n-0 tr=c-ray-mt arguments=[-s, 800x600, -t, 1] tmpdir=c-ray-run003/jobs/c/c-ray-mt-e6mza34n-0
+2017-02-17 09:29:08,430-0200 INFO  Execute JOB_TASK jobid=c-ray-mt-e6mza34n-0 taskid=task-30 exec=/bin/bash dir=c-ray-run003 args=shared/_swiftwrap c-ray-mt-e6mza34n-0 -jobdir c -scratch  -e c-ray-mt -out scene.0001.ppm -err stderr.txt -i scene.0001.data -d  -if scene.0001.data -of scene.0001.ppm -cf  -cdmfile -status files -a -s 800x600 -t 1
+2017-02-17 09:29:08,431-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-30 status=8
+2017-02-17 09:29:08,431-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-30 status=1
+2017-02-17 09:29:08,440-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,440-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-27 status=7
+2017-02-17 09:29:08,441-0200 DEBUG swift START jobid=genscenes-66mza34n-0
+2017-02-17 09:29:08,442-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:08,442-0200 INFO  swift SUCCESS jobid=genscenes-66mza34n-0 - Success file found
+2017-02-17 09:29:08,442-0200 DEBUG swift STAGING_OUT jobid=genscenes-66mza34n-0
+2017-02-17 09:29:08,442-0200 INFO  swift START jobid=genscenes-66mza34n-0 - Staging out files
+2017-02-17 09:29:08,442-0200 DEBUG swift stageouts: [file://localhost/./scene.0000.data]
+2017-02-17 09:29:08,443-0200 DEBUG swift THREAD_ASSOCIATION jobid=c-ray-mt-f6mza34n-0 host=local thread=2-0-14-11-24-8-44-1
+2017-02-17 09:29:08,443-0200 INFO  swift START jobid=c-ray-mt-f6mza34n-0 host=local - Initializing directory structure
+2017-02-17 09:29:08,443-0200 INFO  swift END jobid=c-ray-mt-f6mza34n-0 - Done initializing directory structure
+2017-02-17 09:29:08,443-0200 INFO  swift START jobid=c-ray-mt-f6mza34n-0 - Staging in files [file://localhost/./scene.0008.data]
+2017-02-17 09:29:08,444-0200 DEBUG swift FILE_STAGE_OUT_START srcname=scene.0000.data srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file jobid=genscenes-66mza34n-0
+2017-02-17 09:29:08,445-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:29:08,445-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:29:08,445-0200 DEBUG swift CDM: file://localhost/./scene.0000.data : DEFAULT
+2017-02-17 09:29:08,445-0200 DEBUG swift CDM: file://localhost/./scene.0008.data : DEFAULT
+2017-02-17 09:29:08,445-0200 INFO  swift END jobid=c-ray-mt-f6mza34n-0 - Staging in finished
+2017-02-17 09:29:08,445-0200 DEBUG swift JOB_START jobid=c-ray-mt-f6mza34n-0 tr=c-ray-mt arguments=[-s, 800x600, -t, 1] tmpdir=c-ray-run003/jobs/c/c-ray-mt-f6mza34n-0
+2017-02-17 09:29:08,446-0200 INFO  Execute JOB_TASK jobid=c-ray-mt-f6mza34n-0 taskid=task-44 exec=/bin/bash dir=c-ray-run003 args=shared/_swiftwrap c-ray-mt-f6mza34n-0 -jobdir c -scratch  -e c-ray-mt -out scene.0008.ppm -err stderr.txt -i scene.0008.data -d  -if scene.0008.data -of scene.0008.ppm -cf  -cdmfile -status files -a -s 800x600 -t 1
+2017-02-17 09:29:08,446-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-44 status=8
+2017-02-17 09:29:08,446-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-44 status=1
+2017-02-17 09:29:08,463-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-30 status=2
+2017-02-17 09:29:08,464-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-44 status=2
+2017-02-17 09:29:08,467-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:29:08,472-0200 DEBUG swift FILE_STAGE_OUT_END srcname=scene.0000.data srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file
+2017-02-17 09:29:08,472-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:29:08,473-0200 INFO  swift END jobid=genscenes-66mza34n-0 - Staging out finished
+2017-02-17 09:29:08,484-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:29:08,484-0200 DEBUG swift JOB_END jobid=genscenes-66mza34n-0
+2017-02-17 09:29:08,485-0200 INFO  swift END_SUCCESS jobid=genscenes-66mza34n tr=genscenes
+2017-02-17 09:29:08,485-0200 DEBUG swift PROCEDURE_END line=20 thread=2-0-14-11-16-0-27-0 name=generate
+2017-02-17 09:29:08,485-0200 DEBUG swift JOB_INIT jobid=c-ray-mt-h6mza34n tr=c-ray-mt
+2017-02-17 09:29:08,485-0200 DEBUG swift JOB_SITE_SELECT jobid=c-ray-mt-h6mza34n-0
+2017-02-17 09:29:08,485-0200 DEBUG swift THREAD_ASSOCIATION jobid=c-ray-mt-g6mza34n-0 host=local thread=2-0-14-11-26-10-48-1
+2017-02-17 09:29:08,486-0200 INFO  swift START jobid=c-ray-mt-g6mza34n-0 host=local - Initializing directory structure
+2017-02-17 09:29:08,486-0200 INFO  swift END jobid=c-ray-mt-g6mza34n-0 - Done initializing directory structure
+2017-02-17 09:29:08,486-0200 INFO  swift START jobid=c-ray-mt-g6mza34n-0 - Staging in files [file://localhost/./scene.0010.data]
+2017-02-17 09:29:08,487-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:29:08,487-0200 DEBUG swift CDM: file://localhost/./scene.0010.data : DEFAULT
+2017-02-17 09:29:08,487-0200 INFO  swift END jobid=c-ray-mt-g6mza34n-0 - Staging in finished
+2017-02-17 09:29:08,487-0200 DEBUG swift JOB_START jobid=c-ray-mt-g6mza34n-0 tr=c-ray-mt arguments=[-s, 800x600, -t, 1] tmpdir=c-ray-run003/jobs/c/c-ray-mt-g6mza34n-0
+2017-02-17 09:29:08,488-0200 INFO  Execute JOB_TASK jobid=c-ray-mt-g6mza34n-0 taskid=task-48 exec=/bin/bash dir=c-ray-run003 args=shared/_swiftwrap c-ray-mt-g6mza34n-0 -jobdir c -scratch  -e c-ray-mt -out scene.0010.ppm -err stderr.txt -i scene.0010.data -d  -if scene.0010.data -of scene.0010.ppm -cf  -cdmfile -status files -a -s 800x600 -t 1
+2017-02-17 09:29:08,488-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-48 status=8
+2017-02-17 09:29:08,495-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-48 status=1
+2017-02-17 09:29:08,519-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-48 status=2
+2017-02-17 09:29:08,883-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 11062976, JVMThreads: 41
+2017-02-17 09:29:08,883-0200 INFO  RuntimeStats$ProgressTicker   Selecting site:1  Active:10  Finished successfully:11
+2017-02-17 09:29:09,883-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 11319008, JVMThreads: 41
+2017-02-17 09:29:10,883-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 11427928, JVMThreads: 41
+2017-02-17 09:29:11,883-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 11579520, JVMThreads: 41
+2017-02-17 09:29:12,884-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 11688440, JVMThreads: 41
+2017-02-17 09:29:13,884-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 12341424, JVMThreads: 41
+2017-02-17 09:29:14,884-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 12384248, JVMThreads: 41
+2017-02-17 09:29:15,884-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 12384288, JVMThreads: 41
+2017-02-17 09:29:16,885-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 12384328, JVMThreads: 41
+2017-02-17 09:29:17,885-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 12427088, JVMThreads: 41
+2017-02-17 09:29:18,885-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 12644824, JVMThreads: 41
+2017-02-17 09:29:19,885-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 12644864, JVMThreads: 41
+2017-02-17 09:29:20,885-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 13449592, JVMThreads: 41
+2017-02-17 09:29:21,886-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 13449632, JVMThreads: 41
+2017-02-17 09:29:22,886-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 13449672, JVMThreads: 41
+2017-02-17 09:29:23,886-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 13492496, JVMThreads: 41
+2017-02-17 09:29:24,886-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 13492536, JVMThreads: 41
+2017-02-17 09:29:25,886-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 13710336, JVMThreads: 41
+2017-02-17 09:29:26,887-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 13753096, JVMThreads: 41
+2017-02-17 09:29:27,887-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 14297408, JVMThreads: 41
+2017-02-17 09:29:28,887-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 14515208, JVMThreads: 41
+2017-02-17 09:29:29,887-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 14557920, JVMThreads: 41
+2017-02-17 09:29:30,887-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 14557960, JVMThreads: 41
+2017-02-17 09:29:31,888-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 14558000, JVMThreads: 41
+2017-02-17 09:29:32,888-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 14600712, JVMThreads: 41
+2017-02-17 09:29:33,881-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:29:33,881-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-44 status=7
+2017-02-17 09:29:33,882-0200 DEBUG swift START jobid=c-ray-mt-f6mza34n-0
+2017-02-17 09:29:33,886-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:29:33,887-0200 INFO  swift SUCCESS jobid=c-ray-mt-f6mza34n-0 - Success file found
+2017-02-17 09:29:33,887-0200 DEBUG swift STAGING_OUT jobid=c-ray-mt-f6mza34n-0
+2017-02-17 09:29:33,887-0200 INFO  swift START jobid=c-ray-mt-f6mza34n-0 - Staging out files
+2017-02-17 09:29:33,887-0200 DEBUG swift stageouts: [file://localhost/./scene.0008.ppm]
+2017-02-17 09:29:33,887-0200 DEBUG swift FILE_STAGE_OUT_START srcname=scene.0008.ppm srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file jobid=c-ray-mt-f6mza34n-0
+2017-02-17 09:29:33,888-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:29:33,889-0200 DEBUG swift CDM: file://localhost/./scene.0008.ppm : DEFAULT
+2017-02-17 09:29:33,890-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 14818544, JVMThreads: 41
+2017-02-17 09:29:33,890-0200 INFO  RuntimeStats$ProgressTicker   Selecting site:1  Active:9  Stage out:1  Finished successfully:11
+2017-02-17 09:29:33,914-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:29:33,923-0200 DEBUG swift FILE_STAGE_OUT_END srcname=scene.0008.ppm srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file
+2017-02-17 09:29:33,924-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:29:33,925-0200 INFO  swift END jobid=c-ray-mt-f6mza34n-0 - Staging out finished
+2017-02-17 09:29:33,935-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:29:33,936-0200 DEBUG swift JOB_END jobid=c-ray-mt-f6mza34n-0
+2017-02-17 09:29:33,936-0200 INFO  swift END_SUCCESS jobid=c-ray-mt-f6mza34n tr=c-ray-mt
+2017-02-17 09:29:33,936-0200 DEBUG swift PROCEDURE_END line=25 thread=2-0-14-11-24-8-44-1 name=render
+2017-02-17 09:29:33,937-0200 DEBUG swift FOREACH_IT_END line=41 thread=2-0-14-11-24-8
+2017-02-17 09:29:33,986-0200 DEBUG swift THREAD_ASSOCIATION jobid=c-ray-mt-h6mza34n-0 host=local thread=2-0-14-11-16-0-28-1
+2017-02-17 09:29:33,987-0200 INFO  swift START jobid=c-ray-mt-h6mza34n-0 host=local - Initializing directory structure
+2017-02-17 09:29:33,987-0200 INFO  swift END jobid=c-ray-mt-h6mza34n-0 - Done initializing directory structure
+2017-02-17 09:29:33,987-0200 INFO  swift START jobid=c-ray-mt-h6mza34n-0 - Staging in files [file://localhost/./scene.0000.data]
+2017-02-17 09:29:33,990-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:33,990-0200 DEBUG swift CDM: file://localhost/./scene.0000.data : DEFAULT
+2017-02-17 09:29:33,990-0200 INFO  swift END jobid=c-ray-mt-h6mza34n-0 - Staging in finished
+2017-02-17 09:29:33,990-0200 DEBUG swift JOB_START jobid=c-ray-mt-h6mza34n-0 tr=c-ray-mt arguments=[-s, 800x600, -t, 1] tmpdir=c-ray-run003/jobs/c/c-ray-mt-h6mza34n-0
+2017-02-17 09:29:33,991-0200 INFO  Execute JOB_TASK jobid=c-ray-mt-h6mza34n-0 taskid=task-28 exec=/bin/bash dir=c-ray-run003 args=shared/_swiftwrap c-ray-mt-h6mza34n-0 -jobdir c -scratch  -e c-ray-mt -out scene.0000.ppm -err stderr.txt -i scene.0000.data -d  -if scene.0000.data -of scene.0000.ppm -cf  -cdmfile -status files -a -s 800x600 -t 1
+2017-02-17 09:29:33,991-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-28 status=8
+2017-02-17 09:29:33,991-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-28 status=1
+2017-02-17 09:29:34,011-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-28 status=2
+2017-02-17 09:29:34,714-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:34,714-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-32 status=7
+2017-02-17 09:29:34,714-0200 DEBUG swift START jobid=c-ray-mt-d6mza34n-0
+2017-02-17 09:29:34,715-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:34,716-0200 INFO  swift SUCCESS jobid=c-ray-mt-d6mza34n-0 - Success file found
+2017-02-17 09:29:34,716-0200 DEBUG swift STAGING_OUT jobid=c-ray-mt-d6mza34n-0
+2017-02-17 09:29:34,716-0200 INFO  swift START jobid=c-ray-mt-d6mza34n-0 - Staging out files
+2017-02-17 09:29:34,716-0200 DEBUG swift stageouts: [file://localhost/./scene.0002.ppm]
+2017-02-17 09:29:34,716-0200 DEBUG swift FILE_STAGE_OUT_START srcname=scene.0002.ppm srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file jobid=c-ray-mt-d6mza34n-0
+2017-02-17 09:29:34,717-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:34,717-0200 DEBUG swift CDM: file://localhost/./scene.0002.ppm : DEFAULT
+2017-02-17 09:29:34,732-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:34,743-0200 DEBUG swift FILE_STAGE_OUT_END srcname=scene.0002.ppm srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file
+2017-02-17 09:29:34,744-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:34,745-0200 INFO  swift END jobid=c-ray-mt-d6mza34n-0 - Staging out finished
+2017-02-17 09:29:34,755-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:34,758-0200 DEBUG swift JOB_END jobid=c-ray-mt-d6mza34n-0
+2017-02-17 09:29:34,759-0200 INFO  swift END_SUCCESS jobid=c-ray-mt-d6mza34n tr=c-ray-mt
+2017-02-17 09:29:34,759-0200 DEBUG swift PROCEDURE_END line=25 thread=2-0-14-11-18-2-32-1 name=render
+2017-02-17 09:29:34,759-0200 DEBUG swift FOREACH_IT_END line=41 thread=2-0-14-11-18-2
+2017-02-17 09:29:34,891-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 15276280, JVMThreads: 41
+2017-02-17 09:29:34,891-0200 INFO  RuntimeStats$ProgressTicker   Active:9  Finished successfully:13
+2017-02-17 09:29:35,827-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:35,827-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-30 status=7
+2017-02-17 09:29:35,828-0200 DEBUG swift START jobid=c-ray-mt-e6mza34n-0
+2017-02-17 09:29:35,832-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:35,833-0200 INFO  swift SUCCESS jobid=c-ray-mt-e6mza34n-0 - Success file found
+2017-02-17 09:29:35,833-0200 DEBUG swift STAGING_OUT jobid=c-ray-mt-e6mza34n-0
+2017-02-17 09:29:35,833-0200 INFO  swift START jobid=c-ray-mt-e6mza34n-0 - Staging out files
+2017-02-17 09:29:35,833-0200 DEBUG swift stageouts: [file://localhost/./scene.0001.ppm]
+2017-02-17 09:29:35,834-0200 DEBUG swift FILE_STAGE_OUT_START srcname=scene.0001.ppm srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file jobid=c-ray-mt-e6mza34n-0
+2017-02-17 09:29:35,835-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:35,835-0200 DEBUG swift CDM: file://localhost/./scene.0001.ppm : DEFAULT
+2017-02-17 09:29:35,871-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:35,879-0200 DEBUG swift FILE_STAGE_OUT_END srcname=scene.0001.ppm srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file
+2017-02-17 09:29:35,880-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:35,881-0200 INFO  swift END jobid=c-ray-mt-e6mza34n-0 - Staging out finished
+2017-02-17 09:29:35,891-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 16341016, JVMThreads: 42
+2017-02-17 09:29:35,891-0200 INFO  RuntimeStats$ProgressTicker   Active:8  Stage out:1  Finished successfully:13
+2017-02-17 09:29:35,892-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:35,893-0200 DEBUG swift JOB_END jobid=c-ray-mt-e6mza34n-0
+2017-02-17 09:29:35,893-0200 INFO  swift END_SUCCESS jobid=c-ray-mt-e6mza34n tr=c-ray-mt
+2017-02-17 09:29:35,893-0200 DEBUG swift PROCEDURE_END line=25 thread=2-0-14-11-17-1-30-1 name=render
+2017-02-17 09:29:35,893-0200 DEBUG swift FOREACH_IT_END line=41 thread=2-0-14-11-17-1
+2017-02-17 09:29:36,103-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:36,104-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-34 status=7
+2017-02-17 09:29:36,104-0200 DEBUG swift START jobid=c-ray-mt-96mza34n-0
+2017-02-17 09:29:36,105-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:36,106-0200 INFO  swift SUCCESS jobid=c-ray-mt-96mza34n-0 - Success file found
+2017-02-17 09:29:36,106-0200 DEBUG swift STAGING_OUT jobid=c-ray-mt-96mza34n-0
+2017-02-17 09:29:36,106-0200 INFO  swift START jobid=c-ray-mt-96mza34n-0 - Staging out files
+2017-02-17 09:29:36,106-0200 DEBUG swift stageouts: [file://localhost/./scene.0003.ppm]
+2017-02-17 09:29:36,106-0200 DEBUG swift FILE_STAGE_OUT_START srcname=scene.0003.ppm srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file jobid=c-ray-mt-96mza34n-0
+2017-02-17 09:29:36,107-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:36,107-0200 DEBUG swift CDM: file://localhost/./scene.0003.ppm : DEFAULT
+2017-02-17 09:29:36,130-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:36,131-0200 DEBUG swift FILE_STAGE_OUT_END srcname=scene.0003.ppm srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file
+2017-02-17 09:29:36,132-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:36,133-0200 INFO  swift END jobid=c-ray-mt-96mza34n-0 - Staging out finished
+2017-02-17 09:29:36,160-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:36,161-0200 DEBUG swift JOB_END jobid=c-ray-mt-96mza34n-0
+2017-02-17 09:29:36,161-0200 INFO  swift END_SUCCESS jobid=c-ray-mt-96mza34n tr=c-ray-mt
+2017-02-17 09:29:36,161-0200 DEBUG swift PROCEDURE_END line=25 thread=2-0-14-11-19-3-34-1 name=render
+2017-02-17 09:29:36,161-0200 DEBUG swift FOREACH_IT_END line=41 thread=2-0-14-11-19-3
+2017-02-17 09:29:36,892-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 16691744, JVMThreads: 41
+2017-02-17 09:29:36,892-0200 INFO  RuntimeStats$ProgressTicker   Active:7  Finished successfully:15
+2017-02-17 09:29:37,258-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:37,258-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-42 status=7
+2017-02-17 09:29:37,258-0200 DEBUG swift START jobid=c-ray-mt-86mza34n-0
+2017-02-17 09:29:37,259-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:37,259-0200 INFO  swift SUCCESS jobid=c-ray-mt-86mza34n-0 - Success file found
+2017-02-17 09:29:37,259-0200 DEBUG swift STAGING_OUT jobid=c-ray-mt-86mza34n-0
+2017-02-17 09:29:37,260-0200 INFO  swift START jobid=c-ray-mt-86mza34n-0 - Staging out files
+2017-02-17 09:29:37,260-0200 DEBUG swift stageouts: [file://localhost/./scene.0007.ppm]
+2017-02-17 09:29:37,260-0200 DEBUG swift FILE_STAGE_OUT_START srcname=scene.0007.ppm srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file jobid=c-ray-mt-86mza34n-0
+2017-02-17 09:29:37,260-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:37,261-0200 DEBUG swift CDM: file://localhost/./scene.0007.ppm : DEFAULT
+2017-02-17 09:29:37,284-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:37,285-0200 DEBUG swift FILE_STAGE_OUT_END srcname=scene.0007.ppm srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file
+2017-02-17 09:29:37,285-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:37,286-0200 INFO  swift END jobid=c-ray-mt-86mza34n-0 - Staging out finished
+2017-02-17 09:29:37,296-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:37,299-0200 DEBUG swift JOB_END jobid=c-ray-mt-86mza34n-0
+2017-02-17 09:29:37,299-0200 INFO  swift END_SUCCESS jobid=c-ray-mt-86mza34n tr=c-ray-mt
+2017-02-17 09:29:37,299-0200 DEBUG swift PROCEDURE_END line=25 thread=2-0-14-11-23-7-42-1 name=render
+2017-02-17 09:29:37,299-0200 DEBUG swift FOREACH_IT_END line=41 thread=2-0-14-11-23-7
+2017-02-17 09:29:37,517-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:37,517-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-40 status=7
+2017-02-17 09:29:37,517-0200 DEBUG swift START jobid=c-ray-mt-c6mza34n-0
+2017-02-17 09:29:37,524-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:37,524-0200 INFO  swift SUCCESS jobid=c-ray-mt-c6mza34n-0 - Success file found
+2017-02-17 09:29:37,524-0200 DEBUG swift STAGING_OUT jobid=c-ray-mt-c6mza34n-0
+2017-02-17 09:29:37,524-0200 INFO  swift START jobid=c-ray-mt-c6mza34n-0 - Staging out files
+2017-02-17 09:29:37,524-0200 DEBUG swift stageouts: [file://localhost/./scene.0006.ppm]
+2017-02-17 09:29:37,525-0200 DEBUG swift FILE_STAGE_OUT_START srcname=scene.0006.ppm srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file jobid=c-ray-mt-c6mza34n-0
+2017-02-17 09:29:37,525-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:37,526-0200 DEBUG swift CDM: file://localhost/./scene.0006.ppm : DEFAULT
+2017-02-17 09:29:37,547-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:37,548-0200 DEBUG swift FILE_STAGE_OUT_END srcname=scene.0006.ppm srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file
+2017-02-17 09:29:37,549-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:37,550-0200 INFO  swift END jobid=c-ray-mt-c6mza34n-0 - Staging out finished
+2017-02-17 09:29:37,555-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:37,557-0200 DEBUG swift JOB_END jobid=c-ray-mt-c6mza34n-0
+2017-02-17 09:29:37,557-0200 INFO  swift END_SUCCESS jobid=c-ray-mt-c6mza34n tr=c-ray-mt
+2017-02-17 09:29:37,557-0200 DEBUG swift PROCEDURE_END line=25 thread=2-0-14-11-22-6-40-1 name=render
+2017-02-17 09:29:37,557-0200 DEBUG swift FOREACH_IT_END line=41 thread=2-0-14-11-22-6
+2017-02-17 09:29:37,744-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:37,744-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-46 status=7
+2017-02-17 09:29:37,744-0200 DEBUG swift START jobid=c-ray-mt-b6mza34n-0
+2017-02-17 09:29:37,745-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:37,746-0200 INFO  swift SUCCESS jobid=c-ray-mt-b6mza34n-0 - Success file found
+2017-02-17 09:29:37,746-0200 DEBUG swift STAGING_OUT jobid=c-ray-mt-b6mza34n-0
+2017-02-17 09:29:37,746-0200 INFO  swift START jobid=c-ray-mt-b6mza34n-0 - Staging out files
+2017-02-17 09:29:37,746-0200 DEBUG swift stageouts: [file://localhost/./scene.0009.ppm]
+2017-02-17 09:29:37,747-0200 DEBUG swift FILE_STAGE_OUT_START srcname=scene.0009.ppm srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file jobid=c-ray-mt-b6mza34n-0
+2017-02-17 09:29:37,748-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:37,748-0200 DEBUG swift CDM: file://localhost/./scene.0009.ppm : DEFAULT
+2017-02-17 09:29:37,765-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:37,765-0200 DEBUG swift FILE_STAGE_OUT_END srcname=scene.0009.ppm srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file
+2017-02-17 09:29:37,766-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:37,767-0200 INFO  swift END jobid=c-ray-mt-b6mza34n-0 - Staging out finished
+2017-02-17 09:29:37,785-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:37,786-0200 DEBUG swift JOB_END jobid=c-ray-mt-b6mza34n-0
+2017-02-17 09:29:37,786-0200 INFO  swift END_SUCCESS jobid=c-ray-mt-b6mza34n tr=c-ray-mt
+2017-02-17 09:29:37,786-0200 DEBUG swift PROCEDURE_END line=25 thread=2-0-14-11-25-9-46-1 name=render
+2017-02-17 09:29:37,786-0200 DEBUG swift FOREACH_IT_END line=41 thread=2-0-14-11-25-9
+2017-02-17 09:29:37,892-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 17206504, JVMThreads: 41
+2017-02-17 09:29:37,892-0200 INFO  RuntimeStats$ProgressTicker   Active:4  Finished successfully:18
+2017-02-17 09:29:38,095-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:38,095-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-36 status=7
+2017-02-17 09:29:38,095-0200 DEBUG swift START jobid=c-ray-mt-76mza34n-0
+2017-02-17 09:29:38,096-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:38,097-0200 INFO  swift SUCCESS jobid=c-ray-mt-76mza34n-0 - Success file found
+2017-02-17 09:29:38,097-0200 DEBUG swift STAGING_OUT jobid=c-ray-mt-76mza34n-0
+2017-02-17 09:29:38,097-0200 INFO  swift START jobid=c-ray-mt-76mza34n-0 - Staging out files
+2017-02-17 09:29:38,097-0200 DEBUG swift stageouts: [file://localhost/./scene.0004.ppm]
+2017-02-17 09:29:38,097-0200 DEBUG swift FILE_STAGE_OUT_START srcname=scene.0004.ppm srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file jobid=c-ray-mt-76mza34n-0
+2017-02-17 09:29:38,098-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:38,101-0200 DEBUG swift CDM: file://localhost/./scene.0004.ppm : DEFAULT
+2017-02-17 09:29:38,101-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:29:38,101-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-38 status=7
+2017-02-17 09:29:38,101-0200 DEBUG swift START jobid=c-ray-mt-a6mza34n-0
+2017-02-17 09:29:38,103-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:38,110-0200 INFO  swift SUCCESS jobid=c-ray-mt-a6mza34n-0 - Success file found
+2017-02-17 09:29:38,110-0200 DEBUG swift STAGING_OUT jobid=c-ray-mt-a6mza34n-0
+2017-02-17 09:29:38,110-0200 INFO  swift START jobid=c-ray-mt-a6mza34n-0 - Staging out files
+2017-02-17 09:29:38,110-0200 DEBUG swift stageouts: [file://localhost/./scene.0005.ppm]
+2017-02-17 09:29:38,110-0200 DEBUG swift FILE_STAGE_OUT_START srcname=scene.0005.ppm srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file jobid=c-ray-mt-a6mza34n-0
+2017-02-17 09:29:38,111-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:38,111-0200 DEBUG swift CDM: file://localhost/./scene.0005.ppm : DEFAULT
+2017-02-17 09:29:38,112-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:38,112-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-48 status=7
+2017-02-17 09:29:38,113-0200 DEBUG swift START jobid=c-ray-mt-g6mza34n-0
+2017-02-17 09:29:38,113-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:38,114-0200 INFO  swift SUCCESS jobid=c-ray-mt-g6mza34n-0 - Success file found
+2017-02-17 09:29:38,114-0200 DEBUG swift STAGING_OUT jobid=c-ray-mt-g6mza34n-0
+2017-02-17 09:29:38,114-0200 INFO  swift START jobid=c-ray-mt-g6mza34n-0 - Staging out files
+2017-02-17 09:29:38,114-0200 DEBUG swift stageouts: [file://localhost/./scene.0010.ppm]
+2017-02-17 09:29:38,115-0200 DEBUG swift FILE_STAGE_OUT_START srcname=scene.0010.ppm srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file jobid=c-ray-mt-g6mza34n-0
+2017-02-17 09:29:38,115-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:38,115-0200 DEBUG swift CDM: file://localhost/./scene.0010.ppm : DEFAULT
+2017-02-17 09:29:38,136-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:38,137-0200 DEBUG swift FILE_STAGE_OUT_END srcname=scene.0005.ppm srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file
+2017-02-17 09:29:38,137-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:38,138-0200 INFO  swift END jobid=c-ray-mt-a6mza34n-0 - Staging out finished
+2017-02-17 09:29:38,139-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:38,140-0200 DEBUG swift JOB_END jobid=c-ray-mt-a6mza34n-0
+2017-02-17 09:29:38,140-0200 INFO  swift END_SUCCESS jobid=c-ray-mt-a6mza34n tr=c-ray-mt
+2017-02-17 09:29:38,140-0200 DEBUG swift PROCEDURE_END line=25 thread=2-0-14-11-21-5-38-1 name=render
+2017-02-17 09:29:38,140-0200 DEBUG swift FOREACH_IT_END line=41 thread=2-0-14-11-21-5
+2017-02-17 09:29:38,174-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:38,175-0200 DEBUG swift FILE_STAGE_OUT_END srcname=scene.0004.ppm srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file
+2017-02-17 09:29:38,175-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:38,176-0200 INFO  swift END jobid=c-ray-mt-76mza34n-0 - Staging out finished
+2017-02-17 09:29:38,177-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:38,179-0200 DEBUG swift FILE_STAGE_OUT_END srcname=scene.0010.ppm srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file
+2017-02-17 09:29:38,180-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:38,180-0200 INFO  swift END jobid=c-ray-mt-g6mza34n-0 - Staging out finished
+2017-02-17 09:29:38,218-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:38,219-0200 DEBUG swift JOB_END jobid=c-ray-mt-76mza34n-0
+2017-02-17 09:29:38,219-0200 INFO  swift END_SUCCESS jobid=c-ray-mt-76mza34n tr=c-ray-mt
+2017-02-17 09:29:38,219-0200 DEBUG swift PROCEDURE_END line=25 thread=2-0-14-11-20-4-36-1 name=render
+2017-02-17 09:29:38,219-0200 DEBUG swift FOREACH_IT_END line=41 thread=2-0-14-11-20-4
+2017-02-17 09:29:38,223-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:38,224-0200 DEBUG swift JOB_END jobid=c-ray-mt-g6mza34n-0
+2017-02-17 09:29:38,224-0200 INFO  swift END_SUCCESS jobid=c-ray-mt-g6mza34n tr=c-ray-mt
+2017-02-17 09:29:38,224-0200 DEBUG swift PROCEDURE_END line=25 thread=2-0-14-11-26-10-48-1 name=render
+2017-02-17 09:29:38,224-0200 DEBUG swift FOREACH_IT_END line=41 thread=2-0-14-11-26-10
+2017-02-17 09:29:38,892-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 17790872, JVMThreads: 41
+2017-02-17 09:29:38,893-0200 INFO  RuntimeStats$ProgressTicker   Active:1  Finished successfully:21
+2017-02-17 09:29:39,893-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 17790912, JVMThreads: 41
+2017-02-17 09:29:40,893-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 17790952, JVMThreads: 41
+2017-02-17 09:29:41,893-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 17790992, JVMThreads: 41
+2017-02-17 09:29:42,893-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 17791032, JVMThreads: 41
+2017-02-17 09:29:42,903-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:42,903-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-28 status=7
+2017-02-17 09:29:42,907-0200 DEBUG swift START jobid=c-ray-mt-h6mza34n-0
+2017-02-17 09:29:42,908-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:42,908-0200 INFO  swift SUCCESS jobid=c-ray-mt-h6mza34n-0 - Success file found
+2017-02-17 09:29:42,908-0200 DEBUG swift STAGING_OUT jobid=c-ray-mt-h6mza34n-0
+2017-02-17 09:29:42,908-0200 INFO  swift START jobid=c-ray-mt-h6mza34n-0 - Staging out files
+2017-02-17 09:29:42,908-0200 DEBUG swift stageouts: [file://localhost/./scene.0000.ppm]
+2017-02-17 09:29:42,909-0200 DEBUG swift FILE_STAGE_OUT_START srcname=scene.0000.ppm srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file jobid=c-ray-mt-h6mza34n-0
+2017-02-17 09:29:42,909-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:42,909-0200 DEBUG swift CDM: file://localhost/./scene.0000.ppm : DEFAULT
+2017-02-17 09:29:42,916-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:42,917-0200 DEBUG swift FILE_STAGE_OUT_END srcname=scene.0000.ppm srcdir=c-ray-run003/shared/ srchost=local destdir=. desthost=localhost provider=file
+2017-02-17 09:29:42,917-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:42,918-0200 INFO  swift END jobid=c-ray-mt-h6mza34n-0 - Staging out finished
+2017-02-17 09:29:42,920-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:42,920-0200 DEBUG swift JOB_END jobid=c-ray-mt-h6mza34n-0
+2017-02-17 09:29:42,921-0200 INFO  swift END_SUCCESS jobid=c-ray-mt-h6mza34n tr=c-ray-mt
+2017-02-17 09:29:42,921-0200 DEBUG swift PROCEDURE_END line=25 thread=2-0-14-11-16-0-28-1 name=render
+2017-02-17 09:29:42,921-0200 DEBUG swift FOREACH_IT_END line=41 thread=2-0-14-11-16-0
+2017-02-17 09:29:42,921-0200 DEBUG swift JOB_INIT jobid=convert-i6mza34n tr=convert
+2017-02-17 09:29:42,921-0200 DEBUG swift JOB_SITE_SELECT jobid=convert-i6mza34n-0
+2017-02-17 09:29:42,922-0200 DEBUG swift THREAD_ASSOCIATION jobid=convert-i6mza34n-0 host=local thread=2-0-15-12
+2017-02-17 09:29:42,924-0200 INFO  swift START jobid=convert-i6mza34n-0 host=local - Initializing directory structure
+2017-02-17 09:29:42,924-0200 INFO  swift END jobid=convert-i6mza34n-0 - Done initializing directory structure
+2017-02-17 09:29:42,924-0200 INFO  swift START jobid=convert-i6mza34n-0 - Staging in files [file://localhost/./scene.0002.ppm, file://localhost/./scene.0010.ppm, file://localhost/./scene.0007.ppm, file://localhost/./scene.0003.ppm, file://localhost/./scene.0009.ppm, file://localhost/./scene.0008.ppm, file://localhost/./scene.0004.ppm, file://localhost/./scene.0001.ppm, file://localhost/./scene.0000.ppm, file://localhost/./scene.0006.ppm, file://localhost/./scene.0005.ppm]
+2017-02-17 09:29:42,926-0200 INFO  LateBindingScheduler jobs queued: 3
+2017-02-17 09:29:42,926-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:29:42,927-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:29:42,927-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:42,927-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:42,928-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:42,928-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:42,928-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:42,929-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:42,929-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:42,929-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:42,929-0200 DEBUG swift CDM: file://localhost/./scene.0010.ppm : DEFAULT
+2017-02-17 09:29:42,929-0200 DEBUG swift CDM: file://localhost/./scene.0002.ppm : DEFAULT
+2017-02-17 09:29:42,930-0200 DEBUG swift CDM: file://localhost/./scene.0007.ppm : DEFAULT
+2017-02-17 09:29:42,930-0200 DEBUG swift CDM: file://localhost/./scene.0009.ppm : DEFAULT
+2017-02-17 09:29:42,930-0200 DEBUG swift CDM: file://localhost/./scene.0003.ppm : DEFAULT
+2017-02-17 09:29:42,930-0200 DEBUG swift CDM: file://localhost/./scene.0004.ppm : DEFAULT
+2017-02-17 09:29:42,930-0200 DEBUG swift CDM: file://localhost/./scene.0001.ppm : DEFAULT
+2017-02-17 09:29:42,930-0200 DEBUG swift CDM: file://localhost/./scene.0008.ppm : DEFAULT
+2017-02-17 09:29:42,930-0200 DEBUG swift CDM: file://localhost/./scene.0000.ppm : DEFAULT
+2017-02-17 09:29:42,930-0200 DEBUG swift CDM: file://localhost/./scene.0006.ppm : DEFAULT
+2017-02-17 09:29:42,931-0200 DEBUG swift CDM: file://localhost/./scene.0005.ppm : DEFAULT
+2017-02-17 09:29:42,931-0200 INFO  swift END jobid=convert-i6mza34n-0 - Staging in finished
+2017-02-17 09:29:42,932-0200 DEBUG swift JOB_START jobid=convert-i6mza34n-0 tr=convert arguments=[-delay, 0, -quality, 75, scene.0000.ppm scene.0001.ppm scene.0002.ppm scene.0003.ppm scene.0004.ppm scene.0005.ppm scene.0006.ppm scene.0007.ppm scene.0008.ppm scene.0009.ppm scene.0010.ppm, output.ppm] tmpdir=c-ray-run003/jobs/c/convert-i6mza34n-0
+2017-02-17 09:29:42,932-0200 INFO  Execute JOB_TASK jobid=convert-i6mza34n-0 taskid=task-15 exec=/bin/bash dir=c-ray-run003 args=shared/_swiftwrap convert-i6mza34n-0 -jobdir c -scratch  -e convert -out stdout.txt -err stderr.txt -i -d  -if scene.0002.ppm|scene.0010.ppm|scene.0007.ppm|scene.0003.ppm|scene.0009.ppm|scene.0008.ppm|scene.0004.ppm|scene.0001.ppm|scene.0000.ppm|scene.0006.ppm|scene.0005.ppm -of output.ppm -cf  -cdmfile -status files -a -delay 0 -quality 75 scene.0000.ppm scene.0001.ppm scene.0002.ppm scene.0003.ppm scene.0004.ppm scene.0005.ppm scene.0006.ppm scene.0007.ppm scene.0008.ppm scene.0009.ppm scene.0010.ppm output.ppm
+2017-02-17 09:29:42,933-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-15 status=8
+2017-02-17 09:29:42,933-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-15 status=1
+2017-02-17 09:29:42,934-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-15 status=2
+2017-02-17 09:29:43,096-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:43,096-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-15 status=7
+2017-02-17 09:29:43,097-0200 DEBUG swift START jobid=convert-i6mza34n-0
+2017-02-17 09:29:43,098-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:43,098-0200 INFO  swift SUCCESS jobid=convert-i6mza34n-0 - Success file found
+2017-02-17 09:29:43,098-0200 DEBUG swift STAGING_OUT jobid=convert-i6mza34n-0
+2017-02-17 09:29:43,098-0200 INFO  swift START jobid=convert-i6mza34n-0 - Staging out files
+2017-02-17 09:29:43,098-0200 DEBUG swift stageouts: [file://localhost/output.ppm]
+2017-02-17 09:29:43,099-0200 DEBUG swift FILE_STAGE_OUT_START srcname=output.ppm srcdir=c-ray-run003/shared/ srchost=local destdir= desthost=localhost provider=file jobid=convert-i6mza34n-0
+2017-02-17 09:29:43,099-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:43,100-0200 DEBUG swift CDM: file://localhost/output.ppm : DEFAULT
+2017-02-17 09:29:43,137-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:43,138-0200 DEBUG swift FILE_STAGE_OUT_END srcname=output.ppm srcdir=c-ray-run003/shared/ srchost=local destdir= desthost=localhost provider=file
+2017-02-17 09:29:43,138-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:43,139-0200 INFO  swift END jobid=convert-i6mza34n-0 - Staging out finished
+2017-02-17 09:29:43,141-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:43,143-0200 DEBUG swift JOB_END jobid=convert-i6mza34n-0
+2017-02-17 09:29:43,143-0200 INFO  swift END_SUCCESS jobid=convert-i6mza34n tr=convert
+2017-02-17 09:29:43,143-0200 DEBUG swift PROCEDURE_END line=30 thread=2-0-15-12 name=convert
+2017-02-17 09:29:43,143-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 18641280, JVMThreads: 41
+2017-02-17 09:29:43,144-0200 INFO  RuntimeStats$ProgressTicker   Finished successfully:23
+2017-02-17 09:29:43,155-0200 DEBUG swift Starting cleanups
+2017-02-17 09:29:43,155-0200 INFO  swift START cleanups=[[c-ray-run003, local]]
+2017-02-17 09:29:43,155-0200 INFO  swift START dir=c-ray-run003 host=local
+2017-02-17 09:29:43,155-0200 DEBUG swift cdmfile 
+2017-02-17 09:29:43,157-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:29:43,157-0200 INFO  swift END dir=c-ray-run003 host=local
+2017-02-17 09:29:43,158-0200 INFO  swift END cleanups=[[c-ray-run003, local]]
+2017-02-17 09:29:43,158-0200 DEBUG swift Ending cleanups
+2017-02-17 09:29:43,164-0200 INFO  FileGarbageCollector Failed to clean <cleaned>:any - Closed
+java.lang.NullPointerException
+	at org.griphyn.vdl.mapping.nodes.AbstractFutureArrayDataNode.getFringePaths(AbstractFutureArrayDataNode.java:225)
+	at org.griphyn.vdl.mapping.nodes.AbstractDataNode.getFringePaths(AbstractDataNode.java:314)
+	at org.griphyn.vdl.mapping.file.FileGarbageCollector.run(FileGarbageCollector.java:112)
+	at java.lang.Thread.run(Thread.java:745)
+2017-02-17 09:29:43,167-0200 INFO  Loader Swift finished with no errors

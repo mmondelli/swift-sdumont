@@ -1,0 +1,267 @@
+// CACHE ID 9f6c1ed4-f975-4fb5-9fcf-7994f9fda617-no-provenance
+import(sys)
+import(scheduler)
+import(swift)
+importStdlib(1)
+
+types(
+	xs:schema(
+    			xs:simpleType("file", xs:restriction("string"))
+    )
+)
+swift.field.select.file.array.int := swift:field("select", "file[int]")
+swift.field.swift.mapper.17009.string := swift:field("swift.mapper.17009", "string")
+swift.field.const.float := swift:field("const", "float")
+swift.field.w.string := swift:field("w", "string")
+swift.field.temp.int := swift:field("temp", "int")
+swift.field.swift.mapper.17007.string := swift:field("swift.mapper.17007", "string")
+swift.field.group.file := swift:field("group", "file")
+swift.field.text.file.array.int := swift:field("text", "file[int]")
+swift.field.sort.file := swift:field("sort", "file")
+swift.field.swift.mapper.17011.string := swift:field("swift.mapper.17011", "string")
+swift.field.swift.mapper.17013.string := swift:field("swift.mapper.17013", "string")
+swift.field.swift.mapper.17015.string := swift:field("swift.mapper.17015", "string")
+swift.field.i.int := swift:field("i", "int")
+swift.field.swift.mapper.17017.string := swift:field("swift.mapper.17017", "string")
+swift.field.const.int := swift:field("const", "int")
+swift.field.swift.mapper.17005.string := swift:field("swift.mapper.17005", "string")
+swift.field.const.string := swift:field("const", "string")
+swift.field.swift.mapper.17003.string := swift:field("swift.mapper.17003", "string")
+swift.field.const.boolean := swift:field("const", "boolean")
+swift.field.count.file.array.int := swift:field("count", "file[int]")
+swift.string.17012 := swift:new(swift.field.const.string, value=".txt")
+swift.string.17008 := swift:new(swift.field.const.string, value="./select")
+swift.string.17000 := swift:new(swift.field.const.string, value="-n")
+swift.string.17010 := swift:new(swift.field.const.string, value="select")
+swift.string.17002 := swift:new(swift.field.const.string, value="-o")
+swift.string.17016 := swift:new(swift.field.const.string, value="count_word")
+swift.string.17018 := swift:new(swift.field.const.string, value="word")
+swift.string.17004 := swift:new(swift.field.const.string, value="./raw.en3")
+swift.string.17014 := swift:new(swift.field.const.string, value="./count")
+swift.string.17006 := swift:new(swift.field.const.string, value="english")
+swift.string.17001 := swift:new(swift.field.const.string, value="-w")
+w := 
+			swift:new(swift.field.w.string, readCount=2, _defline=5)
+swift.mapper.17003 := 
+			swift:new(swift.field.swift.mapper.17003.string)
+swift.mapper.17005 := 
+			swift:new(swift.field.swift.mapper.17005.string)
+text := 
+		swift:new(swift.field.text.file.array.int, readCount=2, _defline=7, input=true
+			swift:mapping("filesys_mapper", swift:parameter("location", swift.mapper.17003)
+			swift:parameter("prefix", swift.mapper.17005))
+		)
+swift.mapper.17007 := 
+			swift:new(swift.field.swift.mapper.17007.string)
+swift.mapper.17009 := 
+			swift:new(swift.field.swift.mapper.17009.string)
+swift.mapper.17011 := 
+			swift:new(swift.field.swift.mapper.17011.string)
+select := 
+		swift:new(swift.field.select.file.array.int, waitCount=1, readCount=2, _defline=8
+			swift:mapping("simple_mapper", swift:parameter("location", swift.mapper.17007)
+			swift:parameter("prefix", swift.mapper.17009)
+			swift:parameter("suffix", swift.mapper.17011))
+		)
+swift.mapper.17013 := 
+			swift:new(swift.field.swift.mapper.17013.string)
+swift.mapper.17015 := 
+			swift:new(swift.field.swift.mapper.17015.string)
+swift.mapper.17017 := 
+			swift:new(swift.field.swift.mapper.17017.string)
+count := 
+		swift:new(swift.field.count.file.array.int, waitCount=1, readCount=2, _defline=9
+			swift:mapping("simple_mapper", swift:parameter("location", swift.mapper.17013)
+			swift:parameter("prefix", swift.mapper.17015)
+			swift:parameter("suffix", swift.mapper.17017))
+		)
+group := 
+			swift:new(swift.field.group.file, readCount=2, _defline=10
+				swift:mapping("SingleFileMapper", swift:parameter("file", "group.txt") )
+			)
+sort := 
+			swift:new(swift.field.sort.file, _defline=11
+				swift:mapping("SingleFileMapper", swift:parameter("file", "sort.txt") )
+			)
+
+sort := function(o, i) {
+	swift:unitStart("PROCEDURE", name="sort", line=28, outputs="o")
+	k:tailcall(
+	  swift:execute(
+		"sort"
+		swift:stageIn(i)
+		swift:stageOut(o)
+
+		swift:arguments(
+			swift.string.17000
+			swiftscript:filename(#_line=30
+				i
+			)
+		)
+
+		stdout = swiftscript:filename(#_line=30
+			o
+		)
+
+		swift:deleteVars(i)
+	  )
+	)
+	swift:unitEnd("PROCEDURE", name="sort", line=28)}
+
+count_word := function(o, i) {
+	swift:unitStart("PROCEDURE", name="count_word", line=18, outputs="o")
+	k:tailcall(
+	  swift:execute(
+		"wc"
+		swift:stageIn(i)
+		swift:stageOut(o)
+
+		swift:arguments(
+			swift.string.17001
+			swiftscript:filename(#_line=20
+				i
+			)
+		)
+
+		stdout = swiftscript:filename(#_line=20
+			o
+		)
+
+		swift:deleteVars(i)
+	  )
+	)
+	swift:unitEnd("PROCEDURE", name="count_word", line=18)}
+
+select_word := function(o, i, word) {
+	swift:unitStart("PROCEDURE", name="select_word", line=13, outputs="o")
+	k:tailcall(
+	  swift:execute(
+		"grep"
+		swift:stageIn(i)
+		swift:stageOut(o)
+
+		swift:arguments(
+			swift.string.17002
+			swift.string.17001
+			word
+			swiftscript:filename(#_line=15
+				i
+			)
+		)
+
+		stdout = swiftscript:filename(#_line=15
+			o
+		)
+
+		swift:deleteVars(i, word)
+	  )
+	)
+	swift:unitEnd("PROCEDURE", name="select_word", line=13)}
+
+group_count := function(o, i) {
+	swift:unitStart("PROCEDURE", name="group_count", line=23, outputs="o")
+	k:tailcall(
+	  swift:execute(
+		"cat"
+		swift:stageIn(i)
+		swift:stageOut(o)
+
+		swift:arguments(
+			swiftscript:filenames(#_line=25
+				i
+			)
+		)
+
+		stdout = swiftscript:filename(#_line=25
+			o
+		)
+
+		swift:deleteVars(i)
+	  )
+	)
+	swift:unitEnd("PROCEDURE", name="group_count", line=23)}
+
+restartLog(name = k:concat(contextAttribute("SWIFT:SCRIPT_NAME"), "-", contextAttribute("SWIFT:RUN_ID"))) {
+	swift:mains(
+		swift:startProgressTicker()
+		uparallel(
+			swift:setFieldValue(
+				k:getAndDelete(swift.mapper.17003)
+				swift.string.17004
+			)
+			swift:setFieldValue(
+				k:getAndDelete(swift.mapper.17005)
+				swift.string.17006
+			)
+			swift:setFieldValue(
+				k:getAndDelete(swift.mapper.17007)
+				swift.string.17008
+			)
+			swift:setFieldValue(
+				k:getAndDelete(swift.mapper.17009)
+				swift.string.17010
+			)
+			swift:setFieldValue(
+				k:getAndDelete(swift.mapper.17011)
+				swift.string.17012
+			)
+			swift:setFieldValue(
+				k:getAndDelete(swift.mapper.17013)
+				swift.string.17014
+			)
+			swift:setFieldValue(
+				k:getAndDelete(swift.mapper.17015)
+				swift.string.17016
+			)
+			swift:setFieldValue(
+				k:getAndDelete(swift.mapper.17017)
+				swift.string.17012
+			)
+			swift:setFieldValue(#_line=5
+				swift:readVar(w)
+				swiftscript:arg(#_line=5
+					swift.string.17018
+				)
+			)
+			swift:tParallelFor(#_line=33, _kvar="i", _kvarField=swift.field.i.int, _vvar="t", wrefs="count 1 select 1", rrefs="w 1 text 1 select 2",
+				getArrayIterator(swift:readVar(text))) {
+
+				swift:unitStart("FOREACH_IT", line=33) 
+				uparallel(
+					sequential(
+					   	select_word(#_line=35
+					   		swift:getFieldSubscript(swift:unwrapVar(select), i)
+					   		swift:getFieldSubscript(swift:unwrapVar(text), i), swift:readVar(w)
+					   	)
+					   	swift:partialClose(select, 1)
+					)
+					sequential(
+					   	count_word(#_line=36
+					   		swift:getFieldSubscript(swift:unwrapVar(count), i)
+					   		swift:getFieldSubscript(swift:unwrapVar(select), i)
+					   	)
+					   	swift:partialClose(count, 1)
+					)
+				)
+
+				swift:unitEnd("FOREACH_IT", line=33)
+			}
+			group_count(#_line=39
+				swift:readVar(group)
+				swift:readVar(count)
+			)
+			sort(#_line=40
+				k:getAndDelete(sort)
+				swift:readVar(group)
+			)
+		)
+		swift:stopProgressTicker()
+	)
+}
+
+swift:cleanDataset(text)
+swift:cleanDataset(sort)
+swift:cleanDataset(count)
+swift:cleanDataset(select)
+swift:cleanDataset(group)
+swift:cleanDataset(shutdown=true)

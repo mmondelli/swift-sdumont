@@ -1,0 +1,537 @@
+2017-02-17 09:27:11,624-0200 INFO  Loader JAVA Oracle Corporation Java HotSpot(TM) 64-Bit Server VM 1.7.0_80
+2017-02-17 09:27:11,626-0200 INFO  Loader VERSION Swift trunk git-rev: 18aec82244c5611381528bc361888c553570c66e heads/master 6574
+2017-02-17 09:27:11,626-0200 INFO  Loader RUN_ID run002
+2017-02-17 09:27:11,626-0200 INFO  Loader ARGUMENTS [-runid, run002, -logfile, /home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/part03/run002/swift.log, p3.swift]
+2017-02-17 09:27:11,627-0200 INFO  Loader MAX_HEAP 954728448
+2017-02-17 09:27:11,627-0200 INFO  Loader GLOBUS_HOSTNAME mondelli-520U4C
+2017-02-17 09:27:11,627-0200 INFO  Loader CWD /home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/part03/.
+2017-02-17 09:27:11,628-0200 DEBUG Loader SWIFT_CONFIGURATION 
+[D] /home/mondelli/swift-k/dist/swift-svn/etc/swift.conf
+[C] <Command Line>
+{
+	TCPPortRange: "50000, 50100"                               # [D] line 27
+	alwaysTransferWrapperLog: true                             # [D] line 61
+	executionRetries: 0                                        # [D] line 137
+	fileOperationsThrottle: 8                                  # [D] line 121
+	fileTransfersThrottle: 4                                   # [D] line 107
+	hostJobSubmitThrottle: 2                                   # [D] line 95
+	jobSubmitThrottle: 4                                       # [D] line 83
+	keepSiteDir: false                                         # [D] line 131
+	lazyErrors: true                                           # [D] line 41
+	logProvenance: false                                       # [D] line 200
+	maxForeachThreads: 16384                                   # [D] line 194
+	replicationEnabled: false                                  # [D] line 146
+	replicationLimit: 3                                        # [D] line 157
+	replicationMinQueueTime: 60                                # [D] line 153
+	site.local {
+		app.ALL.executable: "*"                                   # [D] line 235
+		execution.type: "local"                                   # [D] line 223
+		filesystem.type: "local"                                  # [D] line 226
+		initialParallelTasks: 8                                   # [D] line 230
+		maxParallelTasks: 16                                      # [D] line 229
+		workDirectory: "swiftwork"                                # [D] line 232
+	}
+	sites: [local]                                             # [D] line 239
+	tracingEnabled: false                                      # [D] line 51
+}
+
+2017-02-17 09:27:11,629-0200 DEBUG textfiles BEGIN SWIFTSCRIPT:
+type file;
+
+app (file o) simulation (int sim_steps, int sim_range, int sim_values)
+{
+  simulate "--timesteps" sim_steps "--range" sim_range "--nvalues" sim_values stdout=filename(o);
+}
+
+app (file o) analyze (file s[])
+{
+  stats filenames(s) stdout=filename(o);
+}
+
+int nsim   = toInt(arg("nsim","10"));
+int steps  = toInt(arg("steps","1"));
+int range  = toInt(arg("range","100"));
+int values = toInt(arg("values","5"));
+
+file sims[];
+
+foreach i in [0:nsim-1] {
+  file simout <single_file_mapper; file=strcat("output/sim_",i,".out")>;
+  simout = simulation(steps,range,values);
+  sims[i] = simout;
+}
+
+file stats<"output/average.out">;
+stats = analyze(sims);
+
+
+2017-02-17 09:27:11,629-0200 DEBUG textfiles END SWIFTSCRIPT:
+2017-02-17 09:27:11,630-0200 DEBUG Loader kmlversion is >9f6c1ed4-f975-4fb5-9fcf-7994f9fda617-no-provenance<
+2017-02-17 09:27:11,630-0200 DEBUG Loader build version is >9f6c1ed4-f975-4fb5-9fcf-7994f9fda617-no-provenance<
+2017-02-17 09:27:11,630-0200 DEBUG Loader Recompilation suppressed.
+2017-02-17 09:27:12,507-0200 INFO  Loader RUN_START
+2017-02-17 09:27:12,511-0200 INFO  SwiftExecutor swift.home = /home/mondelli/swift-k/dist/swift-svn
+2017-02-17 09:27:12,554-0200 INFO  AbstractScheduler Setting resources to: {local=local}
+2017-02-17 09:27:12,564-0200 INFO  GlobalSubmitQueue No global submit throttle set. Using default (1024)
+2017-02-17 09:27:12,582-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:12,583-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:12,588-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:12,622-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 28388584, JVMThreads: 16
+2017-02-17 09:27:12,625-0200 DEBUG swift PROCEDURE line=8 thread=2-0-8-5 name=analyze
+2017-02-17 09:27:12,631-0200 INFO  RuntimeStats$ProgressTicker 
+2017-02-17 09:27:12,636-0200 DEBUG swift FOREACH_IT_START line=20 thread=2-0-7-4-9-0
+2017-02-17 09:27:12,636-0200 DEBUG swift FOREACH_IT_START line=20 thread=2-0-7-4-10-1
+2017-02-17 09:27:12,636-0200 DEBUG swift SCOPE thread=2-0-7-4-10-1
+2017-02-17 09:27:12,637-0200 DEBUG swift FOREACH_IT_START line=20 thread=2-0-7-4-12-3
+2017-02-17 09:27:12,637-0200 DEBUG swift FOREACH_IT_START line=20 thread=2-0-7-4-13-4
+2017-02-17 09:27:12,637-0200 DEBUG swift SCOPE thread=2-0-7-4-13-4
+2017-02-17 09:27:12,637-0200 DEBUG swift FOREACH_IT_START line=20 thread=2-0-7-4-14-5
+2017-02-17 09:27:12,637-0200 DEBUG swift SCOPE thread=2-0-7-4-14-5
+2017-02-17 09:27:12,637-0200 DEBUG swift FOREACH_IT_START line=20 thread=2-0-7-4-15-6
+2017-02-17 09:27:12,637-0200 DEBUG swift SCOPE thread=2-0-7-4-15-6
+2017-02-17 09:27:12,637-0200 DEBUG swift FOREACH_IT_START line=20 thread=2-0-7-4-16-7
+2017-02-17 09:27:12,637-0200 DEBUG swift SCOPE thread=2-0-7-4-16-7
+2017-02-17 09:27:12,637-0200 DEBUG swift FOREACH_IT_START line=20 thread=2-0-7-4-17-8
+2017-02-17 09:27:12,637-0200 DEBUG swift SCOPE thread=2-0-7-4-17-8
+2017-02-17 09:27:12,637-0200 DEBUG swift PROCEDURE line=3 thread=2-0-7-4-10-1-19-1 name=simulation
+2017-02-17 09:27:12,636-0200 DEBUG swift SCOPE thread=2-0-7-4-9-0
+2017-02-17 09:27:12,637-0200 DEBUG swift SCOPE thread=2-0-7-4-12-3
+2017-02-17 09:27:12,639-0200 DEBUG swift PROCEDURE line=3 thread=2-0-7-4-13-4-23-1 name=simulation
+2017-02-17 09:27:12,640-0200 DEBUG swift PROCEDURE line=3 thread=2-0-7-4-14-5-26-1 name=simulation
+2017-02-17 09:27:12,640-0200 DEBUG swift PROCEDURE line=3 thread=2-0-7-4-15-6-30-1 name=simulation
+2017-02-17 09:27:12,641-0200 DEBUG swift PROCEDURE line=3 thread=2-0-7-4-16-7-32-1 name=simulation
+2017-02-17 09:27:12,641-0200 DEBUG swift PROCEDURE line=3 thread=2-0-7-4-17-8-35-1 name=simulation
+2017-02-17 09:27:12,642-0200 DEBUG swift JOB_INIT jobid=simulate-b4yva34n tr=simulate
+2017-02-17 09:27:12,642-0200 DEBUG swift JOB_INIT jobid=simulate-d4yva34n tr=simulate
+2017-02-17 09:27:12,642-0200 DEBUG swift JOB_SITE_SELECT jobid=simulate-b4yva34n-0
+2017-02-17 09:27:12,642-0200 DEBUG swift JOB_SITE_SELECT jobid=simulate-d4yva34n-0
+2017-02-17 09:27:12,643-0200 DEBUG swift JOB_INIT jobid=simulate-e4yva34n tr=simulate
+2017-02-17 09:27:12,643-0200 DEBUG swift JOB_SITE_SELECT jobid=simulate-e4yva34n-0
+2017-02-17 09:27:12,643-0200 DEBUG swift FOREACH_IT_START line=20 thread=2-0-7-4-11-2
+2017-02-17 09:27:12,643-0200 DEBUG swift SCOPE thread=2-0-7-4-11-2
+2017-02-17 09:27:12,644-0200 DEBUG swift PROCEDURE line=3 thread=2-0-7-4-9-0-38-1 name=simulation
+2017-02-17 09:27:12,644-0200 DEBUG swift JOB_INIT jobid=simulate-f4yva34n tr=simulate
+2017-02-17 09:27:12,644-0200 DEBUG swift JOB_SITE_SELECT jobid=simulate-f4yva34n-0
+2017-02-17 09:27:12,645-0200 DEBUG swift PROCEDURE line=3 thread=2-0-7-4-12-3-41-1 name=simulation
+2017-02-17 09:27:12,645-0200 DEBUG swift JOB_INIT jobid=simulate-g4yva34n tr=simulate
+2017-02-17 09:27:12,645-0200 DEBUG swift JOB_SITE_SELECT jobid=simulate-g4yva34n-0
+2017-02-17 09:27:12,646-0200 DEBUG swift JOB_INIT jobid=simulate-h4yva34n tr=simulate
+2017-02-17 09:27:12,646-0200 DEBUG swift JOB_INIT jobid=simulate-i4yva34n tr=simulate
+2017-02-17 09:27:12,642-0200 DEBUG swift JOB_INIT jobid=simulate-c4yva34n tr=simulate
+2017-02-17 09:27:12,646-0200 DEBUG swift JOB_SITE_SELECT jobid=simulate-i4yva34n-0
+2017-02-17 09:27:12,646-0200 DEBUG swift JOB_SITE_SELECT jobid=simulate-h4yva34n-0
+2017-02-17 09:27:12,646-0200 DEBUG swift JOB_SITE_SELECT jobid=simulate-c4yva34n-0
+2017-02-17 09:27:12,648-0200 DEBUG swift PROCEDURE line=3 thread=2-0-7-4-11-2-44-1 name=simulation
+2017-02-17 09:27:12,648-0200 DEBUG swift JOB_INIT jobid=simulate-j4yva34n tr=simulate
+2017-02-17 09:27:12,648-0200 DEBUG swift FOREACH_IT_START line=20 thread=2-0-7-4-21-9
+2017-02-17 09:27:12,648-0200 DEBUG swift SCOPE thread=2-0-7-4-21-9
+2017-02-17 09:27:12,648-0200 DEBUG swift JOB_SITE_SELECT jobid=simulate-j4yva34n-0
+2017-02-17 09:27:12,648-0200 DEBUG swift PROCEDURE line=3 thread=2-0-7-4-21-9-47-1 name=simulation
+2017-02-17 09:27:12,648-0200 DEBUG swift JOB_INIT jobid=simulate-k4yva34n tr=simulate
+2017-02-17 09:27:12,649-0200 DEBUG swift JOB_SITE_SELECT jobid=simulate-k4yva34n-0
+2017-02-17 09:27:12,649-0200 DEBUG swift THREAD_ASSOCIATION jobid=simulate-h4yva34n-0 host=local thread=2-0-7-4-16-7-32-1
+2017-02-17 09:27:12,649-0200 DEBUG swift THREAD_ASSOCIATION jobid=simulate-i4yva34n-0 host=local thread=2-0-7-4-15-6-30-1
+2017-02-17 09:27:12,649-0200 DEBUG swift THREAD_ASSOCIATION jobid=simulate-j4yva34n-0 host=local thread=2-0-7-4-11-2-44-1
+2017-02-17 09:27:12,650-0200 DEBUG swift THREAD_ASSOCIATION jobid=simulate-k4yva34n-0 host=local thread=2-0-7-4-21-9-47-1
+2017-02-17 09:27:12,650-0200 INFO  swift START host=local - Initializing shared directory
+2017-02-17 09:27:12,650-0200 DEBUG swift THREAD_ASSOCIATION jobid=simulate-e4yva34n-0 host=local thread=2-0-7-4-13-4-23-1
+2017-02-17 09:27:12,650-0200 DEBUG swift THREAD_ASSOCIATION jobid=simulate-d4yva34n-0 host=local thread=2-0-7-4-14-5-26-1
+2017-02-17 09:27:12,651-0200 DEBUG swift THREAD_ASSOCIATION jobid=simulate-g4yva34n-0 host=local thread=2-0-7-4-12-3-41-1
+2017-02-17 09:27:12,654-0200 DEBUG swift THREAD_ASSOCIATION jobid=simulate-b4yva34n-0 host=local thread=2-0-7-4-17-8-35-1
+2017-02-17 09:27:12,655-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:27:12,655-0200 DEBUG swift THREAD_ASSOCIATION jobid=simulate-c4yva34n-0 host=local thread=2-0-7-4-10-1-19-1
+2017-02-17 09:27:12,666-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:27:12,667-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:27:12,668-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:27:12,669-0200 INFO  swift END host=local - Done initializing shared directory
+2017-02-17 09:27:12,671-0200 INFO  swift START jobid=simulate-k4yva34n-0 host=local - Initializing directory structure
+2017-02-17 09:27:12,672-0200 INFO  swift START jobid=simulate-j4yva34n-0 host=local - Initializing directory structure
+2017-02-17 09:27:12,672-0200 INFO  swift START path=output dir=p3-run002/shared - Creating directory structure
+2017-02-17 09:27:12,672-0200 INFO  swift START jobid=simulate-d4yva34n-0 host=local - Initializing directory structure
+2017-02-17 09:27:12,672-0200 INFO  swift START jobid=simulate-h4yva34n-0 host=local - Initializing directory structure
+2017-02-17 09:27:12,673-0200 INFO  swift START jobid=simulate-g4yva34n-0 host=local - Initializing directory structure
+2017-02-17 09:27:12,673-0200 INFO  swift START jobid=simulate-b4yva34n-0 host=local - Initializing directory structure
+2017-02-17 09:27:12,673-0200 INFO  swift START jobid=simulate-c4yva34n-0 host=local - Initializing directory structure
+2017-02-17 09:27:12,671-0200 INFO  swift START jobid=simulate-i4yva34n-0 host=local - Initializing directory structure
+2017-02-17 09:27:12,672-0200 INFO  swift START jobid=simulate-e4yva34n-0 host=local - Initializing directory structure
+2017-02-17 09:27:12,674-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:27:12,675-0200 INFO  swift END jobid=simulate-j4yva34n-0 - Done initializing directory structure
+2017-02-17 09:27:12,675-0200 INFO  swift END jobid=simulate-d4yva34n-0 - Done initializing directory structure
+2017-02-17 09:27:12,675-0200 INFO  swift START jobid=simulate-j4yva34n-0 - Staging in files []
+2017-02-17 09:27:12,675-0200 INFO  swift START jobid=simulate-d4yva34n-0 - Staging in files []
+2017-02-17 09:27:12,675-0200 INFO  swift END jobid=simulate-d4yva34n-0 - Staging in finished
+2017-02-17 09:27:12,675-0200 DEBUG swift JOB_START jobid=simulate-d4yva34n-0 tr=simulate arguments=[--timesteps, 1, --range, 100, --nvalues, 5] tmpdir=p3-run002/jobs/s/simulate-d4yva34n-0
+2017-02-17 09:27:12,676-0200 INFO  swift END jobid=simulate-h4yva34n-0 - Done initializing directory structure
+2017-02-17 09:27:12,676-0200 INFO  swift START jobid=simulate-h4yva34n-0 - Staging in files []
+2017-02-17 09:27:12,676-0200 INFO  swift END jobid=simulate-h4yva34n-0 - Staging in finished
+2017-02-17 09:27:12,676-0200 DEBUG swift JOB_START jobid=simulate-h4yva34n-0 tr=simulate arguments=[--timesteps, 1, --range, 100, --nvalues, 5] tmpdir=p3-run002/jobs/s/simulate-h4yva34n-0
+2017-02-17 09:27:12,677-0200 INFO  swift END jobid=simulate-g4yva34n-0 - Done initializing directory structure
+2017-02-17 09:27:12,677-0200 INFO  swift START jobid=simulate-g4yva34n-0 - Staging in files []
+2017-02-17 09:27:12,677-0200 INFO  swift END jobid=simulate-g4yva34n-0 - Staging in finished
+2017-02-17 09:27:12,677-0200 DEBUG swift JOB_START jobid=simulate-g4yva34n-0 tr=simulate arguments=[--timesteps, 1, --range, 100, --nvalues, 5] tmpdir=p3-run002/jobs/s/simulate-g4yva34n-0
+2017-02-17 09:27:12,677-0200 INFO  swift END jobid=simulate-b4yva34n-0 - Done initializing directory structure
+2017-02-17 09:27:12,677-0200 INFO  swift END jobid=simulate-c4yva34n-0 - Done initializing directory structure
+2017-02-17 09:27:12,677-0200 INFO  swift START jobid=simulate-b4yva34n-0 - Staging in files []
+2017-02-17 09:27:12,677-0200 INFO  swift START jobid=simulate-c4yva34n-0 - Staging in files []
+2017-02-17 09:27:12,677-0200 INFO  swift END jobid=simulate-b4yva34n-0 - Staging in finished
+2017-02-17 09:27:12,678-0200 INFO  swift END jobid=simulate-c4yva34n-0 - Staging in finished
+2017-02-17 09:27:12,678-0200 DEBUG swift JOB_START jobid=simulate-b4yva34n-0 tr=simulate arguments=[--timesteps, 1, --range, 100, --nvalues, 5] tmpdir=p3-run002/jobs/s/simulate-b4yva34n-0
+2017-02-17 09:27:12,678-0200 DEBUG swift JOB_START jobid=simulate-c4yva34n-0 tr=simulate arguments=[--timesteps, 1, --range, 100, --nvalues, 5] tmpdir=p3-run002/jobs/s/simulate-c4yva34n-0
+2017-02-17 09:27:12,678-0200 INFO  swift END jobid=simulate-j4yva34n-0 - Staging in finished
+2017-02-17 09:27:12,678-0200 DEBUG swift JOB_START jobid=simulate-j4yva34n-0 tr=simulate arguments=[--timesteps, 1, --range, 100, --nvalues, 5] tmpdir=p3-run002/jobs/s/simulate-j4yva34n-0
+2017-02-17 09:27:12,679-0200 INFO  swift END jobid=simulate-i4yva34n-0 - Done initializing directory structure
+2017-02-17 09:27:12,679-0200 INFO  swift START jobid=simulate-i4yva34n-0 - Staging in files []
+2017-02-17 09:27:12,679-0200 INFO  swift END jobid=simulate-i4yva34n-0 - Staging in finished
+2017-02-17 09:27:12,679-0200 DEBUG swift JOB_START jobid=simulate-i4yva34n-0 tr=simulate arguments=[--timesteps, 1, --range, 100, --nvalues, 5] tmpdir=p3-run002/jobs/s/simulate-i4yva34n-0
+2017-02-17 09:27:12,682-0200 INFO  Execute JOB_TASK jobid=simulate-h4yva34n-0 taskid=task-32 exec=/bin/bash dir=p3-run002 args=shared/_swiftwrap simulate-h4yva34n-0 -jobdir s -scratch  -e simulate -out output/sim_7.out -err stderr.txt -i -d output -if  -of output/sim_7.out -cf  -cdmfile -status files -a --timesteps 1 --range 100 --nvalues 5
+2017-02-17 09:27:12,682-0200 INFO  Execute JOB_TASK jobid=simulate-i4yva34n-0 taskid=task-30 exec=/bin/bash dir=p3-run002 args=shared/_swiftwrap simulate-i4yva34n-0 -jobdir s -scratch  -e simulate -out output/sim_6.out -err stderr.txt -i -d output -if  -of output/sim_6.out -cf  -cdmfile -status files -a --timesteps 1 --range 100 --nvalues 5
+2017-02-17 09:27:12,682-0200 INFO  Execute JOB_TASK jobid=simulate-g4yva34n-0 taskid=task-41 exec=/bin/bash dir=p3-run002 args=shared/_swiftwrap simulate-g4yva34n-0 -jobdir s -scratch  -e simulate -out output/sim_3.out -err stderr.txt -i -d output -if  -of output/sim_3.out -cf  -cdmfile -status files -a --timesteps 1 --range 100 --nvalues 5
+2017-02-17 09:27:12,683-0200 INFO  Execute JOB_TASK jobid=simulate-d4yva34n-0 taskid=task-26 exec=/bin/bash dir=p3-run002 args=shared/_swiftwrap simulate-d4yva34n-0 -jobdir s -scratch  -e simulate -out output/sim_5.out -err stderr.txt -i -d output -if  -of output/sim_5.out -cf  -cdmfile -status files -a --timesteps 1 --range 100 --nvalues 5
+2017-02-17 09:27:12,683-0200 INFO  Execute JOB_TASK jobid=simulate-j4yva34n-0 taskid=task-44 exec=/bin/bash dir=p3-run002 args=shared/_swiftwrap simulate-j4yva34n-0 -jobdir s -scratch  -e simulate -out output/sim_2.out -err stderr.txt -i -d output -if  -of output/sim_2.out -cf  -cdmfile -status files -a --timesteps 1 --range 100 --nvalues 5
+2017-02-17 09:27:12,683-0200 INFO  Execute JOB_TASK jobid=simulate-b4yva34n-0 taskid=task-35 exec=/bin/bash dir=p3-run002 args=shared/_swiftwrap simulate-b4yva34n-0 -jobdir s -scratch  -e simulate -out output/sim_8.out -err stderr.txt -i -d output -if  -of output/sim_8.out -cf  -cdmfile -status files -a --timesteps 1 --range 100 --nvalues 5
+2017-02-17 09:27:12,683-0200 INFO  Execute JOB_TASK jobid=simulate-c4yva34n-0 taskid=task-19 exec=/bin/bash dir=p3-run002 args=shared/_swiftwrap simulate-c4yva34n-0 -jobdir s -scratch  -e simulate -out output/sim_1.out -err stderr.txt -i -d output -if  -of output/sim_1.out -cf  -cdmfile -status files -a --timesteps 1 --range 100 --nvalues 5
+2017-02-17 09:27:12,684-0200 INFO  swift END jobid=simulate-e4yva34n-0 - Done initializing directory structure
+2017-02-17 09:27:12,684-0200 INFO  swift START jobid=simulate-e4yva34n-0 - Staging in files []
+2017-02-17 09:27:12,684-0200 INFO  swift END jobid=simulate-e4yva34n-0 - Staging in finished
+2017-02-17 09:27:12,684-0200 DEBUG swift JOB_START jobid=simulate-e4yva34n-0 tr=simulate arguments=[--timesteps, 1, --range, 100, --nvalues, 5] tmpdir=p3-run002/jobs/s/simulate-e4yva34n-0
+2017-02-17 09:27:12,684-0200 INFO  swift END jobid=simulate-k4yva34n-0 - Done initializing directory structure
+2017-02-17 09:27:12,684-0200 INFO  swift START jobid=simulate-k4yva34n-0 - Staging in files []
+2017-02-17 09:27:12,684-0200 INFO  swift END jobid=simulate-k4yva34n-0 - Staging in finished
+2017-02-17 09:27:12,684-0200 INFO  Execute JOB_TASK jobid=simulate-e4yva34n-0 taskid=task-23 exec=/bin/bash dir=p3-run002 args=shared/_swiftwrap simulate-e4yva34n-0 -jobdir s -scratch  -e simulate -out output/sim_4.out -err stderr.txt -i -d output -if  -of output/sim_4.out -cf  -cdmfile -status files -a --timesteps 1 --range 100 --nvalues 5
+2017-02-17 09:27:12,684-0200 DEBUG swift JOB_START jobid=simulate-k4yva34n-0 tr=simulate arguments=[--timesteps, 1, --range, 100, --nvalues, 5] tmpdir=p3-run002/jobs/s/simulate-k4yva34n-0
+2017-02-17 09:27:12,685-0200 INFO  Execute JOB_TASK jobid=simulate-k4yva34n-0 taskid=task-47 exec=/bin/bash dir=p3-run002 args=shared/_swiftwrap simulate-k4yva34n-0 -jobdir s -scratch  -e simulate -out output/sim_9.out -err stderr.txt -i -d output -if  -of output/sim_9.out -cf  -cdmfile -status files -a --timesteps 1 --range 100 --nvalues 5
+2017-02-17 09:27:12,691-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-19 status=8
+2017-02-17 09:27:12,691-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-32 status=8
+2017-02-17 09:27:12,692-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-19 status=1
+2017-02-17 09:27:12,692-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-30 status=8
+2017-02-17 09:27:12,692-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-32 status=1
+2017-02-17 09:27:12,692-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-23 status=8
+2017-02-17 09:27:12,692-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-30 status=1
+2017-02-17 09:27:12,692-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-47 status=8
+2017-02-17 09:27:12,693-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-23 status=1
+2017-02-17 09:27:12,693-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-35 status=8
+2017-02-17 09:27:12,696-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-47 status=1
+2017-02-17 09:27:12,696-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-44 status=8
+2017-02-17 09:27:12,701-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-32 status=2
+2017-02-17 09:27:12,711-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-19 status=2
+2017-02-17 09:27:12,715-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-35 status=1
+2017-02-17 09:27:12,716-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-41 status=8
+2017-02-17 09:27:12,716-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-41 status=1
+2017-02-17 09:27:12,716-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-26 status=8
+2017-02-17 09:27:12,717-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-26 status=1
+2017-02-17 09:27:12,718-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-47 status=2
+2017-02-17 09:27:12,721-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-30 status=2
+2017-02-17 09:27:12,732-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-44 status=1
+2017-02-17 09:27:12,735-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-23 status=2
+2017-02-17 09:27:12,737-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-41 status=2
+2017-02-17 09:27:12,749-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-26 status=2
+2017-02-17 09:27:12,749-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-35 status=2
+2017-02-17 09:27:12,749-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-44 status=2
+2017-02-17 09:27:13,632-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 34612872, JVMThreads: 39
+2017-02-17 09:27:13,632-0200 INFO  RuntimeStats$ProgressTicker   Selecting site:1  Active:9
+2017-02-17 09:27:13,814-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:27:13,814-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-32 status=7
+2017-02-17 09:27:13,814-0200 DEBUG swift START jobid=simulate-h4yva34n-0
+2017-02-17 09:27:13,815-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:27:13,816-0200 INFO  swift SUCCESS jobid=simulate-h4yva34n-0 - Success file found
+2017-02-17 09:27:13,816-0200 DEBUG swift STAGING_OUT jobid=simulate-h4yva34n-0
+2017-02-17 09:27:13,816-0200 INFO  swift START jobid=simulate-h4yva34n-0 - Staging out files
+2017-02-17 09:27:13,816-0200 DEBUG swift stageouts: [file://localhost/output/sim_7.out]
+2017-02-17 09:27:13,818-0200 DEBUG swift FILE_STAGE_OUT_START srcname=sim_7.out srcdir=p3-run002/shared/output srchost=local destdir=output desthost=localhost provider=file jobid=simulate-h4yva34n-0
+2017-02-17 09:27:13,818-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:27:13,823-0200 DEBUG swift CDM: file://localhost/output/sim_7.out : DEFAULT
+2017-02-17 09:27:13,824-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:27:13,826-0200 DEBUG swift FILE_STAGE_OUT_END srcname=sim_7.out srcdir=p3-run002/shared/output srchost=local destdir=output desthost=localhost provider=file
+2017-02-17 09:27:13,829-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:27:13,829-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:27:13,829-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-23 status=7
+2017-02-17 09:27:13,830-0200 DEBUG swift START jobid=simulate-e4yva34n-0
+2017-02-17 09:27:13,833-0200 INFO  swift END jobid=simulate-h4yva34n-0 - Staging out finished
+2017-02-17 09:27:13,834-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:27:13,834-0200 INFO  swift SUCCESS jobid=simulate-e4yva34n-0 - Success file found
+2017-02-17 09:27:13,834-0200 DEBUG swift STAGING_OUT jobid=simulate-e4yva34n-0
+2017-02-17 09:27:13,834-0200 INFO  swift START jobid=simulate-e4yva34n-0 - Staging out files
+2017-02-17 09:27:13,834-0200 DEBUG swift stageouts: [file://localhost/output/sim_4.out]
+2017-02-17 09:27:13,835-0200 DEBUG swift FILE_STAGE_OUT_START srcname=sim_4.out srcdir=p3-run002/shared/output srchost=local destdir=output desthost=localhost provider=file jobid=simulate-e4yva34n-0
+2017-02-17 09:27:13,835-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:27:13,835-0200 DEBUG swift CDM: file://localhost/output/sim_4.out : DEFAULT
+2017-02-17 09:27:13,839-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:27:13,840-0200 DEBUG swift FILE_STAGE_OUT_END srcname=sim_4.out srcdir=p3-run002/shared/output srchost=local destdir=output desthost=localhost provider=file
+2017-02-17 09:27:13,840-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:27:13,840-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:27:13,841-0200 INFO  swift END jobid=simulate-e4yva34n-0 - Staging out finished
+2017-02-17 09:27:13,842-0200 DEBUG swift JOB_END jobid=simulate-h4yva34n-0
+2017-02-17 09:27:13,842-0200 INFO  swift END_SUCCESS jobid=simulate-h4yva34n tr=simulate
+2017-02-17 09:27:13,842-0200 DEBUG swift PROCEDURE_END line=3 thread=2-0-7-4-16-7-32-1 name=simulation
+2017-02-17 09:27:13,844-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:27:13,845-0200 DEBUG swift THREAD_ASSOCIATION jobid=simulate-f4yva34n-0 host=local thread=2-0-7-4-9-0-38-1
+2017-02-17 09:27:13,845-0200 DEBUG swift JOB_END jobid=simulate-e4yva34n-0
+2017-02-17 09:27:13,845-0200 INFO  swift END_SUCCESS jobid=simulate-e4yva34n tr=simulate
+2017-02-17 09:27:13,845-0200 DEBUG swift PROCEDURE_END line=3 thread=2-0-7-4-13-4-23-1 name=simulation
+2017-02-17 09:27:13,845-0200 INFO  swift START jobid=simulate-f4yva34n-0 host=local - Initializing directory structure
+2017-02-17 09:27:13,845-0200 INFO  swift END jobid=simulate-f4yva34n-0 - Done initializing directory structure
+2017-02-17 09:27:13,845-0200 INFO  swift START jobid=simulate-f4yva34n-0 - Staging in files []
+2017-02-17 09:27:13,845-0200 INFO  swift END jobid=simulate-f4yva34n-0 - Staging in finished
+2017-02-17 09:27:13,845-0200 DEBUG swift JOB_START jobid=simulate-f4yva34n-0 tr=simulate arguments=[--timesteps, 1, --range, 100, --nvalues, 5] tmpdir=p3-run002/jobs/s/simulate-f4yva34n-0
+2017-02-17 09:27:13,846-0200 INFO  Execute JOB_TASK jobid=simulate-f4yva34n-0 taskid=task-38 exec=/bin/bash dir=p3-run002 args=shared/_swiftwrap simulate-f4yva34n-0 -jobdir s -scratch  -e simulate -out output/sim_0.out -err stderr.txt -i -d output -if  -of output/sim_0.out -cf  -cdmfile -status files -a --timesteps 1 --range 100 --nvalues 5
+2017-02-17 09:27:13,860-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-38 status=8
+2017-02-17 09:27:13,861-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-38 status=1
+2017-02-17 09:27:13,862-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-38 status=2
+2017-02-17 09:27:13,862-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,862-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-19 status=7
+2017-02-17 09:27:13,863-0200 DEBUG swift START jobid=simulate-c4yva34n-0
+2017-02-17 09:27:13,863-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,864-0200 INFO  swift SUCCESS jobid=simulate-c4yva34n-0 - Success file found
+2017-02-17 09:27:13,864-0200 DEBUG swift STAGING_OUT jobid=simulate-c4yva34n-0
+2017-02-17 09:27:13,864-0200 INFO  swift START jobid=simulate-c4yva34n-0 - Staging out files
+2017-02-17 09:27:13,864-0200 DEBUG swift stageouts: [file://localhost/output/sim_1.out]
+2017-02-17 09:27:13,864-0200 DEBUG swift FILE_STAGE_OUT_START srcname=sim_1.out srcdir=p3-run002/shared/output srchost=local destdir=output desthost=localhost provider=file jobid=simulate-c4yva34n-0
+2017-02-17 09:27:13,865-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,865-0200 DEBUG swift CDM: file://localhost/output/sim_1.out : DEFAULT
+2017-02-17 09:27:13,872-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,873-0200 DEBUG swift FILE_STAGE_OUT_END srcname=sim_1.out srcdir=p3-run002/shared/output srchost=local destdir=output desthost=localhost provider=file
+2017-02-17 09:27:13,874-0200 DEBUG swift FOREACH_IT_END line=20 thread=2-0-7-4-13-4
+2017-02-17 09:27:13,874-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,875-0200 INFO  swift END jobid=simulate-c4yva34n-0 - Staging out finished
+2017-02-17 09:27:13,876-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,877-0200 DEBUG swift JOB_END jobid=simulate-c4yva34n-0
+2017-02-17 09:27:13,877-0200 INFO  swift END_SUCCESS jobid=simulate-c4yva34n tr=simulate
+2017-02-17 09:27:13,877-0200 DEBUG swift PROCEDURE_END line=3 thread=2-0-7-4-10-1-19-1 name=simulation
+2017-02-17 09:27:13,899-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,899-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-30 status=7
+2017-02-17 09:27:13,900-0200 DEBUG swift START jobid=simulate-i4yva34n-0
+2017-02-17 09:27:13,901-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,902-0200 INFO  swift SUCCESS jobid=simulate-i4yva34n-0 - Success file found
+2017-02-17 09:27:13,902-0200 DEBUG swift STAGING_OUT jobid=simulate-i4yva34n-0
+2017-02-17 09:27:13,902-0200 INFO  swift START jobid=simulate-i4yva34n-0 - Staging out files
+2017-02-17 09:27:13,902-0200 DEBUG swift stageouts: [file://localhost/output/sim_6.out]
+2017-02-17 09:27:13,902-0200 DEBUG swift FILE_STAGE_OUT_START srcname=sim_6.out srcdir=p3-run002/shared/output srchost=local destdir=output desthost=localhost provider=file jobid=simulate-i4yva34n-0
+2017-02-17 09:27:13,903-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,903-0200 DEBUG swift CDM: file://localhost/output/sim_6.out : DEFAULT
+2017-02-17 09:27:13,908-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,908-0200 DEBUG swift FILE_STAGE_OUT_END srcname=sim_6.out srcdir=p3-run002/shared/output srchost=local destdir=output desthost=localhost provider=file
+2017-02-17 09:27:13,909-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,910-0200 INFO  swift END jobid=simulate-i4yva34n-0 - Staging out finished
+2017-02-17 09:27:13,913-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,914-0200 DEBUG swift JOB_END jobid=simulate-i4yva34n-0
+2017-02-17 09:27:13,914-0200 INFO  swift END_SUCCESS jobid=simulate-i4yva34n tr=simulate
+2017-02-17 09:27:13,914-0200 DEBUG swift PROCEDURE_END line=3 thread=2-0-7-4-15-6-30-1 name=simulation
+2017-02-17 09:27:13,920-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,920-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-44 status=7
+2017-02-17 09:27:13,920-0200 DEBUG swift START jobid=simulate-j4yva34n-0
+2017-02-17 09:27:13,921-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,921-0200 INFO  swift SUCCESS jobid=simulate-j4yva34n-0 - Success file found
+2017-02-17 09:27:13,922-0200 DEBUG swift STAGING_OUT jobid=simulate-j4yva34n-0
+2017-02-17 09:27:13,922-0200 INFO  swift START jobid=simulate-j4yva34n-0 - Staging out files
+2017-02-17 09:27:13,922-0200 DEBUG swift stageouts: [file://localhost/output/sim_2.out]
+2017-02-17 09:27:13,922-0200 DEBUG swift FILE_STAGE_OUT_START srcname=sim_2.out srcdir=p3-run002/shared/output srchost=local destdir=output desthost=localhost provider=file jobid=simulate-j4yva34n-0
+2017-02-17 09:27:13,923-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,923-0200 DEBUG swift CDM: file://localhost/output/sim_2.out : DEFAULT
+2017-02-17 09:27:13,925-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,925-0200 DEBUG swift FILE_STAGE_OUT_END srcname=sim_2.out srcdir=p3-run002/shared/output srchost=local destdir=output desthost=localhost provider=file
+2017-02-17 09:27:13,926-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,926-0200 INFO  swift END jobid=simulate-j4yva34n-0 - Staging out finished
+2017-02-17 09:27:13,929-0200 DEBUG swift FOREACH_IT_END line=20 thread=2-0-7-4-16-7
+2017-02-17 09:27:13,930-0200 DEBUG swift FOREACH_IT_END line=20 thread=2-0-7-4-15-6
+2017-02-17 09:27:13,930-0200 DEBUG swift FOREACH_IT_END line=20 thread=2-0-7-4-10-1
+2017-02-17 09:27:13,931-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,932-0200 DEBUG swift JOB_END jobid=simulate-j4yva34n-0
+2017-02-17 09:27:13,932-0200 INFO  swift END_SUCCESS jobid=simulate-j4yva34n tr=simulate
+2017-02-17 09:27:13,932-0200 DEBUG swift PROCEDURE_END line=3 thread=2-0-7-4-11-2-44-1 name=simulation
+2017-02-17 09:27:13,957-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,958-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-41 status=7
+2017-02-17 09:27:13,958-0200 DEBUG swift START jobid=simulate-g4yva34n-0
+2017-02-17 09:27:13,958-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:27:13,958-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-26 status=7
+2017-02-17 09:27:13,959-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,959-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-35 status=7
+2017-02-17 09:27:13,959-0200 DEBUG swift START jobid=simulate-b4yva34n-0
+2017-02-17 09:27:13,959-0200 DEBUG swift START jobid=simulate-d4yva34n-0
+2017-02-17 09:27:13,959-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:27:13,959-0200 INFO  swift SUCCESS jobid=simulate-g4yva34n-0 - Success file found
+2017-02-17 09:27:13,959-0200 DEBUG swift STAGING_OUT jobid=simulate-g4yva34n-0
+2017-02-17 09:27:13,959-0200 INFO  swift START jobid=simulate-g4yva34n-0 - Staging out files
+2017-02-17 09:27:13,959-0200 DEBUG swift stageouts: [file://localhost/output/sim_3.out]
+2017-02-17 09:27:13,960-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,960-0200 DEBUG swift FILE_STAGE_OUT_START srcname=sim_3.out srcdir=p3-run002/shared/output srchost=local destdir=output desthost=localhost provider=file jobid=simulate-g4yva34n-0
+2017-02-17 09:27:13,960-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,960-0200 INFO  swift SUCCESS jobid=simulate-d4yva34n-0 - Success file found
+2017-02-17 09:27:13,960-0200 DEBUG swift STAGING_OUT jobid=simulate-d4yva34n-0
+2017-02-17 09:27:13,960-0200 INFO  swift START jobid=simulate-d4yva34n-0 - Staging out files
+2017-02-17 09:27:13,960-0200 DEBUG swift stageouts: [file://localhost/output/sim_5.out]
+2017-02-17 09:27:13,960-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,960-0200 DEBUG swift FILE_STAGE_OUT_START srcname=sim_5.out srcdir=p3-run002/shared/output srchost=local destdir=output desthost=localhost provider=file jobid=simulate-d4yva34n-0
+2017-02-17 09:27:13,960-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,960-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-47 status=7
+2017-02-17 09:27:13,960-0200 DEBUG swift CDM: file://localhost/output/sim_3.out : DEFAULT
+2017-02-17 09:27:13,961-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:27:13,961-0200 DEBUG swift START jobid=simulate-k4yva34n-0
+2017-02-17 09:27:13,962-0200 DEBUG swift CDM: file://localhost/output/sim_5.out : DEFAULT
+2017-02-17 09:27:13,962-0200 INFO  swift SUCCESS jobid=simulate-b4yva34n-0 - Success file found
+2017-02-17 09:27:13,962-0200 DEBUG swift STAGING_OUT jobid=simulate-b4yva34n-0
+2017-02-17 09:27:13,962-0200 INFO  swift START jobid=simulate-b4yva34n-0 - Staging out files
+2017-02-17 09:27:13,962-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,962-0200 DEBUG swift stageouts: [file://localhost/output/sim_8.out]
+2017-02-17 09:27:13,962-0200 DEBUG swift FILE_STAGE_OUT_START srcname=sim_8.out srcdir=p3-run002/shared/output srchost=local destdir=output desthost=localhost provider=file jobid=simulate-b4yva34n-0
+2017-02-17 09:27:13,962-0200 INFO  swift SUCCESS jobid=simulate-k4yva34n-0 - Success file found
+2017-02-17 09:27:13,963-0200 DEBUG swift STAGING_OUT jobid=simulate-k4yva34n-0
+2017-02-17 09:27:13,963-0200 INFO  swift START jobid=simulate-k4yva34n-0 - Staging out files
+2017-02-17 09:27:13,963-0200 DEBUG swift stageouts: [file://localhost/output/sim_9.out]
+2017-02-17 09:27:13,963-0200 DEBUG swift FILE_STAGE_OUT_START srcname=sim_9.out srcdir=p3-run002/shared/output srchost=local destdir=output desthost=localhost provider=file jobid=simulate-k4yva34n-0
+2017-02-17 09:27:13,963-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,963-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,963-0200 DEBUG swift CDM: file://localhost/output/sim_9.out : DEFAULT
+2017-02-17 09:27:13,963-0200 DEBUG swift CDM: file://localhost/output/sim_8.out : DEFAULT
+2017-02-17 09:27:13,964-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,964-0200 DEBUG swift FILE_STAGE_OUT_END srcname=sim_3.out srcdir=p3-run002/shared/output srchost=local destdir=output desthost=localhost provider=file
+2017-02-17 09:27:13,965-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,965-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,965-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,965-0200 DEBUG swift FILE_STAGE_OUT_END srcname=sim_8.out srcdir=p3-run002/shared/output srchost=local destdir=output desthost=localhost provider=file
+2017-02-17 09:27:13,965-0200 DEBUG swift FILE_STAGE_OUT_END srcname=sim_5.out srcdir=p3-run002/shared/output srchost=local destdir=output desthost=localhost provider=file
+2017-02-17 09:27:13,966-0200 INFO  swift END jobid=simulate-g4yva34n-0 - Staging out finished
+2017-02-17 09:27:13,966-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,966-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:27:13,967-0200 INFO  swift END jobid=simulate-b4yva34n-0 - Staging out finished
+2017-02-17 09:27:13,967-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,967-0200 INFO  swift END jobid=simulate-d4yva34n-0 - Staging out finished
+2017-02-17 09:27:13,968-0200 DEBUG swift JOB_END jobid=simulate-g4yva34n-0
+2017-02-17 09:27:13,968-0200 INFO  swift END_SUCCESS jobid=simulate-g4yva34n tr=simulate
+2017-02-17 09:27:13,968-0200 DEBUG swift PROCEDURE_END line=3 thread=2-0-7-4-12-3-41-1 name=simulation
+2017-02-17 09:27:13,970-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,970-0200 DEBUG swift JOB_END jobid=simulate-b4yva34n-0
+2017-02-17 09:27:13,970-0200 INFO  swift END_SUCCESS jobid=simulate-b4yva34n tr=simulate
+2017-02-17 09:27:13,970-0200 DEBUG swift PROCEDURE_END line=3 thread=2-0-7-4-17-8-35-1 name=simulation
+2017-02-17 09:27:13,971-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,971-0200 DEBUG swift FILE_STAGE_OUT_END srcname=sim_9.out srcdir=p3-run002/shared/output srchost=local destdir=output desthost=localhost provider=file
+2017-02-17 09:27:13,972-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,973-0200 INFO  swift END jobid=simulate-k4yva34n-0 - Staging out finished
+2017-02-17 09:27:13,973-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:27:13,974-0200 DEBUG swift JOB_END jobid=simulate-d4yva34n-0
+2017-02-17 09:27:13,974-0200 INFO  swift END_SUCCESS jobid=simulate-d4yva34n tr=simulate
+2017-02-17 09:27:13,974-0200 DEBUG swift PROCEDURE_END line=3 thread=2-0-7-4-14-5-26-1 name=simulation
+2017-02-17 09:27:13,974-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:13,975-0200 DEBUG swift JOB_END jobid=simulate-k4yva34n-0
+2017-02-17 09:27:13,975-0200 INFO  swift END_SUCCESS jobid=simulate-k4yva34n tr=simulate
+2017-02-17 09:27:13,975-0200 DEBUG swift PROCEDURE_END line=3 thread=2-0-7-4-21-9-47-1 name=simulation
+2017-02-17 09:27:14,009-0200 DEBUG swift FOREACH_IT_END line=20 thread=2-0-7-4-17-8
+2017-02-17 09:27:14,009-0200 DEBUG swift FOREACH_IT_END line=20 thread=2-0-7-4-11-2
+2017-02-17 09:27:14,009-0200 DEBUG swift FOREACH_IT_END line=20 thread=2-0-7-4-12-3
+2017-02-17 09:27:14,010-0200 DEBUG swift FOREACH_IT_END line=20 thread=2-0-7-4-14-5
+2017-02-17 09:27:14,010-0200 DEBUG swift FOREACH_IT_END line=20 thread=2-0-7-4-21-9
+2017-02-17 09:27:14,632-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 10012872, JVMThreads: 39
+2017-02-17 09:27:14,632-0200 INFO  RuntimeStats$ProgressTicker   Active:1  Finished successfully:9
+2017-02-17 09:27:14,990-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:14,990-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-38 status=7
+2017-02-17 09:27:14,991-0200 DEBUG swift START jobid=simulate-f4yva34n-0
+2017-02-17 09:27:14,991-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:14,992-0200 INFO  swift SUCCESS jobid=simulate-f4yva34n-0 - Success file found
+2017-02-17 09:27:14,992-0200 DEBUG swift STAGING_OUT jobid=simulate-f4yva34n-0
+2017-02-17 09:27:14,992-0200 INFO  swift START jobid=simulate-f4yva34n-0 - Staging out files
+2017-02-17 09:27:14,992-0200 DEBUG swift stageouts: [file://localhost/output/sim_0.out]
+2017-02-17 09:27:14,992-0200 DEBUG swift FILE_STAGE_OUT_START srcname=sim_0.out srcdir=p3-run002/shared/output srchost=local destdir=output desthost=localhost provider=file jobid=simulate-f4yva34n-0
+2017-02-17 09:27:14,993-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:14,993-0200 DEBUG swift CDM: file://localhost/output/sim_0.out : DEFAULT
+2017-02-17 09:27:14,994-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:14,994-0200 DEBUG swift FILE_STAGE_OUT_END srcname=sim_0.out srcdir=p3-run002/shared/output srchost=local destdir=output desthost=localhost provider=file
+2017-02-17 09:27:14,995-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:14,996-0200 INFO  swift END jobid=simulate-f4yva34n-0 - Staging out finished
+2017-02-17 09:27:14,998-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:14,999-0200 DEBUG swift JOB_END jobid=simulate-f4yva34n-0
+2017-02-17 09:27:14,999-0200 INFO  swift END_SUCCESS jobid=simulate-f4yva34n tr=simulate
+2017-02-17 09:27:14,999-0200 DEBUG swift PROCEDURE_END line=3 thread=2-0-7-4-9-0-38-1 name=simulation
+2017-02-17 09:27:15,006-0200 DEBUG swift FOREACH_IT_END line=20 thread=2-0-7-4-9-0
+2017-02-17 09:27:15,006-0200 DEBUG swift JOB_INIT jobid=stats-l4yva34n tr=stats
+2017-02-17 09:27:15,006-0200 DEBUG swift JOB_SITE_SELECT jobid=stats-l4yva34n-0
+2017-02-17 09:27:15,007-0200 DEBUG swift THREAD_ASSOCIATION jobid=stats-l4yva34n-0 host=local thread=2-0-8-5
+2017-02-17 09:27:15,008-0200 INFO  swift START jobid=stats-l4yva34n-0 host=local - Initializing directory structure
+2017-02-17 09:27:15,009-0200 INFO  swift START path=_concurrent/sims-18-2-0 dir=p3-run002/shared - Creating directory structure
+2017-02-17 09:27:15,009-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:15,010-0200 INFO  swift END jobid=stats-l4yva34n-0 - Done initializing directory structure
+2017-02-17 09:27:15,010-0200 INFO  swift START jobid=stats-l4yva34n-0 - Staging in files [file://localhost/_concurrent/sims-18-2-0/[8], file://localhost/_concurrent/sims-18-2-0/[7], file://localhost/_concurrent/sims-18-2-0/[5], file://localhost/_concurrent/sims-18-2-0/[3], file://localhost/_concurrent/sims-18-2-0/[4], file://localhost/_concurrent/sims-18-2-0/[9], file://localhost/_concurrent/sims-18-2-0/[2], file://localhost/_concurrent/sims-18-2-0/[0], file://localhost/_concurrent/sims-18-2-0/[1], file://localhost/_concurrent/sims-18-2-0/[6]]
+2017-02-17 09:27:15,011-0200 INFO  LateBindingScheduler jobs queued: 5
+2017-02-17 09:27:15,011-0200 INFO  LateBindingScheduler jobs queued: 4
+2017-02-17 09:27:15,011-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:15,012-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:15,012-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:15,012-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:15,012-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:15,013-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:15,013-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:15,013-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:15,014-0200 DEBUG swift CDM: file://localhost/_concurrent/sims-18-2-0/[8] : DEFAULT
+2017-02-17 09:27:15,014-0200 DEBUG swift CDM: file://localhost/_concurrent/sims-18-2-0/[7] : DEFAULT
+2017-02-17 09:27:15,014-0200 DEBUG swift CDM: file://localhost/_concurrent/sims-18-2-0/[5] : DEFAULT
+2017-02-17 09:27:15,014-0200 DEBUG swift FILE_STAGE_IN_START file=[7] srchost=localhost srcdir=_concurrent/sims-18-2-0 srcname=[7] desthost=local destdir=p3-run002/shared/_concurrent/sims-18-2-0 provider=file policy=DEFAULT
+2017-02-17 09:27:15,014-0200 DEBUG swift FILE_STAGE_IN_START file=[5] srchost=localhost srcdir=_concurrent/sims-18-2-0 srcname=[5] desthost=local destdir=p3-run002/shared/_concurrent/sims-18-2-0 provider=file policy=DEFAULT
+2017-02-17 09:27:15,014-0200 DEBUG swift CDM: file://localhost/_concurrent/sims-18-2-0/[3] : DEFAULT
+2017-02-17 09:27:15,014-0200 DEBUG swift CDM: file://localhost/_concurrent/sims-18-2-0/[4] : DEFAULT
+2017-02-17 09:27:15,014-0200 DEBUG swift FILE_STAGE_IN_START file=[3] srchost=localhost srcdir=_concurrent/sims-18-2-0 srcname=[3] desthost=local destdir=p3-run002/shared/_concurrent/sims-18-2-0 provider=file policy=DEFAULT
+2017-02-17 09:27:15,014-0200 DEBUG swift FILE_STAGE_IN_START file=[4] srchost=localhost srcdir=_concurrent/sims-18-2-0 srcname=[4] desthost=local destdir=p3-run002/shared/_concurrent/sims-18-2-0 provider=file policy=DEFAULT
+2017-02-17 09:27:15,015-0200 DEBUG swift CDM: file://localhost/_concurrent/sims-18-2-0/[9] : DEFAULT
+2017-02-17 09:27:15,015-0200 DEBUG swift FILE_STAGE_IN_START file=[8] srchost=localhost srcdir=_concurrent/sims-18-2-0 srcname=[8] desthost=local destdir=p3-run002/shared/_concurrent/sims-18-2-0 provider=file policy=DEFAULT
+2017-02-17 09:27:15,015-0200 DEBUG swift FILE_STAGE_IN_START file=[9] srchost=localhost srcdir=_concurrent/sims-18-2-0 srcname=[9] desthost=local destdir=p3-run002/shared/_concurrent/sims-18-2-0 provider=file policy=DEFAULT
+2017-02-17 09:27:15,015-0200 DEBUG swift CDM: file://localhost/_concurrent/sims-18-2-0/[0] : DEFAULT
+2017-02-17 09:27:15,015-0200 DEBUG swift CDM: file://localhost/_concurrent/sims-18-2-0/[1] : DEFAULT
+2017-02-17 09:27:15,015-0200 DEBUG swift CDM: file://localhost/_concurrent/sims-18-2-0/[6] : DEFAULT
+2017-02-17 09:27:15,015-0200 DEBUG swift FILE_STAGE_IN_START file=[1] srchost=localhost srcdir=_concurrent/sims-18-2-0 srcname=[1] desthost=local destdir=p3-run002/shared/_concurrent/sims-18-2-0 provider=file policy=DEFAULT
+2017-02-17 09:27:15,015-0200 DEBUG swift FILE_STAGE_IN_START file=[6] srchost=localhost srcdir=_concurrent/sims-18-2-0 srcname=[6] desthost=local destdir=p3-run002/shared/_concurrent/sims-18-2-0 provider=file policy=DEFAULT
+2017-02-17 09:27:15,015-0200 DEBUG swift FILE_STAGE_IN_START file=[0] srchost=localhost srcdir=_concurrent/sims-18-2-0 srcname=[0] desthost=local destdir=p3-run002/shared/_concurrent/sims-18-2-0 provider=file policy=DEFAULT
+2017-02-17 09:27:15,015-0200 DEBUG swift CDM: file://localhost/_concurrent/sims-18-2-0/[2] : DEFAULT
+2017-02-17 09:27:15,015-0200 DEBUG swift FILE_STAGE_IN_START file=[2] srchost=localhost srcdir=_concurrent/sims-18-2-0 srcname=[2] desthost=local destdir=p3-run002/shared/_concurrent/sims-18-2-0 provider=file policy=DEFAULT
+2017-02-17 09:27:15,016-0200 INFO  LateBindingScheduler jobs queued: 6
+2017-02-17 09:27:15,017-0200 INFO  LateBindingScheduler jobs queued: 5
+2017-02-17 09:27:15,017-0200 DEBUG swift FILE_STAGE_IN_END file=[7] srchost=localhost srcdir=_concurrent/sims-18-2-0 srcname=[7] desthost=local destdir=p3-run002/shared/_concurrent/sims-18-2-0 provider=file
+2017-02-17 09:27:15,017-0200 DEBUG swift FILE_STAGE_IN_END file=[3] srchost=localhost srcdir=_concurrent/sims-18-2-0 srcname=[3] desthost=local destdir=p3-run002/shared/_concurrent/sims-18-2-0 provider=file
+2017-02-17 09:27:15,019-0200 INFO  LateBindingScheduler jobs queued: 4
+2017-02-17 09:27:15,019-0200 DEBUG swift FILE_STAGE_IN_END file=[4] srchost=localhost srcdir=_concurrent/sims-18-2-0 srcname=[4] desthost=local destdir=p3-run002/shared/_concurrent/sims-18-2-0 provider=file
+2017-02-17 09:27:15,020-0200 INFO  LateBindingScheduler jobs queued: 3
+2017-02-17 09:27:15,020-0200 DEBUG swift FILE_STAGE_IN_END file=[5] srchost=localhost srcdir=_concurrent/sims-18-2-0 srcname=[5] desthost=local destdir=p3-run002/shared/_concurrent/sims-18-2-0 provider=file
+2017-02-17 09:27:15,021-0200 INFO  LateBindingScheduler jobs queued: 2
+2017-02-17 09:27:15,021-0200 DEBUG swift FILE_STAGE_IN_END file=[6] srchost=localhost srcdir=_concurrent/sims-18-2-0 srcname=[6] desthost=local destdir=p3-run002/shared/_concurrent/sims-18-2-0 provider=file
+2017-02-17 09:27:15,021-0200 INFO  LateBindingScheduler jobs queued: 1
+2017-02-17 09:27:15,022-0200 DEBUG swift FILE_STAGE_IN_END file=[1] srchost=localhost srcdir=_concurrent/sims-18-2-0 srcname=[1] desthost=local destdir=p3-run002/shared/_concurrent/sims-18-2-0 provider=file
+2017-02-17 09:27:15,023-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:15,024-0200 DEBUG swift FILE_STAGE_IN_END file=[8] srchost=localhost srcdir=_concurrent/sims-18-2-0 srcname=[8] desthost=local destdir=p3-run002/shared/_concurrent/sims-18-2-0 provider=file
+2017-02-17 09:27:15,024-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:15,024-0200 DEBUG swift FILE_STAGE_IN_END file=[0] srchost=localhost srcdir=_concurrent/sims-18-2-0 srcname=[0] desthost=local destdir=p3-run002/shared/_concurrent/sims-18-2-0 provider=file
+2017-02-17 09:27:15,025-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:15,025-0200 DEBUG swift FILE_STAGE_IN_END file=[2] srchost=localhost srcdir=_concurrent/sims-18-2-0 srcname=[2] desthost=local destdir=p3-run002/shared/_concurrent/sims-18-2-0 provider=file
+2017-02-17 09:27:15,026-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:15,027-0200 DEBUG swift FILE_STAGE_IN_END file=[9] srchost=localhost srcdir=_concurrent/sims-18-2-0 srcname=[9] desthost=local destdir=p3-run002/shared/_concurrent/sims-18-2-0 provider=file
+2017-02-17 09:27:15,027-0200 INFO  swift END jobid=stats-l4yva34n-0 - Staging in finished
+2017-02-17 09:27:15,028-0200 DEBUG swift JOB_START jobid=stats-l4yva34n-0 tr=stats arguments=[_concurrent/sims-18-2-0/[0] _concurrent/sims-18-2-0/[1] _concurrent/sims-18-2-0/[2] _concurrent/sims-18-2-0/[3] _concurrent/sims-18-2-0/[4] _concurrent/sims-18-2-0/[5] _concurrent/sims-18-2-0/[6] _concurrent/sims-18-2-0/[7] _concurrent/sims-18-2-0/[8] _concurrent/sims-18-2-0/[9]] tmpdir=p3-run002/jobs/s/stats-l4yva34n-0
+2017-02-17 09:27:15,028-0200 INFO  Execute JOB_TASK jobid=stats-l4yva34n-0 taskid=task-8 exec=/bin/bash dir=p3-run002 args=shared/_swiftwrap stats-l4yva34n-0 -jobdir s -scratch  -e stats -out output/average.out -err stderr.txt -i -d _concurrent/sims-18-2-0|output -if _concurrent/sims-18-2-0/[8]|_concurrent/sims-18-2-0/[7]|_concurrent/sims-18-2-0/[5]|_concurrent/sims-18-2-0/[3]|_concurrent/sims-18-2-0/[4]|_concurrent/sims-18-2-0/[9]|_concurrent/sims-18-2-0/[2]|_concurrent/sims-18-2-0/[0]|_concurrent/sims-18-2-0/[1]|_concurrent/sims-18-2-0/[6] -of output/average.out -cf  -cdmfile -status files -a _concurrent/sims-18-2-0/[0] _concurrent/sims-18-2-0/[1] _concurrent/sims-18-2-0/[2] _concurrent/sims-18-2-0/[3] _concurrent/sims-18-2-0/[4] _concurrent/sims-18-2-0/[5] _concurrent/sims-18-2-0/[6] _concurrent/sims-18-2-0/[7] _concurrent/sims-18-2-0/[8] _concurrent/sims-18-2-0/[9]
+2017-02-17 09:27:15,029-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-8 status=8
+2017-02-17 09:27:15,029-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-8 status=1
+2017-02-17 09:27:15,029-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-8 status=2
+2017-02-17 09:27:15,110-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:15,110-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-8 status=7
+2017-02-17 09:27:15,111-0200 DEBUG swift START jobid=stats-l4yva34n-0
+2017-02-17 09:27:15,111-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:15,112-0200 INFO  swift SUCCESS jobid=stats-l4yva34n-0 - Success file found
+2017-02-17 09:27:15,112-0200 DEBUG swift STAGING_OUT jobid=stats-l4yva34n-0
+2017-02-17 09:27:15,112-0200 INFO  swift START jobid=stats-l4yva34n-0 - Staging out files
+2017-02-17 09:27:15,112-0200 DEBUG swift stageouts: [file://localhost/output/average.out]
+2017-02-17 09:27:15,112-0200 DEBUG swift FILE_STAGE_OUT_START srcname=average.out srcdir=p3-run002/shared/output srchost=local destdir=output desthost=localhost provider=file jobid=stats-l4yva34n-0
+2017-02-17 09:27:15,113-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:15,113-0200 DEBUG swift CDM: file://localhost/output/average.out : DEFAULT
+2017-02-17 09:27:15,115-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:15,115-0200 DEBUG swift FILE_STAGE_OUT_END srcname=average.out srcdir=p3-run002/shared/output srchost=local destdir=output desthost=localhost provider=file
+2017-02-17 09:27:15,116-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:15,118-0200 INFO  swift END jobid=stats-l4yva34n-0 - Staging out finished
+2017-02-17 09:27:15,119-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:15,120-0200 DEBUG swift JOB_END jobid=stats-l4yva34n-0
+2017-02-17 09:27:15,120-0200 INFO  swift END_SUCCESS jobid=stats-l4yva34n tr=stats
+2017-02-17 09:27:15,120-0200 DEBUG swift PROCEDURE_END line=8 thread=2-0-8-5 name=analyze
+2017-02-17 09:27:15,120-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 11050424, JVMThreads: 39
+2017-02-17 09:27:15,120-0200 INFO  RuntimeStats$ProgressTicker   Finished successfully:11
+2017-02-17 09:27:15,128-0200 DEBUG swift Starting cleanups
+2017-02-17 09:27:15,128-0200 INFO  swift START cleanups=[[p3-run002, local]]
+2017-02-17 09:27:15,128-0200 INFO  swift START dir=p3-run002 host=local
+2017-02-17 09:27:15,128-0200 DEBUG swift cdmfile 
+2017-02-17 09:27:15,129-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:27:15,129-0200 INFO  swift END dir=p3-run002 host=local
+2017-02-17 09:27:15,129-0200 INFO  swift END cleanups=[[p3-run002, local]]
+2017-02-17 09:27:15,129-0200 DEBUG swift Ending cleanups
+2017-02-17 09:27:15,133-0200 INFO  Loader Swift finished with no errors

@@ -1,0 +1,318 @@
+// CACHE ID 9f6c1ed4-f975-4fb5-9fcf-7994f9fda617-no-provenance
+import(sys)
+import(scheduler)
+import(swift)
+importStdlib(1)
+
+types(
+	xs:schema(
+    			xs:simpleType("file", xs:restriction("string"))
+    )
+)
+swift.field.simlog.file := swift:field("simlog", "file")
+swift.field.simout.file := swift:field("simout", "file")
+swift.field.steps.int := swift:field("steps", "int")
+swift.field.const.float := swift:field("const", "float")
+swift.field.temp.int := swift:field("temp", "int")
+swift.field.sims.file.array.int := swift:field("sims", "file[int]")
+swift.field.nsim.int := swift:field("nsim", "int")
+swift.field.swift.mapper.17014.string := swift:field("swift.mapper.17014", "string")
+swift.field.stats_out.file := swift:field("stats_out", "file")
+swift.field.swift.mapper.17017.string := swift:field("swift.mapper.17017", "string")
+swift.field.stats_log.file := swift:field("stats_log", "file")
+swift.field.const.int := swift:field("const", "int")
+swift.field.seedfile.file := swift:field("seedfile", "file")
+swift.field.const.string := swift:field("const", "string")
+swift.field.range.int := swift:field("range", "int")
+swift.field.values.int := swift:field("values", "int")
+swift.field.swift.mapper.17020.string := swift:field("swift.mapper.17020", "string")
+swift.field.biasfile.file := swift:field("biasfile", "file")
+swift.field.const.boolean := swift:field("const", "boolean")
+swift.string.17013 := swift:new(swift.field.const.string, value="\n*** Script parameters: nsim=%i range=%i num values=%i\n\n")
+swift.string.17010 := swift:new(swift.field.const.string, value="range")
+swift.string.17003 := swift:new(swift.field.const.string, value="-B")
+swift.string.17006 := swift:new(swift.field.const.string, value="nsim")
+swift.string.17016 := swift:new(swift.field.const.string, value=".dat")
+swift.string.17019 := swift:new(swift.field.const.string, value=".out")
+swift.string.17008 := swift:new(swift.field.const.string, value="steps")
+swift.string.17015 := swift:new(swift.field.const.string, value="output/bias_")
+swift.string.17000 := swift:new(swift.field.const.string, value="-r")
+swift.string.17005 := swift:new(swift.field.const.string, value="-S")
+swift.string.17002 := swift:new(swift.field.const.string, value="-t")
+swift.string.17007 := swift:new(swift.field.const.string, value="10")
+swift.string.17009 := swift:new(swift.field.const.string, value="1")
+swift.string.17012 := swift:new(swift.field.const.string, value="values")
+swift.string.17001 := swift:new(swift.field.const.string, value="-n")
+swift.string.17021 := swift:new(swift.field.const.string, value=".log")
+swift.string.17004 := swift:new(swift.field.const.string, value="-x")
+swift.string.17011 := swift:new(swift.field.const.string, value="100")
+swift.string.17018 := swift:new(swift.field.const.string, value="output/sim_")
+swift.int.0 := swift:new(swift.field.const.int, value=0)
+swift.int.1000 := swift:new(swift.field.const.int, value=1000)
+swift.int.1 := swift:new(swift.field.const.int, value=1)
+swift.int.20 := swift:new(swift.field.const.int, value=20)
+swift.int.2000000 := swift:new(swift.field.const.int, value=2000000)
+swift.int.1000000 := swift:new(swift.field.const.int, value=1000000)
+nsim := 
+			swift:new(swift.field.nsim.int, readCount=3, _defline=29)
+steps := 
+			swift:new(swift.field.steps.int, readCount=2, _defline=30)
+range := 
+			swift:new(swift.field.range.int, readCount=3, _defline=31)
+values := 
+			swift:new(swift.field.values.int, readCount=3, _defline=32)
+seedfile := 
+			swift:new(swift.field.seedfile.file, readCount=2, _defline=35
+				swift:mapping("SingleFileMapper", swift:parameter("file", "output/seed.dat") )
+			)
+sims := 
+		swift:new(swift.field.sims.file.array.int, waitCount=1, readCount=2, _defline=40
+			swift:mapping("InternalMapper", swift:parameter("prefix", swift:new(swift.field.const.string, value="sims-40")))
+		)
+stats_out := 
+			swift:new(swift.field.stats_out.file, _defline=51
+				swift:mapping("SingleFileMapper", swift:parameter("file", "output/average.out") )
+			)
+stats_log := 
+			swift:new(swift.field.stats_log.file, _defline=52
+				swift:mapping("SingleFileMapper", swift:parameter("file", "output/average.log") )
+			)
+
+analyze := function(out, log, s) {
+	swift:unitStart("PROCEDURE", name="analyze", line=22, outputs="out,log")
+	k:tailcall(
+	  swift:execute(
+		"stats"
+		swift:stageIn(s)
+		swift:stageOut(out, log)
+
+		swift:arguments(
+			swiftscript:filenames(#_line=24
+				s
+			)
+		)
+
+		stdout = swiftscript:filename(#_line=24
+			out
+		)
+		stderr = swiftscript:filename(#_line=24
+			log
+		)
+		swift:deleteVars(s)
+	  )
+	)
+	swift:unitEnd("PROCEDURE", name="analyze", line=22)}
+
+genbias := function(out, bias_range, nvalues) {
+	swift:unitStart("PROCEDURE", name="genbias", line=10, outputs="out")
+	k:tailcall(
+	  swift:execute(
+		"simulate"
+		swift:stageOut(out)
+
+		swift:arguments(
+			swift.string.17000
+			bias_range
+			swift.string.17001
+			nvalues
+		)
+
+		stdout = swiftscript:filename(#_line=12
+			out
+		)
+
+		swift:deleteVars(bias_range, nvalues)
+	  )
+	)
+	swift:unitEnd("PROCEDURE", name="genbias", line=10)}
+
+genseed := function(out, nseeds) {
+	swift:unitStart("PROCEDURE", name="genseed", line=5, outputs="out")
+	k:tailcall(
+	  swift:execute(
+		"simulate"
+		swift:stageOut(out)
+
+		swift:arguments(
+			swift.string.17000
+			swift.int.2000000
+			swift.string.17001
+			nseeds
+		)
+
+		stdout = swiftscript:filename(#_line=7
+			out
+		)
+
+		swift:deleteVars(nseeds)
+	  )
+	)
+	swift:unitEnd("PROCEDURE", name="genseed", line=5)}
+
+simulation := function(out, log, timesteps, sim_range, bias_file, scale, sim_count, seed_file) {
+	swift:unitStart("PROCEDURE", name="simulation", line=15, outputs="out,log")
+	k:tailcall(
+	  swift:execute(
+		"simulate"
+		swift:stageIn(bias_file, seed_file)
+		swift:stageOut(out, log)
+
+		swift:arguments(
+			swift.string.17002
+			timesteps
+			swift.string.17000
+			sim_range
+			swift.string.17003
+			swiftscript:filename(#_line=18
+				bias_file
+			)
+			swift.string.17004
+			scale
+			swift.string.17001
+			sim_count
+			swift.string.17005
+			swiftscript:filename(#_line=19
+				seed_file
+			)
+		)
+
+		stdout = swiftscript:filename(#_line=19
+			out
+		)
+		stderr = swiftscript:filename(#_line=19
+			log
+		)
+		swift:deleteVars(timesteps, sim_range, bias_file, scale, sim_count, seed_file)
+	  )
+	)
+	swift:unitEnd("PROCEDURE", name="simulation", line=15)}
+
+restartLog(name = k:concat(contextAttribute("SWIFT:SCRIPT_NAME"), "-", contextAttribute("SWIFT:RUN_ID"))) {
+	swift:mains(
+		swift:startProgressTicker()
+		uparallel(
+			swift:setFieldValue(#_line=29
+				swift:readVar(nsim)
+				swiftscript:toInt(#_line=29
+					swiftscript:arg$string$string$(#_line=29
+						swift.string.17006, swift.string.17007
+					)
+				)
+			)
+			swift:setFieldValue(#_line=30
+				swift:readVar(steps)
+				swiftscript:toInt(#_line=30
+					swiftscript:arg$string$string$(#_line=30
+						swift.string.17008, swift.string.17009
+					)
+				)
+			)
+			swift:setFieldValue(#_line=31
+				swift:readVar(range)
+				swiftscript:toInt(#_line=31
+					swiftscript:arg$string$string$(#_line=31
+						swift.string.17010, swift.string.17011
+					)
+				)
+			)
+			swift:setFieldValue(#_line=32
+				swift:readVar(values)
+				swiftscript:toInt(#_line=32
+					swiftscript:arg$string$string$(#_line=32
+						swift.string.17012, swift.string.17007
+					)
+				)
+			)
+			sequential(
+				swift:unitStart("INTERNALPROC", name="tracef", outputs="")
+				tracef(#_line=37
+			    	swift.string.17013
+			    	swift:readVar(nsim)
+			    	swift:readVar(range)
+			    	swift:readVar(values)
+				)
+				swift:unitEnd("INTERNALPROC", name="tracef")
+			)
+			genseed(#_line=38
+				swift:readVar(seedfile)
+				swift.int.1
+			)
+			swift:tParallelFor(#_line=42, _vvar="i", wrefs="sims 1", rrefs="values 1 seedfile 1 range 1 steps 1",
+				getArrayIterator(swift:range(swift.int.0, swiftop:subtraction(
+				swift:readVar(nsim)
+				swift.int.1
+			)))) {
+
+				swift:unitStart("FOREACH_IT", line=42) 
+				swift.mapper.17014 := 
+							swift:new(swift.field.swift.mapper.17014.string)
+				biasfile := 
+						swift:new(swift.field.biasfile.file, readCount=2, _defline=43
+							swift:mapping("single_file_mapper", swift:parameter("file", swift.mapper.17014))
+						)
+				swift.mapper.17017 := 
+							swift:new(swift.field.swift.mapper.17017.string)
+				simout := 
+						swift:new(swift.field.simout.file, readCount=2, _defline=44
+							swift:mapping("single_file_mapper", swift:parameter("file", swift.mapper.17017))
+						)
+				swift.mapper.17020 := 
+							swift:new(swift.field.swift.mapper.17020.string)
+				simlog := 
+						swift:new(swift.field.simlog.file, _defline=45
+							swift:mapping("single_file_mapper", swift:parameter("file", swift.mapper.17020))
+						)
+				uparallel(
+					swift:setFieldValue(
+						k:getAndDelete(swift.mapper.17014)
+						swiftscript:strcat(#_line=43
+							swift.string.17015, i, swift.string.17016
+						)
+					)
+					swift:setFieldValue(
+						k:getAndDelete(swift.mapper.17017)
+						swiftscript:strcat(#_line=44
+							swift.string.17018, i, swift.string.17019
+						)
+					)
+					swift:setFieldValue(
+						k:getAndDelete(swift.mapper.17020)
+						swiftscript:strcat(#_line=45
+							swift.string.17018, i, swift.string.17021
+						)
+					)
+					genbias(#_line=46
+						swift:readVar(biasfile)
+						swift.int.1000, swift.int.20
+					)
+					simulation(#_line=47
+						swift:readVar(simout), k:getAndDelete(simlog)
+						swift:readVar(steps), swift:readVar(range), swift:readVar(biasfile), swift.int.1000000, swift:readVar(values), swift:readVar(seedfile)
+					)
+					sequential(
+					   	swift:setFieldValue(#_line=48
+					   		swift:getFieldSubscript(swift:unwrapVar(sims), i)
+					   		swift:readVar(simout)
+					   	)
+					   	swift:partialClose(sims, 1)
+					)
+				)
+				swift:cleanDataset(simout)
+				swift:cleanDataset(simlog)
+				swift:cleanDataset(biasfile)
+				swift:unitEnd("FOREACH_IT", line=42)
+			}
+			analyze(#_line=53
+				k:getAndDelete(stats_out), k:getAndDelete(stats_log)
+				swift:readVar(sims)
+			)
+		)
+		swift:stopProgressTicker()
+	)
+}
+
+swift:cleanDataset(seedfile)
+swift:cleanDataset(stats_log)
+swift:cleanDataset(sims)
+swift:cleanDataset(stats_out)
+swift:cleanDataset(shutdown=true)

@@ -1,0 +1,40 @@
+checking for paramfile
+paramfile is: 
+Progress  2017-02-16 21:36:44.826263709-0200  LOG_START
+
+_____________________________________________________________________________
+
+        Wrapper (_swiftwrap)
+_____________________________________________________________________________
+
+Job directory mode is: link on shared filesystem
+PID=10435
+HOST=
+PWD=/home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/hello/swiftwork/hello-run001
+DIR=jobs/e/echo-dxohh24n-0
+EXEC=/bin/echo
+STDIN=
+STDOUT=stdout.txt
+STDERR=stderr.txt
+DIRS=
+INF=
+OUTF=
+COLLECT=
+CDM_FILE=
+ARGS=hi
+ARGC=1
+MPI_RANK=
+PMI_RANK=
+Progress  2017-02-16 21:36:44.833789208-0200  CREATE_JOBDIR
+Created job directory: jobs/e/echo-dxohh24n-0
+Progress  2017-02-16 21:36:44.837090109-0200  CREATE_INPUTDIR
+Progress  2017-02-16 21:36:44.838736235-0200  LINK_INPUTS
+Progress  2017-02-16 21:36:44.840931862-0200  EXECUTE
+APP_RESOURCES=real_secs:0.01,kernel_secs:0.00,user_secs:0.00,percent_cpu:6%,max_rss:652,avg_rss:0,avg_tot_vm:0,avg_priv_data:0,avg_priv_stack:0,avg_shared_text:0,page_size:4096,major_pgfaults:1,minor_pgfaults:206,swaps:0,invol_context_switches:1,vol_waits:3,fs_reads:64,fs_writes:8,sock_recv:0,sock_send:0,signals:0,exit_status:0
+Moving back to workflow directory /home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/hello/swiftwork/hello-run001
+Progress  2017-02-16 21:36:44.877723126-0200  EXECUTE_DONE
+Job ran successfully
+Progress  2017-02-16 21:36:44.880353566-0200  MOVING_OUTPUTS 
+Progress  2017-02-16 21:36:44.881707452-0200  RM_JOBDIR
+Progress  2017-02-16 21:36:44.884964988-0200  TOUCH_SUCCESS
+Progress  2017-02-16 21:36:44.889025504-0200  END

@@ -1,0 +1,39 @@
+Progress  2017-02-17 09:27:39.408316049-0200  LOG_START
+
+_____________________________________________________________________________
+
+        Wrapper (_swiftwrap)
+_____________________________________________________________________________
+
+Job directory mode is: link on shared filesystem
+PID=25848
+HOST=
+PWD=/home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/part04/swiftwork/p4-run002
+DIR=jobs/s/simulate-hsjxa34n-0
+EXEC=/home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/bin/simulate
+STDIN=
+STDOUT=output/sim_1.out
+STDERR=output/sim_1.log
+DIRS=output
+INF=
+OUTF=output/sim_1.out|output/sim_1.log
+COLLECT=
+CDM_FILE=
+ARGS=--timesteps 1 --range 100 --nvalues 5
+ARGC=6
+MPI_RANK=
+PMI_RANK=
+Progress  2017-02-17 09:27:39.431703162-0200  CREATE_JOBDIR
+Created job directory: jobs/s/simulate-hsjxa34n-0
+Progress  2017-02-17 09:27:39.442909008-0200  CREATE_INPUTDIR
+Created output directory: jobs/s/simulate-hsjxa34n-0/output
+Progress  2017-02-17 09:27:39.459718969-0200  LINK_INPUTS
+Progress  2017-02-17 09:27:39.463301835-0200  EXECUTE
+APP_RESOURCES=real_secs:1.03,kernel_secs:0.01,user_secs:0.00,percent_cpu:1%,max_rss:1624,avg_rss:0,avg_tot_vm:0,avg_priv_data:0,avg_priv_stack:0,avg_shared_text:0,page_size:4096,major_pgfaults:0,minor_pgfaults:3620,swaps:0,invol_context_switches:17,vol_waits:24,fs_reads:0,fs_writes:32,sock_recv:0,sock_send:0,signals:0,exit_status:0
+Moving back to workflow directory /home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/part04/swiftwork/p4-run002
+Progress  2017-02-17 09:27:40.508275331-0200  EXECUTE_DONE
+Job ran successfully
+Progress  2017-02-17 09:27:40.509917205-0200  MOVING_OUTPUTS output/sim_1.out|output/sim_1.log
+Progress  2017-02-17 09:27:40.548416923-0200  RM_JOBDIR
+Progress  2017-02-17 09:27:40.560266707-0200  TOUCH_SUCCESS
+Progress  2017-02-17 09:27:40.564578447-0200  END

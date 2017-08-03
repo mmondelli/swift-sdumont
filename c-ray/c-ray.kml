@@ -1,0 +1,278 @@
+// CACHE ID 9f6c1ed4-f975-4fb5-9fcf-7994f9fda617-no-provenance
+import(sys)
+import(scheduler)
+import(swift)
+importStdlib(1)
+
+types(
+	xs:schema(
+    			xs:simpleType("scene", xs:restriction("string"))
+    			xs:simpleType("image", xs:restriction("string"))
+    			xs:simpleType("scene_template", xs:restriction("string"))
+    			xs:simpleType("movie", xs:restriction("string"))
+    )
+)
+swift.field.image_files.image.array.int := swift:field("image_files", "image[int]")
+swift.field.resolution.string := swift:field("resolution", "string")
+swift.field.scene_files.scene.array.int := swift:field("scene_files", "scene[int]")
+swift.field.steps.int := swift:field("steps", "int")
+swift.field.swift.mapper.17008.string := swift:field("swift.mapper.17008", "string")
+swift.field.const.float := swift:field("const", "float")
+swift.field.temp.int := swift:field("temp", "int")
+swift.field.output_movie.movie := swift:field("output_movie", "movie")
+swift.field.swift.mapper.17011.string := swift:field("swift.mapper.17011", "string")
+swift.field.swift.mapper.17010.string := swift:field("swift.mapper.17010", "string")
+swift.field.template.scene_template := swift:field("template", "scene_template")
+swift.field.swift.mapper.17012.string := swift:field("swift.mapper.17012", "string")
+swift.field.quality.int := swift:field("quality", "int")
+swift.field.const.int := swift:field("const", "int")
+swift.field.delay.int := swift:field("delay", "int")
+swift.field.swift.mapper.17006.string := swift:field("swift.mapper.17006", "string")
+swift.field.const.string := swift:field("const", "string")
+swift.field.threads.int := swift:field("threads", "int")
+swift.field.swift.mapper.17004.string := swift:field("swift.mapper.17004", "string")
+swift.field.const.boolean := swift:field("const", "boolean")
+swift.string.17013 := swift:new(swift.field.const.string, value=".ppm")
+swift.string.17017 := swift:new(swift.field.const.string, value="800x600")
+swift.string.17018 := swift:new(swift.field.const.string, value="steps")
+swift.string.17016 := swift:new(swift.field.const.string, value="resolution")
+swift.string.17005 := swift:new(swift.field.const.string, value=".")
+swift.string.17019 := swift:new(swift.field.const.string, value="10")
+swift.string.17003 := swift:new(swift.field.const.string, value="-t")
+swift.string.17015 := swift:new(swift.field.const.string, value="1")
+swift.string.17021 := swift:new(swift.field.const.string, value="0")
+swift.string.17002 := swift:new(swift.field.const.string, value="-s")
+swift.string.17007 := swift:new(swift.field.const.string, value="scene.")
+swift.string.17014 := swift:new(swift.field.const.string, value="threads")
+swift.string.17022 := swift:new(swift.field.const.string, value="quality")
+swift.string.17001 := swift:new(swift.field.const.string, value="-quality")
+swift.string.17020 := swift:new(swift.field.const.string, value="delay")
+swift.string.17000 := swift:new(swift.field.const.string, value="-delay")
+swift.string.17023 := swift:new(swift.field.const.string, value="75")
+swift.string.17009 := swift:new(swift.field.const.string, value=".data")
+swift.int.0 := swift:new(swift.field.const.int, value=0)
+threads := 
+			swift:new(swift.field.threads.int, readCount=2, _defline=6)
+steps := 
+			swift:new(swift.field.steps.int, readCount=3, _defline=7)
+resolution := 
+			swift:new(swift.field.resolution.string, readCount=2, _defline=8)
+delay := 
+			swift:new(swift.field.delay.int, readCount=2, _defline=9)
+quality := 
+			swift:new(swift.field.quality.int, readCount=2, _defline=10)
+template := 
+			swift:new(swift.field.template.scene_template, readCount=1, _defline=18, input=true
+				swift:mapping("SingleFileMapper", swift:parameter("file", "tscene") )
+			)
+swift.mapper.17004 := 
+			swift:new(swift.field.swift.mapper.17004.string)
+swift.mapper.17006 := 
+			swift:new(swift.field.swift.mapper.17006.string)
+swift.mapper.17008 := 
+			swift:new(swift.field.swift.mapper.17008.string)
+scene_files := 
+		swift:new(swift.field.scene_files.scene.array.int, waitCount=1, readCount=2, _defline=35
+			swift:mapping("simple_mapper", swift:parameter("location", swift.mapper.17004)
+			swift:parameter("prefix", swift.mapper.17006)
+			swift:parameter("suffix", swift.mapper.17008))
+		)
+swift.mapper.17010 := 
+			swift:new(swift.field.swift.mapper.17010.string)
+swift.mapper.17011 := 
+			swift:new(swift.field.swift.mapper.17011.string)
+swift.mapper.17012 := 
+			swift:new(swift.field.swift.mapper.17012.string)
+image_files := 
+		swift:new(swift.field.image_files.image.array.int, waitCount=1, readCount=2, _defline=37
+			swift:mapping("simple_mapper", swift:parameter("location", swift.mapper.17010)
+			swift:parameter("prefix", swift.mapper.17011)
+			swift:parameter("suffix", swift.mapper.17012))
+		)
+output_movie := 
+			swift:new(swift.field.output_movie.movie, _defline=39
+				swift:mapping("SingleFileMapper", swift:parameter("file", "output.ppm") )
+			)
+
+generate := function(out, t, i, total) {
+	swift:unitStart("PROCEDURE", name="generate", line=20, outputs="out")
+	k:tailcall(
+	  swift:execute(
+		"genscenes"
+		swift:stageIn(t)
+		swift:stageOut(out)
+
+		swift:arguments(
+			i
+			total
+			swiftscript:filename(#_line=22
+				t
+			)
+		)
+
+		stdout = swiftscript:filename(#_line=22
+			out
+		)
+
+		swift:deleteVars(t, i, total)
+	  )
+	)
+	swift:unitEnd("PROCEDURE", name="generate", line=20)}
+
+convert := function(o, i, d, q) {
+	swift:unitStart("PROCEDURE", name="convert", line=30, outputs="o")
+	k:tailcall(
+	  swift:execute(
+		"convert"
+		swift:stageIn(i)
+		swift:stageOut(o)
+
+		swift:arguments(
+			swift.string.17000
+			d
+			swift.string.17001
+			q
+			swiftscript:filenames(#_line=32
+				i
+			)
+			swiftscript:filename(#_line=32
+				o
+			)
+		)
+
+
+		swift:deleteVars(i, d, q)
+	  )
+	)
+	swift:unitEnd("PROCEDURE", name="convert", line=30)}
+
+render := function(o, i, r, t) {
+	swift:unitStart("PROCEDURE", name="render", line=25, outputs="o")
+	k:tailcall(
+	  swift:execute(
+		"c-ray-mt"
+		swift:stageIn(i)
+		swift:stageOut(o)
+
+		swift:arguments(
+			swift.string.17002
+			r
+			swift.string.17003
+			t
+		)
+
+		stdin = swiftscript:filename(#_line=27
+			i
+		)
+		stdout = swiftscript:filename(#_line=27
+			o
+		)
+
+		swift:deleteVars(i, r, t)
+	  )
+	)
+	swift:unitEnd("PROCEDURE", name="render", line=25)}
+
+restartLog(name = k:concat(contextAttribute("SWIFT:SCRIPT_NAME"), "-", contextAttribute("SWIFT:RUN_ID"))) {
+	swift:mains(
+		swift:startProgressTicker()
+		uparallel(
+			swift:setFieldValue(
+				k:getAndDelete(swift.mapper.17004)
+				swift.string.17005
+			)
+			swift:setFieldValue(
+				k:getAndDelete(swift.mapper.17006)
+				swift.string.17007
+			)
+			swift:setFieldValue(
+				k:getAndDelete(swift.mapper.17008)
+				swift.string.17009
+			)
+			swift:setFieldValue(
+				k:getAndDelete(swift.mapper.17010)
+				swift.string.17005
+			)
+			swift:setFieldValue(
+				k:getAndDelete(swift.mapper.17011)
+				swift.string.17007
+			)
+			swift:setFieldValue(
+				k:getAndDelete(swift.mapper.17012)
+				swift.string.17013
+			)
+			swift:setFieldValue(#_line=12
+				swift:readVar(threads)
+				swiftscript:toInt(#_line=12
+					swiftscript:arg$string$string$(#_line=12
+						swift.string.17014, swift.string.17015
+					)
+				)
+			)
+			swift:setFieldValue(#_line=13
+				swift:readVar(resolution)
+				swiftscript:arg$string$string$(#_line=13
+					swift.string.17016, swift.string.17017
+				)
+			)
+			swift:setFieldValue(#_line=14
+				swift:readVar(steps)
+				swiftscript:toInt(#_line=14
+					swiftscript:arg$string$string$(#_line=14
+						swift.string.17018, swift.string.17019
+					)
+				)
+			)
+			swift:setFieldValue(#_line=15
+				swift:readVar(delay)
+				swiftscript:toInt(#_line=15
+					swiftscript:arg$string$string$(#_line=15
+						swift.string.17020, swift.string.17021
+					)
+				)
+			)
+			swift:setFieldValue(#_line=16
+				swift:readVar(quality)
+				swiftscript:toInt(#_line=16
+					swiftscript:arg$string$string$(#_line=16
+						swift.string.17022, swift.string.17023
+					)
+				)
+			)
+			swift:tParallelFor(#_line=41, _vvar="i", wrefs="image_files 1 scene_files 1", rrefs="template 1 threads 1 resolution 1 steps 1 scene_files 2",
+				getArrayIterator(swift:range(swift.int.0, swift:readVar(steps)))) {
+
+				swift:unitStart("FOREACH_IT", line=41) 
+				uparallel(
+					sequential(
+					   	generate(#_line=42
+					   		swift:getFieldSubscript(swift:unwrapVar(scene_files), i)
+					   		swift:readVar(template), i, swift:readVar(steps)
+					   	)
+					   	swift:partialClose(scene_files, 1)
+					)
+					sequential(
+					   	render(#_line=43
+					   		swift:getFieldSubscript(swift:unwrapVar(image_files), i)
+					   		swift:getFieldSubscript(swift:unwrapVar(scene_files), i), swift:readVar(resolution), swift:readVar(threads)
+					   	)
+					   	swift:partialClose(image_files, 1)
+					)
+				)
+
+				swift:unitEnd("FOREACH_IT", line=41)
+			}
+			convert(#_line=46
+				k:getAndDelete(output_movie)
+				swift:readVar(image_files), swift:readVar(delay), swift:readVar(quality)
+			)
+		)
+		swift:stopProgressTicker()
+	)
+}
+
+swift:cleanDataset(template)
+swift:cleanDataset(image_files)
+swift:cleanDataset(output_movie)
+swift:cleanDataset(scene_files)
+swift:cleanDataset(shutdown=true)

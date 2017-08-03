@@ -1,0 +1,45 @@
+checking for paramfile
+paramfile is: 
+checking for paramfile
+paramfile is: 
+checking for paramfile
+paramfile is: 
+Progress  2017-02-16 21:38:27.769308213-0200  LOG_START
+
+_____________________________________________________________________________
+
+        Wrapper (_swiftwrap)
+_____________________________________________________________________________
+
+Job directory mode is: link on shared filesystem
+PID=10876
+HOST=
+PWD=/home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/part02/swiftwork/p2-run001
+DIR=jobs/s/simulate-sy3kh24n-0
+EXEC=/home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/bin/simulate
+STDIN=
+STDOUT=output/sim_6.out
+STDERR=stderr.txt
+DIRS=output
+INF=
+OUTF=output/sim_6.out
+COLLECT=
+CDM_FILE=
+ARGS=
+ARGC=0
+MPI_RANK=
+PMI_RANK=
+Progress  2017-02-16 21:38:27.785157299-0200  CREATE_JOBDIR
+Created job directory: jobs/s/simulate-sy3kh24n-0
+Progress  2017-02-16 21:38:27.798618741-0200  CREATE_INPUTDIR
+Created output directory: jobs/s/simulate-sy3kh24n-0/output
+Progress  2017-02-16 21:38:27.804995746-0200  LINK_INPUTS
+Progress  2017-02-16 21:38:27.806738689-0200  EXECUTE
+APP_RESOURCES=real_secs:0.03,kernel_secs:0.00,user_secs:0.00,percent_cpu:35%,max_rss:1616,avg_rss:0,avg_tot_vm:0,avg_priv_data:0,avg_priv_stack:0,avg_shared_text:0,page_size:4096,major_pgfaults:0,minor_pgfaults:3606,swaps:0,invol_context_switches:28,vol_waits:26,fs_reads:0,fs_writes:32,sock_recv:0,sock_send:0,signals:0,exit_status:0
+Moving back to workflow directory /home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/part02/swiftwork/p2-run001
+Progress  2017-02-16 21:38:27.859020645-0200  EXECUTE_DONE
+Job ran successfully
+Progress  2017-02-16 21:38:27.861331736-0200  MOVING_OUTPUTS output/sim_6.out
+Progress  2017-02-16 21:38:27.874393764-0200  RM_JOBDIR
+Progress  2017-02-16 21:38:27.880497709-0200  TOUCH_SUCCESS
+Progress  2017-02-16 21:38:27.890387167-0200  END

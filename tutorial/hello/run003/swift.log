@@ -1,0 +1,112 @@
+2017-02-17 09:51:38,675-0200 INFO  Loader JAVA Oracle Corporation Java HotSpot(TM) 64-Bit Server VM 1.7.0_80
+2017-02-17 09:51:38,678-0200 INFO  Loader VERSION Swift trunk git-rev: 18aec82244c5611381528bc361888c553570c66e heads/master 6574
+2017-02-17 09:51:38,678-0200 INFO  Loader RUN_ID run003
+2017-02-17 09:51:38,678-0200 INFO  Loader ARGUMENTS [-runid, run003, -logfile, /home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/hello/run003/swift.log, hello_out.swift]
+2017-02-17 09:51:38,678-0200 INFO  Loader MAX_HEAP 954728448
+2017-02-17 09:51:38,678-0200 INFO  Loader GLOBUS_HOSTNAME mondelli-520U4C
+2017-02-17 09:51:38,678-0200 INFO  Loader CWD /home/mondelli/Dropbox/Docker/swift_verao/uteis/tutorial/hello/.
+2017-02-17 09:51:38,680-0200 DEBUG Loader SWIFT_CONFIGURATION 
+[D] /home/mondelli/swift-k/dist/swift-svn/etc/swift.conf
+[C] <Command Line>
+{
+	TCPPortRange: "50000, 50100"                               # [D] line 27
+	alwaysTransferWrapperLog: true                             # [D] line 61
+	executionRetries: 0                                        # [D] line 137
+	fileOperationsThrottle: 8                                  # [D] line 121
+	fileTransfersThrottle: 4                                   # [D] line 107
+	hostJobSubmitThrottle: 2                                   # [D] line 95
+	jobSubmitThrottle: 4                                       # [D] line 83
+	keepSiteDir: false                                         # [D] line 131
+	lazyErrors: true                                           # [D] line 41
+	logProvenance: false                                       # [D] line 200
+	maxForeachThreads: 16384                                   # [D] line 194
+	replicationEnabled: false                                  # [D] line 146
+	replicationLimit: 3                                        # [D] line 157
+	replicationMinQueueTime: 60                                # [D] line 153
+	site.local {
+		app.ALL.executable: "*"                                   # [D] line 235
+		execution.type: "local"                                   # [D] line 223
+		filesystem.type: "local"                                  # [D] line 226
+		initialParallelTasks: 8                                   # [D] line 230
+		maxParallelTasks: 16                                      # [D] line 229
+		workDirectory: "swiftwork"                                # [D] line 232
+	}
+	sites: [local]                                             # [D] line 239
+	tracingEnabled: false                                      # [D] line 51
+}
+
+2017-02-17 09:51:38,681-0200 DEBUG textfiles BEGIN SWIFTSCRIPT:
+type file;
+
+file hello <"hello.txt">;
+
+app (file o) echo (string s) 
+{ 
+   echo s stdout=filename(o); 
+}
+
+hello = echo("hi");
+
+
+2017-02-17 09:51:38,681-0200 DEBUG textfiles END SWIFTSCRIPT:
+2017-02-17 09:51:38,681-0200 INFO  Loader hello_out.swift: source file is new. Recompiling.
+2017-02-17 09:51:39,685-0200 INFO  Loader RUN_START
+2017-02-17 09:51:39,691-0200 INFO  SwiftExecutor swift.home = /home/mondelli/swift-k/dist/swift-svn
+2017-02-17 09:51:39,735-0200 INFO  AbstractScheduler Setting resources to: {local=local}
+2017-02-17 09:51:39,744-0200 INFO  GlobalSubmitQueue No global submit throttle set. Using default (1024)
+2017-02-17 09:51:39,763-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:51:39,764-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:51:39,765-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:51:39,798-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 34952528, JVMThreads: 16
+2017-02-17 09:51:39,798-0200 DEBUG swift PROCEDURE line=5 thread=2-0 name=echo
+2017-02-17 09:51:39,799-0200 INFO  RuntimeStats$ProgressTicker 
+2017-02-17 09:51:39,801-0200 DEBUG swift JOB_INIT jobid=echo-6v5vb34n tr=echo
+2017-02-17 09:51:39,801-0200 DEBUG swift JOB_SITE_SELECT jobid=echo-6v5vb34n-0
+2017-02-17 09:51:39,807-0200 DEBUG swift THREAD_ASSOCIATION jobid=echo-6v5vb34n-0 host=local thread=2-0
+2017-02-17 09:51:39,807-0200 INFO  swift START host=local - Initializing shared directory
+2017-02-17 09:51:39,808-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:51:39,824-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:51:39,828-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:51:39,829-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:51:39,830-0200 INFO  swift END host=local - Done initializing shared directory
+2017-02-17 09:51:39,832-0200 INFO  swift START jobid=echo-6v5vb34n-0 host=local - Initializing directory structure
+2017-02-17 09:51:39,832-0200 INFO  swift START path= dir=hello_out-run003/shared - Creating directory structure
+2017-02-17 09:51:39,833-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:51:39,834-0200 INFO  swift END jobid=echo-6v5vb34n-0 - Done initializing directory structure
+2017-02-17 09:51:39,834-0200 INFO  swift START jobid=echo-6v5vb34n-0 - Staging in files []
+2017-02-17 09:51:39,834-0200 INFO  swift END jobid=echo-6v5vb34n-0 - Staging in finished
+2017-02-17 09:51:39,834-0200 DEBUG swift JOB_START jobid=echo-6v5vb34n-0 tr=echo arguments=[hi] tmpdir=hello_out-run003/jobs/e/echo-6v5vb34n-0
+2017-02-17 09:51:39,838-0200 INFO  Execute JOB_TASK jobid=echo-6v5vb34n-0 taskid=task-2 exec=/bin/bash dir=hello_out-run003 args=shared/_swiftwrap echo-6v5vb34n-0 -jobdir e -scratch  -e echo -out hello.txt -err stderr.txt -i -d  -if  -of hello.txt -cf  -cdmfile -status files -a hi
+2017-02-17 09:51:39,853-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-2 status=8
+2017-02-17 09:51:39,853-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-2 status=1
+2017-02-17 09:51:39,856-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-2 status=2
+2017-02-17 09:51:39,898-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:51:39,898-0200 INFO  Execute TASK_STATUS_CHANGE taskid=task-2 status=7
+2017-02-17 09:51:39,898-0200 DEBUG swift START jobid=echo-6v5vb34n-0
+2017-02-17 09:51:39,899-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:51:39,899-0200 INFO  swift SUCCESS jobid=echo-6v5vb34n-0 - Success file found
+2017-02-17 09:51:39,899-0200 DEBUG swift STAGING_OUT jobid=echo-6v5vb34n-0
+2017-02-17 09:51:39,900-0200 INFO  swift START jobid=echo-6v5vb34n-0 - Staging out files
+2017-02-17 09:51:39,900-0200 DEBUG swift stageouts: [file://localhost/hello.txt]
+2017-02-17 09:51:39,902-0200 DEBUG swift FILE_STAGE_OUT_START srcname=hello.txt srcdir=hello_out-run003/shared/ srchost=local destdir= desthost=localhost provider=file jobid=echo-6v5vb34n-0
+2017-02-17 09:51:39,902-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:51:39,906-0200 DEBUG swift CDM: file://localhost/hello.txt : DEFAULT
+2017-02-17 09:51:39,907-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:51:39,908-0200 DEBUG swift FILE_STAGE_OUT_END srcname=hello.txt srcdir=hello_out-run003/shared/ srchost=local destdir= desthost=localhost provider=file
+2017-02-17 09:51:39,910-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:51:39,914-0200 INFO  swift END jobid=echo-6v5vb34n-0 - Staging out finished
+2017-02-17 09:51:39,915-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:51:39,915-0200 DEBUG swift JOB_END jobid=echo-6v5vb34n-0
+2017-02-17 09:51:39,916-0200 INFO  swift END_SUCCESS jobid=echo-6v5vb34n tr=echo
+2017-02-17 09:51:39,916-0200 DEBUG swift PROCEDURE_END line=5 thread=2-0 name=echo
+2017-02-17 09:51:39,917-0200 INFO  RuntimeStats$ProgressTicker HeapMax: 954728448, CrtHeap: 121110528, UsedHeap: 8113384, JVMThreads: 24
+2017-02-17 09:51:39,917-0200 INFO  RuntimeStats$ProgressTicker   Finished successfully:1
+2017-02-17 09:51:39,928-0200 DEBUG swift Starting cleanups
+2017-02-17 09:51:39,929-0200 INFO  swift START cleanups=[[hello_out-run003, local]]
+2017-02-17 09:51:39,929-0200 INFO  swift START dir=hello_out-run003 host=local
+2017-02-17 09:51:39,929-0200 DEBUG swift cdmfile 
+2017-02-17 09:51:39,929-0200 INFO  LateBindingScheduler jobs queued: 0
+2017-02-17 09:51:39,930-0200 INFO  swift END dir=hello_out-run003 host=local
+2017-02-17 09:51:39,930-0200 INFO  swift END cleanups=[[hello_out-run003, local]]
+2017-02-17 09:51:39,930-0200 DEBUG swift Ending cleanups
+2017-02-17 09:51:39,935-0200 INFO  Loader Swift finished with no errors
