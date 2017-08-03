@@ -1,8 +1,0 @@
-Swift trunk git-rev: 18aec82244c5611381528bc361888c553570c66e heads/master 6574
-RunID: run005
-Could not start execution:
-	Compile error in foreach statement at 33:
-	Compile error in assignment at 35: Compile error in procedure invocation at 35:
-	Compile error in procedure invocation at 35:
-	Parameter type mismatch: (file) select_word(file)
-	Expected: (file) select_word(file, string)
