@@ -23,7 +23,7 @@ TODO: Colocar swift.conf nos diretórios
 = 0. Hello Swift ==========
 
 > cd hello
-> swift hello.swift
+> swift -sites treinamento hello.swift
 
 > swiftlog -import-provenance <run_id>
 
@@ -32,7 +32,7 @@ TODO: Colocar swift.conf nos diretórios
 = 1. Part01 ==========
 
 > cd part01
-> swift p1.swift
+> swift -sites treinamento p1.swift
 > cat sim.out
 
 > swiftlog -import-provenance <run_id>
@@ -42,7 +42,7 @@ TODO: Colocar swift.conf nos diretórios
 = 2. Part02 ==========
 
 > cd part02
-> swift p1.swift
+> swift -sites treinamento p2.swift
 > ls -ltrh output
 > cat output/sim_1.out
 
@@ -53,7 +53,7 @@ TODO: Colocar swift.conf nos diretórios
 = 3. Part03 ==========
 
 > cd part03
-> swift p3.swift
+> swift -sites treinamento p3.swift
 > ls -ltrh output
 > more output/*out
 
@@ -64,7 +64,7 @@ TODO: Colocar swift.conf nos diretórios
 = 4. Part04 ==========
 
 > cd part04
-> swift p4.swift
+> swift -sites treinamento p4.swift
 > ls -ltrh output
 > more output/sim_1.log
 
@@ -75,7 +75,7 @@ TODO: Colocar swift.conf nos diretórios
 = 5. Part05 ==========
 
 > cd part05
-> swift p5.swift
+> swift -sites treinamento  p5.swift
 > ls -ltrh output
 > more output/average*
 
@@ -86,7 +86,7 @@ TODO: Colocar swift.conf nos diretórios
 = 6. Part06 ==========
 
 > cd part06
-> swift p6.swift
+> swift -sites treinamento p6.swift
 > ls -ltrh output
 > more output/average*
 
@@ -100,7 +100,7 @@ TODO: Colocar swift.conf nos diretórios
 
 > cd ../pagerank
 > tar xfz raw.en3.tar.gz
-> swift pagerank.swift -word=Brazil
+> swift -sites treinamento pagerank.swift -word=Brazil
 > more sort.txt
 
 > swiftlog -import-provenance <run_id>
@@ -111,7 +111,7 @@ TODO: Colocar swift.conf nos diretórios
 
 > cd ../c-ray
 > export PATH:./bin:$PATH
-> swift c-ray.swift 
+> swift -sites treinamento c-ray.swift 
 
 > swiftlog -import-provenance <run_id>
 
@@ -121,7 +121,7 @@ TODO: Colocar swift.conf nos diretórios
 
 > cd ../swift-gecko
 > export PATH:./bin:$PATH
-> swift allvsall.swift
+> swift -sites treinamento allvsall.swift
 
 > swiftlog -import-provenance <run_id>
 
