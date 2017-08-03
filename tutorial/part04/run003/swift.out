@@ -1,7 +1,0 @@
-Swift trunk git-rev: 18aec82244c5611381528bc361888c553570c66e heads/master 6574
-RunID: run003
-Progress: Fri, 17 Feb 2017 11:49:10-0200
-Progress: Fri, 17 Feb 2017 11:49:11-0200  Selecting site:1  Active:9
-Not cleaning output/sim_3.log (not temporary)
-Progress: Fri, 17 Feb 2017 11:49:12-0200  Active:1  Finished successfully:9
-Final status: Fri, 17 Feb 2017 11:49:13-0200  Finished successfully:11
